@@ -17,6 +17,8 @@ interface ComboboxBase {
   placeholder?: string;
   size?: 'sm' | 'md' | 'lg';
   invalid?: boolean;
+  /** Green border when the value checks out. Figma: State=Success. */
+  valid?: boolean;
   disabled?: boolean;
   /** Lets people add what they typed as a new option. Called with the text. */
   onCreate?: (text: string) => void;
@@ -50,7 +52,7 @@ export interface MultiComboboxProps extends ComboboxBase {
  * Use a Select when people just pick from a short known list. Figma: Combobox.
  */
 export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiComboboxProps>(function Combobox(props, ref) {
-  const { options, placeholder = 'Search', size = 'md', invalid, disabled, onCreate, emptyText = 'No matches', id, className, required } = props;
+  const { options, placeholder = 'Search', size = 'md', invalid, valid, disabled, onCreate, emptyText = 'No matches', id, className, required } = props;
   const listId = useId();
   const multiple = props.multiple === true;
   const [values, setValues] = useControllable<string[]>(
@@ -126,6 +128,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
           styles.combobox,
           multiple && styles.multiple,
           (invalid || props['aria-invalid']) && inputStyles.invalid,
+          valid && !invalid && !props['aria-invalid'] && !disabled && inputStyles.valid,
           disabled && inputStyles.disabled,
           className,
         )}
@@ -214,17 +217,17 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
   );
 });
 
-type FieldBits = Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> & { fieldClassName?: string };
+type FieldBits = Pick<FieldProps, 'label' | 'hint' | 'error' | 'success' | 'optional' | 'info'> & { fieldClassName?: string };
 export type ComboboxFieldProps = (Omit<ComboboxProps, 'aria-describedby' | 'aria-invalid'> | Omit<MultiComboboxProps, 'aria-describedby' | 'aria-invalid'>) & FieldBits;
 
 /** A Combobox with a label and hint. */
 export const ComboboxField = forwardRef<HTMLInputElement, ComboboxFieldProps>(function ComboboxField(
-  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
+  { label, hint, error, success, optional, info, required, id, fieldClassName, valid, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
-      {(c) => <Combobox ref={ref} {...(rest as ComboboxProps)} {...c} />}
+    <Field label={label} hint={hint} error={error} success={success} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+      {(c) => <Combobox ref={ref} {...(rest as ComboboxProps)} {...c} valid={valid || (success != null && error == null)} />}
     </Field>
   );
 });

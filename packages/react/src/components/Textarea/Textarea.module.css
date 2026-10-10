@@ -35,6 +35,9 @@
     0 0 0 4px var(--halo-border-focus);
 }
 .textarea[aria-invalid='true'] { --line: var(--halo-state-error-primary); }
+.valid,
+.valid:hover:not(:disabled),
+.valid:focus { --line: var(--halo-state-success-primary); }
 .textarea:disabled {
   --line: var(--halo-border-secondary);
   background: var(--halo-surface-minimal);

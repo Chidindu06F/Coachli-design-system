@@ -46,6 +46,11 @@ export const Error: Story = {
   args: { label: 'Pickup time', error: 'Choose a time to continue.' },
 };
 
+/** A green border and message once the time is accepted. */
+export const Success: Story = {
+  args: { label: 'Pickup time', defaultValue: '10:30', success: 'The store is open then.' },
+};
+
 export const Disabled: Story = {
   args: { label: 'Start time', disabled: true, defaultValue: '10:30' },
 };

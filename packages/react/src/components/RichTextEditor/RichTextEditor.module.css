@@ -22,6 +22,7 @@
     0 0 0 4px var(--halo-border-focus);
 }
 .invalid, .invalid:hover:not(.disabled), .invalid:has(.content:focus) { --line: var(--halo-state-error-primary); }
+.valid, .valid:hover:not(.disabled), .valid:has(.content:focus) { --line: var(--halo-state-success-primary); }
 .disabled { --line: var(--halo-border-secondary); background: var(--halo-surface-minimal); }
 .disabled .content { color: var(--halo-text-disabled); cursor: not-allowed; }
 

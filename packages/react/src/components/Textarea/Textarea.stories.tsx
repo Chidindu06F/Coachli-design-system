@@ -24,11 +24,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-/** Error and disabled. */
+/** Error, success and disabled. */
 export const States: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 20 }}>
       <TextareaField label="Bio" error="Add a few words about yourself." />
+      <TextareaField label="Bio" defaultValue="Designer and weekend potter." success="Looks good." />
       <TextareaField label="Notes" disabled defaultValue="Read only for now." />
     </div>
   ),

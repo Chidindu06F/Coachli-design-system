@@ -18,6 +18,7 @@ New work collects under **Unreleased** and goes live in Storybook straight away.
 - **Button**: new `loading` prop shows a Spinner and ignores clicks while an action runs.
 - **Select**: new `icon` prop for an icon at the start of the box.
 - **Input**: new success state. `success` on `InputField` (and `Field`) shows a green message; `valid` on `Input` gives a green border and a check at the end.
+- **Success state on other fields**: `SelectField`, `ComboboxField`, `DatePickerField`, `DateRangePickerField`, `TimePickerField`, `ColorField`, `TextareaField` and `RichTextEditorField` take `success` for a green message with a check. Their controls take `valid` for a green border.
 - **Date range picker**: the box now reads "Start date – End date". **Breaking:** `placeholder` is replaced by `startPlaceholder` and `endPlaceholder`.
 
 ### Tokens

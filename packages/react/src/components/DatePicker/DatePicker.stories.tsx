@@ -35,6 +35,11 @@ export const Limits: Story = {
   args: { label: 'Delivery day', min: today, isDateDisabled: (d: Date) => d.getDay() === 0 || d.getDay() === 6, hint: 'Weekdays only' },
 };
 
+/** A green border and message once the date is accepted. */
+export const Success: Story = {
+  args: { label: 'Delivery day', defaultValue: addDays(today, 2), success: 'We deliver on this day.' },
+};
+
 /** Two months, presets and Apply. */
 export const Range: Story = {
   decorators: [(Story) => <div style={{ minHeight: 480 }}><Story /></div>],

@@ -51,18 +51,18 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(functio
 
 export interface TimePickerFieldProps
   extends Omit<TimePickerProps, 'aria-describedby' | 'aria-invalid'>,
-    Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> {
+    Pick<FieldProps, 'label' | 'hint' | 'error' | 'success' | 'optional' | 'info'> {
   fieldClassName?: string;
 }
 
 /** A Time picker with a label and hint. Figma: Time field. */
 export const TimePickerField = forwardRef<HTMLButtonElement, TimePickerFieldProps>(function TimePickerField(
-  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
+  { label, hint, error, success, optional, info, required, id, fieldClassName, valid, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
-      {(c) => <TimePicker ref={ref} {...rest} {...c} />}
+    <Field label={label} hint={hint} error={error} success={success} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+      {(c) => <TimePicker ref={ref} {...rest} {...c} valid={valid || (success != null && error == null)} />}
     </Field>
   );
 });

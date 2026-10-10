@@ -27,6 +27,8 @@ export interface RichTextEditorProps {
   onChange?: (html: string) => void;
   placeholder?: string;
   invalid?: boolean;
+  /** Green border when the value checks out. Figma: State=Success. */
+  valid?: boolean;
   disabled?: boolean;
   /** Toolbar groups to show. Figma: Text style, Format, Blocks, Insert, History. */
   tools?: Partial<Record<'textStyle' | 'format' | 'blocks' | 'insert' | 'history', boolean>>;
@@ -66,7 +68,7 @@ const TEXT_STYLES = [
  * editing, use a dedicated editor library styled with Halo tokens.
  */
 export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorProps>(function RichTextEditor(
-  { defaultValue = '', onChange, placeholder = 'Start writing…', invalid, disabled, tools = {}, minHeight = 160, id, className, ...aria },
+  { defaultValue = '', onChange, placeholder = 'Start writing…', invalid, valid, disabled, tools = {}, minHeight = 160, id, className, ...aria },
   ref,
 ) {
   const area = useRef<HTMLDivElement | null>(null);
@@ -156,7 +158,7 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
   const divider = (key: string) => <span key={key} className={styles.divider} aria-hidden="true" />;
 
   return (
-    <div className={cx(styles.editor, invalid || aria['aria-invalid'] ? styles.invalid : undefined, disabled && styles.disabled, className)}>
+    <div className={cx(styles.editor, invalid || aria['aria-invalid'] ? styles.invalid : undefined, valid && !invalid && !aria['aria-invalid'] && !disabled && styles.valid, disabled && styles.disabled, className)}>
       <div role="toolbar" aria-label="Formatting" aria-controls={id} className={styles.toolbar}>
         {show.textStyle && (
           <>
@@ -263,7 +265,7 @@ function UrlPopover({ label, icon, placeholder, disabled, onApply }: { label: st
   );
 }
 
-export interface RichTextEditorFieldProps extends Omit<RichTextEditorProps, 'aria-describedby' | 'aria-invalid' | 'aria-labelledby'>, Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> {
+export interface RichTextEditorFieldProps extends Omit<RichTextEditorProps, 'aria-describedby' | 'aria-invalid' | 'aria-labelledby'>, Pick<FieldProps, 'label' | 'hint' | 'error' | 'success' | 'optional' | 'info'> {
   required?: boolean;
   /** Shows a character count, with this as the limit. Figma: Count. */
   maxLength?: number;
@@ -272,7 +274,7 @@ export interface RichTextEditorFieldProps extends Omit<RichTextEditorProps, 'ari
 
 /** A RichTextEditor with a label, hint and optional character count. */
 export const RichTextEditorField = forwardRef<RichTextEditorHandle, RichTextEditorFieldProps>(function RichTextEditorField(
-  { label, hint, error, optional, info, required, id, maxLength, fieldClassName, onChange, defaultValue, ...rest },
+  { label, hint, error, success, optional, info, required, id, maxLength, fieldClassName, onChange, defaultValue, valid, ...rest },
   ref,
 ) {
   const textOf = (html: string) => {
@@ -282,12 +284,14 @@ export const RichTextEditorField = forwardRef<RichTextEditorHandle, RichTextEdit
     return div.textContent ?? '';
   };
   const [length, setLength] = useState(() => textOf(defaultValue ?? '').length);
+  const tooLong = maxLength !== undefined && length > maxLength;
   const count: ReactNode = maxLength !== undefined ? `${length}/${maxLength}` : undefined;
   return (
     <Field
       label={label}
       hint={hint}
-      error={error ?? (maxLength !== undefined && length > maxLength ? `Keep it under ${maxLength} characters.` : undefined)}
+      error={error ?? (tooLong ? `Keep it under ${maxLength} characters.` : undefined)}
+      success={success}
       required={required}
       optional={optional}
       info={info}
@@ -300,6 +304,7 @@ export const RichTextEditorField = forwardRef<RichTextEditorHandle, RichTextEdit
           ref={ref}
           {...rest}
           {...c}
+          valid={valid || (success != null && error == null && !tooLong)}
           defaultValue={defaultValue}
           onChange={(html) => {
             setLength(textOf(html).length);

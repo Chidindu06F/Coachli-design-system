@@ -45,6 +45,15 @@ export const Field: Story = {
   ),
 };
 
+/** A green border and message once the colour passes a check. */
+export const Success: Story = {
+  render: () => (
+    <div style={{ maxWidth: 240 }}>
+      <ColorField label="Button colour" defaultValue="#1FA971" success="Text on it meets contrast." />
+    </div>
+  ),
+};
+
 /** Swatch shapes, sizes and selection. */
 export const Swatches: Story = {
   render: () => (
