@@ -49,8 +49,6 @@
 
 .error { color: var(--halo-state-error-contrast); }
 
-.success { color: var(--halo-state-success-contrast); }
-
 .hintIcon {
   width: 16px;
   height: 16px;
@@ -68,5 +66,3 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-
-.hintIcon.successIcon { color: var(--halo-icon-positive); }

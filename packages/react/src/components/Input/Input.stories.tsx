@@ -44,19 +44,19 @@ export const States: Story = {
     <div style={{ display: 'grid', gap: 20 }}>
       <InputField label="Full name" required defaultValue="Amara Okafor" />
       <InputField label="Company" optional info="Shown on your invoices." placeholder="Studio" />
-      <InputField label="Username" success="This username is available" defaultValue="amara.okafor" />
+      <InputField label="Username" valid defaultValue="amara.okafor" />
       <InputField label="Password" error="Use at least 8 characters." defaultValue="abc" />
       <InputField label="Email" disabled defaultValue="amara@example.com" />
     </div>
   ),
 };
 
-/** After a value passes a check: a green border, a check at the end and a green message. Use `success` on InputField, or `valid` on Input. An error always wins. */
+/** After a value passes a check: a green check at the end of the box, with no message and no colour change. Use `valid`. An error always wins and shows a red warning icon. */
 export const Success: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 20 }}>
-      <InputField label="Username" success="This username is available" defaultValue="amara.okafor" />
-      <InputField label="Account number" hint="10 digits" success="Amara Okafor, GTBank" defaultValue="0123456789" />
+      <InputField label="Username" valid defaultValue="amara.okafor" />
+      <InputField label="Account number" hint="10 digits" valid defaultValue="0123456789" />
       <Input valid defaultValue="SAVE20" aria-label="Promo code" />
     </div>
   ),

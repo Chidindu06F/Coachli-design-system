@@ -45,8 +45,6 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   hint?: ReactNode;
   /** An error message. Replaces the hint, turns red and marks the control invalid. Figma: State=Error. */
   error?: ReactNode;
-  /** A success message, like "This username is available". Replaces the hint and turns green. An error wins over it. Figma: State=Success. */
-  success?: ReactNode;
   /** Shown at the end of the hint row, like "86 / 2,000". */
   count?: ReactNode;
   /** Render function that receives the ids and state to put on the control. */
@@ -56,11 +54,10 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
 }
 
 /** Lays out a label, a control and a hint row. Used by the *Field components. */
-export function Field({ label, required, optional, info, hint, error, success, count, children, controlId, className, ...rest }: FieldProps) {
+export function Field({ label, required, optional, info, hint, error, count, children, controlId, className, ...rest }: FieldProps) {
   const autoId = useId();
   const id = controlId ?? autoId;
-  const isSuccess = error == null && success != null;
-  const message = error ?? (isSuccess ? success : hint);
+  const message = error ?? hint;
   const hintId = message ? `${id}-hint` : undefined;
   return (
     <div className={cx(styles.field, className)} {...rest}>
@@ -73,9 +70,8 @@ export function Field({ label, required, optional, info, hint, error, success, c
       {(message || count) && (
         <div className={styles.hintRow}>
           {message && (
-            <span id={hintId} className={cx(styles.hint, error != null && styles.error, isSuccess && styles.success)} aria-live={isSuccess ? 'polite' : undefined}>
+            <span id={hintId} className={cx(styles.hint, error != null && styles.error)}>
               {error != null && <Icon name="WarningCircle" className={styles.hintIcon} />}
-              {isSuccess && <Icon name="CheckCircle" className={cx(styles.hintIcon, styles.successIcon)} />}
               {message}
             </span>
           )}

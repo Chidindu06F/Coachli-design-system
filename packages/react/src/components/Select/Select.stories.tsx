@@ -44,8 +44,8 @@ export const States: Story = {
       <Select aria-label="Small" size="sm" options={fruit} />
       <Select aria-label="Large" size="lg" options={fruit} defaultValue="mango" />
       <SelectField label="Fruit" options={fruit} error="Choose a fruit to continue." />
-      <SelectField label="Fruit" options={fruit} defaultValue="mango" success="In stock this week." />
-      <ComboboxField label="Fruit" options={fruit} success="In stock this week." />
+      <SelectField label="Fruit" options={fruit} defaultValue="mango" valid />
+      <ComboboxField label="Fruit" options={fruit} valid />
       <SelectField label="Fruit" options={fruit} defaultValue="pear" disabled />
     </div>
   ),

@@ -24,6 +24,10 @@
   transition: box-shadow 120ms ease;
 }
 .noResize { resize: none; }
+
+.wrap { position: relative; width: 100%; }
+.withStatus { padding-right: calc(var(--pad) * 2 + 20px); }
+.status { position: absolute; top: calc(var(--pad) + (var(--text-height) - 20px) / 2); right: var(--pad); pointer-events: none; }
 .textarea::placeholder { color: var(--halo-text-secondary); opacity: 1; }
 
 .textarea:hover:not(:disabled) { --line: var(--halo-border-contrast); }
@@ -35,9 +39,6 @@
     0 0 0 4px var(--halo-border-focus);
 }
 .textarea[aria-invalid='true'] { --line: var(--halo-state-error-primary); }
-.valid,
-.valid:hover:not(:disabled),
-.valid:focus { --line: var(--halo-state-success-primary); }
 .textarea:disabled {
   --line: var(--halo-border-secondary);
   background: var(--halo-surface-minimal);

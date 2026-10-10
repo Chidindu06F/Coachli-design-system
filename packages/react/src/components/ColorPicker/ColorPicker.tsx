@@ -3,6 +3,7 @@ import type { ButtonHTMLAttributes, CSSProperties, HTMLAttributes, KeyboardEvent
 import { cx } from '../../internal/cx';
 import { mergeRefs, Portal, useDismiss, useFloating } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
+import { StatusIcon } from '../../internal/StatusIcon';
 import { useControllable } from '../../internal/useControllable';
 import { CompactButton } from '../CompactButton';
 import { Field } from '../Field';
@@ -276,7 +277,7 @@ export interface ColorFieldProps extends Omit<ColorPickerProps, 'id'> {
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   invalid?: boolean;
-  /** Green border when the value checks out. Figma: State=Success. */
+  /** A green check at the end once the value checks out. Figma: State=Success. */
   valid?: boolean;
   id?: string;
   'aria-label'?: string;
@@ -304,7 +305,7 @@ export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function
 
   return (
     <>
-      <div ref={box} className={cx(inputStyles.box, inputStyles[size], (invalid || aria['aria-invalid']) && inputStyles.invalid, valid && !invalid && !aria['aria-invalid'] && !disabled && inputStyles.valid, disabled && inputStyles.disabled, className)}>
+      <div ref={box} className={cx(inputStyles.box, inputStyles[size], (invalid || aria['aria-invalid']) && inputStyles.invalid, disabled && inputStyles.disabled, className)}>
         <ColorSwatch
           ref={swatch}
           color={hex}
@@ -333,6 +334,7 @@ export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function
           }}
           onBlur={() => setText(hex)}
         />
+        <StatusIcon invalid={invalid || !!aria['aria-invalid']} valid={valid} disabled={disabled} />
       </div>
       {open && (
         <Portal>
@@ -356,16 +358,16 @@ export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function
 });
 
 export type ColorFieldWithLabelProps = Omit<ColorFieldProps, 'aria-describedby' | 'aria-invalid'> &
-  Pick<FieldProps, 'label' | 'hint' | 'error' | 'success' | 'optional' | 'info'> & { required?: boolean; fieldClassName?: string };
+  Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> & { required?: boolean; fieldClassName?: string };
 
 /** A ColorInput with a label and hint. */
 export const ColorField = forwardRef<HTMLInputElement, ColorFieldWithLabelProps>(function ColorField(
-  { label, hint, error, success, optional, info, required, id, fieldClassName, valid, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, valid, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} success={success} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
-      {(c) => <ColorInput ref={ref} {...rest} {...c} valid={valid || (success != null && error == null)} />}
+    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+      {(c) => <ColorInput ref={ref} {...rest} {...c} valid={valid} />}
     </Field>
   );
 });

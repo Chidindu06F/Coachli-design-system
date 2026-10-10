@@ -3,6 +3,7 @@ import type { KeyboardEvent } from 'react';
 import { cx } from '../../internal/cx';
 import { mergeRefs, Portal, useDismiss, useFloating } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
+import { StatusIcon } from '../../internal/StatusIcon';
 import { useControllable } from '../../internal/useControllable';
 import { Field } from '../Field';
 import type { FieldProps } from '../Field';
@@ -17,7 +18,7 @@ interface ComboboxBase {
   placeholder?: string;
   size?: 'sm' | 'md' | 'lg';
   invalid?: boolean;
-  /** Green border when the value checks out. Figma: State=Success. */
+  /** A green check at the end once the value checks out. Figma: State=Success. */
   valid?: boolean;
   disabled?: boolean;
   /** Lets people add what they typed as a new option. Called with the text. */
@@ -128,7 +129,6 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
           styles.combobox,
           multiple && styles.multiple,
           (invalid || props['aria-invalid']) && inputStyles.invalid,
-          valid && !invalid && !props['aria-invalid'] && !disabled && inputStyles.valid,
           disabled && inputStyles.disabled,
           className,
         )}
@@ -166,6 +166,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
             onKeyDown={onKey}
           />
         </div>
+        <StatusIcon invalid={invalid || !!props['aria-invalid']} valid={valid} disabled={disabled} />
         <Icon name="CaretDown" className={cx(styles.caret, open && styles.caretOpen)} />
       </div>
       {open && (
@@ -217,17 +218,17 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
   );
 });
 
-type FieldBits = Pick<FieldProps, 'label' | 'hint' | 'error' | 'success' | 'optional' | 'info'> & { fieldClassName?: string };
+type FieldBits = Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> & { fieldClassName?: string };
 export type ComboboxFieldProps = (Omit<ComboboxProps, 'aria-describedby' | 'aria-invalid'> | Omit<MultiComboboxProps, 'aria-describedby' | 'aria-invalid'>) & FieldBits;
 
 /** A Combobox with a label and hint. */
 export const ComboboxField = forwardRef<HTMLInputElement, ComboboxFieldProps>(function ComboboxField(
-  { label, hint, error, success, optional, info, required, id, fieldClassName, valid, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, valid, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} success={success} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
-      {(c) => <Combobox ref={ref} {...(rest as ComboboxProps)} {...c} valid={valid || (success != null && error == null)} />}
+    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+      {(c) => <Combobox ref={ref} {...(rest as ComboboxProps)} {...c} valid={valid} />}
     </Field>
   );
 });

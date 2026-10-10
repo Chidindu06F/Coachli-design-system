@@ -37,7 +37,7 @@ export const Limits: Story = {
 
 /** A green border and message once the date is accepted. */
 export const Success: Story = {
-  args: { label: 'Delivery day', defaultValue: addDays(today, 2), success: 'We deliver on this day.' },
+  args: { label: 'Delivery day', defaultValue: addDays(today, 2), valid: true },
 };
 
 /** Two months, presets and Apply. */

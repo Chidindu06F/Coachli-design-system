@@ -55,11 +55,6 @@
 .invalid:hover:not(.disabled),
 .invalid:focus-within { --line: var(--halo-state-error-primary); }
 
-.valid,
-.valid:hover:not(.disabled),
-.valid:focus-within { --line: var(--halo-state-success-primary); }
-
-.end.validIcon { color: var(--halo-icon-positive); }
 
 .disabled {
   --line: var(--halo-border-secondary);

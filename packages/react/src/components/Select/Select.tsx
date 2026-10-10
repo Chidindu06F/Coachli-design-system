@@ -3,6 +3,7 @@ import type { KeyboardEvent, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
 import { mergeRefs, Portal, useDismiss, useFloating } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
+import { StatusIcon } from '../../internal/StatusIcon';
 import { useControllable } from '../../internal/useControllable';
 import { Field } from '../Field';
 import type { FieldProps } from '../Field';
@@ -29,7 +30,7 @@ export interface SelectProps {
   /** 32, 40 or 48px. Figma: Size. */
   size?: 'sm' | 'md' | 'lg';
   invalid?: boolean;
-  /** Green border when the value checks out. Figma: State=Success. */
+  /** A green check at the end once the value checks out. Figma: State=Success. */
   valid?: boolean;
   disabled?: boolean;
   /** Form field name. A hidden input carries the value. */
@@ -123,12 +124,13 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
         aria-describedby={aria['aria-describedby']}
         aria-required={required || undefined}
         disabled={disabled}
-        className={cx(inputStyles.box, inputStyles[size], styles.trigger, (invalid || aria['aria-invalid']) && inputStyles.invalid, valid && !invalid && !aria['aria-invalid'] && !disabled && inputStyles.valid, disabled && inputStyles.disabled, className)}
+        className={cx(inputStyles.box, inputStyles[size], styles.trigger, (invalid || aria['aria-invalid']) && inputStyles.invalid, disabled && inputStyles.disabled, className)}
         onClick={() => setOpen(!open)}
         onKeyDown={onKey}
       >
         {(selected?.icon ?? icon) && <span className={inputStyles.icon} aria-hidden="true">{selected?.icon ?? icon}</span>}
         <span className={cx(styles.value, !selected && styles.placeholder)}>{selected?.label ?? placeholder}</span>
+        <StatusIcon invalid={invalid || !!aria['aria-invalid']} valid={valid} disabled={disabled} />
         <Icon name="CaretDown" className={cx(styles.caret, open && styles.caretOpen)} />
       </button>
       {name && <input type="hidden" name={name} value={v ?? ''} />}
@@ -161,18 +163,18 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
   );
 });
 
-export interface SelectFieldProps extends Omit<SelectProps, 'aria-describedby' | 'aria-invalid'>, Pick<FieldProps, 'label' | 'hint' | 'error' | 'success' | 'optional' | 'info'> {
+export interface SelectFieldProps extends Omit<SelectProps, 'aria-describedby' | 'aria-invalid'>, Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> {
   fieldClassName?: string;
 }
 
 /** A Select with a label and hint. Figma: Select field. */
 export const SelectField = forwardRef<HTMLButtonElement, SelectFieldProps>(function SelectField(
-  { label, hint, error, success, optional, info, required, id, fieldClassName, valid, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, valid, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} success={success} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
-      {(c) => <Select ref={ref} {...rest} {...c} valid={valid || (success != null && error == null)} />}
+    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+      {(c) => <Select ref={ref} {...rest} {...c} valid={valid} />}
     </Field>
   );
 });

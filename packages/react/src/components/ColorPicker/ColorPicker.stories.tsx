@@ -49,7 +49,7 @@ export const Field: Story = {
 export const Success: Story = {
   render: () => (
     <div style={{ maxWidth: 240 }}>
-      <ColorField label="Button colour" defaultValue="#1FA971" success="Text on it meets contrast." />
+      <ColorField label="Button colour" defaultValue="#1FA971" valid />
     </div>
   ),
 };
