@@ -38,14 +38,26 @@ export const Sizes: Story = {
   ),
 };
 
-/** Required, optional, an info tip, an error and disabled. */
+/** Required, optional, an info tip, success, an error and disabled. */
 export const States: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 20 }}>
       <InputField label="Full name" required defaultValue="Amara Okafor" />
       <InputField label="Company" optional info="Shown on your invoices." placeholder="Studio" />
+      <InputField label="Username" success="This username is available" defaultValue="amara.okafor" />
       <InputField label="Password" error="Use at least 8 characters." defaultValue="abc" />
       <InputField label="Email" disabled defaultValue="amara@example.com" />
+    </div>
+  ),
+};
+
+/** After a value passes a check: a green border, a check at the end and a green message. Use `success` on InputField, or `valid` on Input. An error always wins. */
+export const Success: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 20 }}>
+      <InputField label="Username" success="This username is available" defaultValue="amara.okafor" />
+      <InputField label="Account number" hint="10 digits" success="Amara Okafor, GTBank" defaultValue="0123456789" />
+      <Input valid defaultValue="SAVE20" aria-label="Promo code" />
     </div>
   ),
 };

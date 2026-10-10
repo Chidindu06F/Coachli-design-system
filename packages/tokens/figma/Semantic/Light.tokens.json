@@ -1705,5 +1705,147 @@
         }
       }
     }
+  },
+  "chart": {
+    "series-1": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.13333333333333333,
+          0.13333333333333333,
+          0.13333333333333333
+        ],
+        "alpha": 1,
+        "hex": "#222222"
+      },
+      "$description": "First series. The main line or bar.",
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/black/400",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "series-2": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.2784313725490196,
+          0.7607843137254902,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#47C2FF"
+      },
+      "$description": "Second series.",
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/skyblue/300",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "series-3": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.11372549019607843,
+          0.6862745098039216,
+          0.3803921568627451
+        ],
+        "alpha": 1,
+        "hex": "#1DAF61"
+      },
+      "$description": "Third series.",
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/green/300",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "series-4": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9647058823529412,
+          0.7098039215686275,
+          0.11764705882352941
+        ],
+        "alpha": 1,
+        "hex": "#F6B51E"
+      },
+      "$description": "Fourth series.",
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/yellow/300",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "series-5": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8941176470588236,
+          0.3137254901960784,
+          0.5607843137254902
+        ],
+        "alpha": 1,
+        "hex": "#E4508F"
+      },
+      "$description": "Fifth series.",
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/pink/300",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "series-6": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7490196078431373,
+          0.7490196078431373,
+          0.7490196078431373
+        ],
+        "alpha": 1,
+        "hex": "#BFBFBF"
+      },
+      "$description": "Sixth series, or Other and comparison data.",
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/neutrals/600",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "grid": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9019607843137255,
+          0.9019607843137255,
+          0.9019607843137255
+        ],
+        "alpha": 1,
+        "hex": "#E6E6E6"
+      },
+      "$description": "Grid lines and the axis line.",
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/neutrals/300",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    }
   }
 }

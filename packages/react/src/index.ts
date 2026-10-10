@@ -23,6 +23,8 @@ export { Card } from './components/Card';
 export type { CardProps } from './components/Card';
 export { Carousel, CarouselSlide } from './components/Carousel';
 export type { CarouselProps, CarouselSlideProps } from './components/Carousel';
+export { AreaChart, BarChart, ChartLegend, LineChart, PieChart, Sparkline } from './components/Chart';
+export type { AreaChartProps, BarChartProps, ChartDatum, ChartSeries, LineChartProps, PieChartProps, PieSlice, SeriesColor, SparklineProps } from './components/Chart';
 export { Checkbox, CheckboxGroup } from './components/Checkbox';
 export type { CheckboxGroupProps, CheckboxProps, CheckboxSize } from './components/Checkbox';
 export { CompactButton } from './components/CompactButton';
