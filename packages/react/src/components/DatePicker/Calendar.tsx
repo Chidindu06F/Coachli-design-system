@@ -32,8 +32,8 @@ interface CalendarBase extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' |
   /** Something under the months, like Cancel and Apply buttons. */
   footer?: ReactNode;
   /**
-   * Arrows: the month name with back and forward arrows. Picker: the month name is also a button
-   * that swaps the days for months and years, to jump straight to a date far away, like a birthday.
+   * Arrows: the month name with back and forward arrows. Picker: the month name can be clicked
+   * to swap the days for months and years, to jump straight to a date far away, like a birthday.
    * Picker needs one month on show. Figma: Header.
    */
   header?: 'arrows' | 'picker';
@@ -278,7 +278,6 @@ export function Calendar(props: CalendarProps) {
                 <div className={styles.titles}>
                   <button type="button" className={styles.titleButton} aria-expanded={picking} aria-label={`${formatDate(month, locale, { month: 'long', year: 'numeric' })}, choose a month and year`} onClick={() => setPicking(!picking)}>
                     {formatDate(month, locale, { month: 'long', year: 'numeric' })}
-                    <Icon name="CaretDown" className={cx(styles.titleCaret, picking && styles.titleCaretOpen)} />
                   </button>
                 </div>
               ) : (

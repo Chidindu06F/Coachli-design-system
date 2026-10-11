@@ -37,8 +37,6 @@
 }
 .titleButton:hover { background: var(--halo-button-secondary-hover); }
 .titleButton:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
-.titleCaret { width: 16px; height: 16px; transition: transform 120ms ease; }
-.titleCaretOpen { transform: rotate(180deg); }
 .picker { min-height: 280px; }
 .monthTitle {
   font-size: var(--halo-font-size-md);

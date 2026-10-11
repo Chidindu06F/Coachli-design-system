@@ -7,6 +7,7 @@ import { MonthYearPanel } from '../../internal/MonthYearPanel';
 import { useControllable } from '../../internal/useControllable';
 import { Button } from '../Button';
 import { CompactButton } from '../CompactButton';
+import { Calendar } from '../DatePicker/Calendar';
 import { addDays, addMonths, before, formatDate, monthGrid, sameDay, sameMonth, startOfDay } from '../DatePicker/dates';
 import { Popover } from '../Popover';
 import { SegmentedControl } from '../SegmentedControl';
@@ -53,7 +54,7 @@ export interface EventCalendarProps extends Omit<HTMLAttributes<HTMLDivElement>,
   /** Which views the switch offers. */
   views?: EventCalendarView[];
   /**
-   * Full: the title is a button that jumps to any month or year, and the view switch shows.
+   * Full: the title can be clicked to open a calendar and jump to any date, and the view switch shows.
    * Simple: a plain title with the arrows and Today. Figma: Header.
    */
   header?: 'full' | 'simple';
@@ -302,11 +303,10 @@ export function EventCalendar({
                   className={styles.titleButton}
                   aria-haspopup="dialog"
                   aria-expanded={jumping}
-                  aria-label={`${title}, choose ${mode === 'year' ? 'a year' : 'a month and year'}`}
+                  aria-label={`${title}, choose ${mode === 'year' ? 'a year' : 'a date'}`}
                   onClick={() => setJumping(!jumping)}
                 >
                   <span aria-live="polite">{title}</span>
-                  <Icon name="CaretDown" className={cx(styles.titleCaret, jumping && styles.titleCaretOpen)} />
                 </button>
               </h2>
             ) : (
@@ -338,18 +338,34 @@ export function EventCalendar({
 
       {jumping && (
         <Portal>
-          <div ref={jumpPanel} role="dialog" aria-label={mode === 'year' ? 'Choose a year' : 'Choose a month and year'} className={styles.jumpPanel} style={jumpStyle}>
-            <MonthYearPanel
-              value={mode === 'month' || mode === 'year' ? first : focus}
-              unit={mode === 'year' ? 'year' : 'month'}
-              fromYear={fromYear}
-              toYear={toYear}
-              locale={locale}
-              onSelect={(d) => {
-                goMonth(d.getFullYear(), d.getMonth());
-                closeJump();
-              }}
-            />
+          <div ref={jumpPanel} role="dialog" aria-label={mode === 'year' ? 'Choose a year' : 'Choose a date'} className={styles.jumpPanel} style={jumpStyle}>
+            {mode === 'year' ? (
+              <MonthYearPanel
+                className={styles.yearJump}
+                value={first}
+                unit="year"
+                fromYear={fromYear}
+                toYear={toYear}
+                locale={locale}
+                onSelect={(d) => {
+                  goMonth(d.getFullYear(), first.getMonth());
+                  closeJump();
+                }}
+              />
+            ) : (
+              // A calendar to pick any day; its own month name jumps to other months and years.
+              <Calendar
+                value={selected ?? focus}
+                onChange={(d) => {
+                  choose(d);
+                  closeJump();
+                }}
+                header="picker"
+                yearRange={[fromYear, toYear]}
+                weekStartsOn={weekStartsOn}
+                locale={locale}
+              />
+            )}
           </div>
         </Portal>
       )}

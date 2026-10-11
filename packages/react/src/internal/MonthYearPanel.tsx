@@ -64,7 +64,6 @@ export function MonthYearPanel({ value, onSelect, unit = 'month', fromYear = -In
         {view === 'months' ? (
           <button type="button" className={styles.headButton} aria-label={`${year}, choose a year`} onClick={() => setView('years')}>
             {yearName(year)}
-            <Icon name="CaretDown" className={styles.caret} />
           </button>
         ) : (
           <span className={styles.headLabel} aria-live="polite">

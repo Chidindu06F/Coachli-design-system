@@ -43,10 +43,9 @@
 .titleButton:hover { background: var(--halo-button-secondary-hover); }
 .titleButton:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
 .titleButton > span { overflow: hidden; text-overflow: ellipsis; }
-.titleCaret { flex-shrink: 0; width: 18px; height: 18px; transition: transform 120ms ease; }
-.titleCaretOpen { transform: rotate(180deg); }
-.jumpPanel {
-  z-index: 1000;
+.jumpPanel { z-index: 1000; }
+/* The Calendar brings its own panel; the year grid gets the same look. */
+.yearJump {
   padding: var(--halo-spacing-6);
   border-radius: var(--halo-radius-5);
   background: var(--halo-surface-primary);
