@@ -1,11 +1,12 @@
 import { useEffect, useId, useRef } from 'react';
 import type { KeyboardEvent, ReactElement, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { Portal, useDismiss, useFloating } from '../../internal/floating';
 import type { Align, Side } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
 import { cloneTrigger } from '../../internal/trigger';
 import { useControllable } from '../../internal/useControllable';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Menu.module.css';
 
 export interface MenuAction {
@@ -31,7 +32,10 @@ export interface MenuLabel {
 }
 export type MenuEntry = MenuAction | MenuSeparator | MenuLabel;
 
-export interface MenuProps {
+/** Parts you can style with `classNames` and `styles`. */
+export type MenuPart = 'root' | 'item' | 'icon' | 'label' | 'shortcut' | 'check' | 'separator' | 'groupLabel';
+
+export interface MenuProps extends PartsProps<MenuPart> {
   /** The element that opens the menu, like a "more" CompactButton. */
   trigger: ReactElement;
   items: MenuEntry[];
@@ -48,7 +52,8 @@ export interface MenuProps {
 const isAction = (e: MenuEntry): e is MenuAction => !e.type || e.type === 'item';
 
 /** A list of actions that opens from a button. Arrow keys move, Enter chooses, Escape closes. */
-export function Menu({ trigger, items, side = 'bottom', align = 'start', open, defaultOpen = false, onOpenChange, className, ...rest }: MenuProps) {
+export function Menu({ trigger, items, side = 'bottom', align = 'start', open, defaultOpen = false, onOpenChange, className, classNames, styles: partStyles, ...rest }: MenuProps) {
+  const part = parts<MenuPart>('menu', { classNames, styles: partStyles });
   const id = useId();
   const [isOpen, setOpen] = useControllable(open, defaultOpen, onOpenChange);
   const anchor = useRef<HTMLElement | null>(null);
@@ -84,10 +89,10 @@ export function Menu({ trigger, items, side = 'bottom', align = 'start', open, d
       {cloneTrigger(trigger, { ref: anchor, open: isOpen, id, haspopup: 'menu', onToggle: () => setOpen(!isOpen) })}
       {isOpen && (
         <Portal>
-          <div ref={floating} id={id} role="menu" aria-label={rest['aria-label']} className={cx(styles.menu, className)} style={style} onKeyDown={onKey}>
+          <div ref={floating} id={id} role="menu" aria-label={rest['aria-label']} {...part('root', [styles.menu, className], style)} onKeyDown={onKey}>
             {items.map((entry, i) => {
-              if (entry.type === 'separator') return <div key={i} role="separator" className={styles.separator} />;
-              if (entry.type === 'label') return <div key={i} className={styles.groupLabel}>{entry.label}</div>;
+              if (entry.type === 'separator') return <div key={i} role="separator" {...part('separator', styles.separator)} />;
+              if (entry.type === 'label') return <div key={i} {...part('groupLabel', styles.groupLabel)}>{entry.label}</div>;
               return (
                 <div
                   key={i}
@@ -98,7 +103,7 @@ export function Menu({ trigger, items, side = 'bottom', align = 'start', open, d
                   aria-checked={entry.selected}
                   aria-disabled={entry.disabled || undefined}
                   tabIndex={-1}
-                  className={cx(styles.item, entry.destructive && styles.destructive, entry.selected && styles.selected)}
+                  {...part('item', [styles.item, entry.destructive && styles.destructive, entry.selected && styles.selected])}
                   onClick={() => {
                     if (entry.disabled) return;
                     entry.onSelect?.();
@@ -112,10 +117,10 @@ export function Menu({ trigger, items, side = 'bottom', align = 'start', open, d
                     }
                   }}
                 >
-                  {entry.icon && <span className={styles.icon} aria-hidden="true">{entry.icon}</span>}
-                  <span className={styles.itemLabel}>{entry.label}</span>
-                  {entry.shortcut && <span className={styles.shortcut}>{entry.shortcut}</span>}
-                  {entry.selected && <Icon name="Check" className={styles.check} />}
+                  {entry.icon && <span {...part('icon', styles.icon)} aria-hidden="true">{entry.icon}</span>}
+                  <span {...part('label', styles.itemLabel)}>{entry.label}</span>
+                  {entry.shortcut && <span {...part('shortcut', styles.shortcut)}>{entry.shortcut}</span>}
+                  {entry.selected && <Icon name="Check" {...part('check', styles.check)} />}
                 </div>
               );
             })}

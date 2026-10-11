@@ -10,3 +10,4 @@ export type {
   TableRowProps,
   TableToolbarProps,
 } from './Table';
+export type { TablePart } from './Table';

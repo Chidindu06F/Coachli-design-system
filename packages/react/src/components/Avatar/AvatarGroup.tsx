@@ -25,11 +25,12 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(function
   const extra = (total ?? avatars.length) - shown.length;
   const classes = [styles.group, styles[size], className].filter(Boolean).join(' ');
 
+
   return (
-    <div ref={ref} role="group" aria-label={ariaLabel ?? `${total ?? avatars.length} people`} className={classes} {...rest}>
+    <div ref={ref} role="group" data-halo="avatar-group" aria-label={ariaLabel ?? `${total ?? avatars.length} people`} className={classes} {...rest}>
       {shown.map((a) => cloneElement(a, { size, className: [styles.member, a.props.className].filter(Boolean).join(' ') }))}
       {extra > 0 && (
-        <span className={`${styles.avatar} ${styles.member}`} role="img" aria-label={`${extra} more`}>
+        <span data-part="more" className={`${styles.avatar} ${styles.member}`} role="img" aria-label={`${extra} more`}>
           <span className={`${styles.circle} ${styles.neutral}`}>
             <span className={styles.initials} aria-hidden="true">+{extra}</span>
           </span>

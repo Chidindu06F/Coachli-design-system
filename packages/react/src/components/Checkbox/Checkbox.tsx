@@ -1,10 +1,15 @@
 import { forwardRef, useEffect, useId, useRef } from 'react';
 import type { ChangeEvent, InputHTMLAttributes, ReactNode } from 'react';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Checkbox.module.css';
 
 export type CheckboxSize = 'sm' | 'md';
 
-export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+/** Parts you can style with `classNames` and `styles`. `className` goes on the root; other props go on the input. */
+export type CheckboxPart = 'root' | 'control' | 'input' | 'mark' | 'text' | 'label' | 'description';
+
+export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'>, PartsProps<CheckboxPart> {
   /** What ticking the box means. Leave it out only when the box is labelled some other way. Figma: Label. */
   label?: ReactNode;
   /** Extra detail under the label. Figma: Description. */
@@ -26,9 +31,10 @@ const MARKS: Record<CheckboxSize, { box: number; check: string; dash: string }> 
 
 /** A box people tick to choose any number of options, or to agree to something. */
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { label, description, size = 'md', indeterminate = false, invalid = false, onCheckedChange, onChange, className, id, disabled, ...rest },
+  { label, description, size = 'md', indeterminate = false, invalid = false, onCheckedChange, onChange, className, classNames, styles: partStyles, id, disabled, ...rest },
   ref,
 ) {
+  const part = parts<CheckboxPart>('checkbox', { classNames, styles: partStyles });
   const inner = useRef<HTMLInputElement | null>(null);
   const autoId = useId();
   const inputId = id ?? autoId;
@@ -53,30 +59,30 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
 
   return (
     <label
-      className={[styles.field, styles[size], disabled && styles.disabled, className].filter(Boolean).join(' ')}
+      {...part('root', [styles.field, styles[size], disabled && styles.disabled, className])}
       htmlFor={inputId}
     >
-      <span className={styles.control}>
+      <span {...part('control', styles.control)}>
         <input
           {...rest}
           ref={setRef}
           id={inputId}
           type="checkbox"
-          className={styles.input}
+          {...part('input', styles.input, rest.style)}
           disabled={disabled}
           aria-invalid={invalid || undefined}
           aria-describedby={[rest['aria-describedby'], descId].filter(Boolean).join(' ') || undefined}
           onChange={handleChange}
         />
-        <svg className={styles.mark} viewBox={`0 0 ${m.box} ${m.box}`} aria-hidden="true">
+        <svg {...part('mark', styles.mark)} viewBox={`0 0 ${m.box} ${m.box}`} aria-hidden="true">
           <path className={styles.check} d={m.check} />
           <path className={styles.dash} d={m.dash} />
         </svg>
       </span>
       {(label || description) && (
-        <span className={styles.text}>
-          {label && <span className={styles.label}>{label}</span>}
-          {description && <span id={descId} className={styles.description}>{description}</span>}
+        <span {...part('text', styles.text)}>
+          {label && <span {...part('label', styles.label)}>{label}</span>}
+          {description && <span id={descId} {...part('description', styles.description)}>{description}</span>}
         </span>
       )}
     </label>

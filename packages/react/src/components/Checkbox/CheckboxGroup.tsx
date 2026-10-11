@@ -1,9 +1,14 @@
 import { forwardRef } from 'react';
 import type { FieldsetHTMLAttributes, ReactNode } from 'react';
 import type { CheckboxSize } from './Checkbox';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Checkbox.module.css';
 
-export interface CheckboxGroupProps extends FieldsetHTMLAttributes<HTMLFieldSetElement> {
+/** Parts you can style with `classNames` and `styles`. */
+export type CheckboxGroupPart = 'root' | 'legend' | 'items';
+
+export interface CheckboxGroupProps extends FieldsetHTMLAttributes<HTMLFieldSetElement>, PartsProps<CheckboxGroupPart> {
   /** Names the group. Screen readers read it with each option. Figma: Label. */
   label: ReactNode;
   /** Hides the label visually but keeps it for screen readers. Figma: Show label off. */
@@ -16,13 +21,14 @@ export interface CheckboxGroupProps extends FieldsetHTMLAttributes<HTMLFieldSetE
 
 /** A labelled list of checkboxes. */
 export const CheckboxGroup = forwardRef<HTMLFieldSetElement, CheckboxGroupProps>(function CheckboxGroup(
-  { label, hideLabel = false, size = 'md', className, children, ...rest },
+  { label, hideLabel = false, size = 'md', className, classNames, styles: partStyles, children, ...rest },
   ref,
 ) {
+  const part = parts<CheckboxGroupPart>('checkbox-group', { classNames, styles: partStyles });
   return (
-    <fieldset ref={ref} className={[styles.group, styles[size], className].filter(Boolean).join(' ')} {...rest}>
-      <legend className={hideLabel ? styles.srOnly : styles.legend}>{label}</legend>
-      <div className={styles.items}>{children}</div>
+    <fieldset ref={ref} {...rest} {...part('root', [styles.group, styles[size], className], rest.style)}>
+      <legend {...part('legend', hideLabel ? styles.srOnly : styles.legend)}>{label}</legend>
+      <div {...part('items', styles.items)}>{children}</div>
     </fieldset>
   );
 });

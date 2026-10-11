@@ -1,5 +1,7 @@
 import { createContext, forwardRef, useCallback, useContext, useId, useMemo, useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Accordion.module.css';
 
 type AccordionType = 'single' | 'multiple';
@@ -11,7 +13,11 @@ interface AccordionContextValue {
 
 const AccordionContext = createContext<AccordionContextValue | null>(null);
 
-export interface AccordionProps extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
+/** Parts you can style with `classNames` and `styles` on Accordion. Every AccordionItem picks them up. */
+export type AccordionPart = 'root' | 'item' | 'heading' | 'header' | 'title' | 'icon' | 'panel' | 'body';
+const PartCtx = createContext(parts<AccordionPart>('accordion', {}));
+
+export interface AccordionProps extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'>, PartsProps<AccordionPart> {
   /** single: opening one item closes the others. multiple: any number can be open. */
   type?: AccordionType;
   /** Items open on first render (their `value`s). */
@@ -24,9 +30,10 @@ export interface AccordionProps extends Omit<HTMLAttributes<HTMLDivElement>, 'de
 
 /** A stack of AccordionItems. Manages which ones are open. */
 export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Accordion(
-  { type = 'multiple', defaultValue = [], value, onValueChange, className, children, ...rest },
+  { type = 'multiple', defaultValue = [], value, onValueChange, className, classNames, styles: partStyles, children, ...rest },
   ref,
 ) {
+  const part = useMemo(() => parts<AccordionPart>('accordion', { classNames, styles: partStyles }), [classNames, partStyles]);
   const [internal, setInternal] = useState<string[]>(defaultValue);
   const open = value ?? internal;
   const setOpen = useCallback(
@@ -49,9 +56,11 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Acc
 
   return (
     <AccordionContext.Provider value={ctx}>
-      <div ref={ref} className={className} {...rest}>
-        {children}
-      </div>
+      <PartCtx.Provider value={part}>
+        <div ref={ref} {...rest} {...part('root', className, rest.style)}>
+          {children}
+        </div>
+      </PartCtx.Provider>
     </AccordionContext.Provider>
   );
 });
@@ -80,6 +89,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
   const autoId = useId();
   const itemValue = value ?? autoId;
   const ctx = useContext(AccordionContext);
+  const part = useContext(PartCtx);
   const [localOpen, setLocalOpen] = useState(defaultOpen);
   const open = !disabled && (ctx ? ctx.isOpen(itemValue) : localOpen);
   const toggle = () => (ctx ? ctx.toggle(itemValue) : setLocalOpen((o) => !o));
@@ -87,25 +97,22 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
   const Heading = `h${headingLevel}` as const;
   const headerId = `${autoId}-header`;
   const panelId = `${autoId}-panel`;
-  const classes = [styles.item, open && styles.open, divider && styles.divider, disabled && styles.disabled, className]
-    .filter(Boolean)
-    .join(' ');
 
   return (
-    <div ref={ref} className={classes} {...rest}>
-      <Heading className={styles.heading}>
+    <div ref={ref} {...rest} {...part('item', [styles.item, open && styles.open, divider && styles.divider, disabled && styles.disabled, className], rest.style)}>
+      <Heading {...part('heading', styles.heading)}>
         <button
           type="button"
           id={headerId}
-          className={styles.header}
+          {...part('header', styles.header)}
           aria-expanded={open}
           aria-controls={panelId}
           disabled={disabled}
           onClick={toggle}
         >
-          <span className={styles.title}>{title}</span>
+          <span {...part('title', styles.title)}>{title}</span>
           {/* Looks like a Ghost Compact button, but it's part of the header button. */}
-          <span className={styles.iconBox} aria-hidden="true">
+          <span {...part('icon', styles.iconBox)} aria-hidden="true">
             <svg viewBox="0 0 256 256" width="20" height="20" fill="currentColor">
               {open ? (
                 <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128Z" />
@@ -116,9 +123,9 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
           </span>
         </button>
       </Heading>
-      <div id={panelId} role="region" aria-labelledby={headerId} className={styles.panel} inert={!open} aria-hidden={!open}>
+      <div id={panelId} role="region" aria-labelledby={headerId} {...part('panel', styles.panel)} inert={!open} aria-hidden={!open}>
         <div className={styles.panelInner}>
-          <div className={styles.panelBody}>{children}</div>
+          <div {...part('body', styles.panelBody)}>{children}</div>
         </div>
       </div>
     </div>

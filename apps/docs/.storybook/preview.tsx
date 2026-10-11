@@ -20,7 +20,7 @@ const preview: Preview = {
     backgrounds: { disable: true },
     a11y: { test: 'todo' },
     options: {
-      storySort: { order: ['Introduction', 'Theming', 'Foundations', ['Colors', 'Palette', 'Typography', 'Spacing & Radius', 'Grid & Layout', 'Illustrations', 'Awards'], 'Components'] },
+      storySort: { order: ['Introduction', 'Theming', 'Customising', 'Foundations', ['Colors', 'Palette', 'Typography', 'Spacing & Radius', 'Grid & Layout', 'Illustrations', 'Awards'], 'Components'] },
     },
   },
 };

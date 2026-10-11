@@ -30,6 +30,7 @@ export const Award = forwardRef<SVGSVGElement, AwardProps>(function Award({ name
       aria-label={label || undefined}
       aria-hidden={label ? undefined : true}
       focusable="false"
+      data-halo="award"
       className={cx(styles.award, className)}
       // The drawing is a fixed string from this package, never user input.
       dangerouslySetInnerHTML={{ __html: awardMarkup(name, colors, `award-${id}`) }}

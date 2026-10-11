@@ -1,13 +1,14 @@
 import { forwardRef, useEffect, useId, useRef, useState } from 'react';
 import type { RefObject } from 'react';
-import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import { mergeRefs, Portal, useDismiss, useFloating } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
 import { StatusIcon } from '../../internal/StatusIcon';
 import { useControllable } from '../../internal/useControllable';
 import { Button } from '../Button';
 import { Field } from '../Field';
-import type { FieldProps } from '../Field';
+import type { FieldProps, FieldWrapperProps } from '../Field';
 import inputStyles from '../Input/Input.module.css';
 import selectStyles from '../Select/Select.module.css';
 import { Tag } from '../Tag';
@@ -16,7 +17,13 @@ import type { CalendarPreset, DateRange } from './Calendar';
 import styles from './DatePicker.module.css';
 import { formatDate } from './dates';
 
-interface PickerBase {
+/**
+ * Parts you can style with `classNames` and `styles`. `start`, `dash` and `end` are in the range box;
+ * `values` and `button` in the several-dates box. The popover and calendar open in a layer over the page.
+ */
+export type DatePickerPart = 'root' | 'icon' | 'value' | 'start' | 'dash' | 'end' | 'values' | 'button' | 'popover' | 'calendar';
+
+interface PickerBase extends PartsProps<DatePickerPart> {
   placeholder?: string;
   size?: 'sm' | 'md' | 'lg';
   invalid?: boolean;
@@ -59,6 +66,8 @@ type TriggerProps = PickerBase & {
   range?: { start?: string; end?: string; startPlaceholder: string; endPlaceholder: string };
   onToggle: () => void;
   dialogId: string;
+  /** Component name for data-halo. */
+  halo: string;
 };
 
 const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(function Trigger(
@@ -73,10 +82,14 @@ const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(function Trigger(
     className,
     onToggle,
     dialogId,
+    halo,
+    classNames,
+    styles: partStyles,
     ...aria
   },
   ref,
 ) {
+  const part = parts<DatePickerPart>(halo, { classNames, styles: partStyles });
   return (
     <button
       ref={ref}
@@ -90,7 +103,7 @@ const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(function Trigger(
       aria-invalid={invalid || aria['aria-invalid'] || undefined}
       aria-required={aria.required || undefined}
       disabled={disabled}
-      className={cx(inputStyles.box, inputStyles[size], selectStyles.trigger, (invalid || aria['aria-invalid']) && inputStyles.invalid, disabled && inputStyles.disabled, className)}
+      {...part('root', [inputStyles.box, inputStyles[size], selectStyles.trigger, (invalid || aria['aria-invalid']) && inputStyles.invalid, disabled && inputStyles.disabled, className])}
       onClick={onToggle}
       onKeyDown={(e) => {
         if (e.key === 'ArrowDown' && !open) {
@@ -99,15 +112,15 @@ const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(function Trigger(
         }
       }}
     >
-      <Icon name="CalendarBlank" className={cx(inputStyles.icon, selectStyles.caret)} />
+      <Icon name="CalendarBlank" {...part('icon', [inputStyles.icon, selectStyles.caret])} />
       {range ? (
-        <span className={styles.rangeValue}>
-          <span className={cx(styles.rangePart, !range.start && selectStyles.placeholder)}>{range.start ?? range.startPlaceholder}</span>
-          <span className={styles.rangeDash} aria-hidden="true">–</span>
-          <span className={cx(styles.rangePart, !range.end && selectStyles.placeholder)}>{range.end ?? range.endPlaceholder}</span>
+        <span {...part('value', styles.rangeValue)}>
+          <span {...part('start', [styles.rangePart, !range.start && selectStyles.placeholder])}>{range.start ?? range.startPlaceholder}</span>
+          <span {...part('dash', styles.rangeDash)} aria-hidden="true">–</span>
+          <span {...part('end', [styles.rangePart, !range.end && selectStyles.placeholder])}>{range.end ?? range.endPlaceholder}</span>
         </span>
       ) : (
-        <span className={cx(selectStyles.value, !text && selectStyles.placeholder)}>{text ?? placeholder}</span>
+        <span {...part('value', [selectStyles.value, !text && selectStyles.placeholder])}>{text ?? placeholder}</span>
       )}
       <StatusIcon invalid={invalid || !!aria['aria-invalid']} disabled={disabled} />
     </button>
@@ -128,20 +141,22 @@ export interface DatePickerProps extends PickerBase {
 
 /** A box that opens a Calendar to pick one day. */
 export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(function DatePicker(
-  { value, defaultValue = null, onValueChange, placeholder = 'Pick a date', locale, format, min, max, isDateDisabled, weekStartsOn, calendarHeader, yearRange, ...rest },
+  { value, defaultValue = null, onValueChange, placeholder = 'Pick a date', locale, format, min, max, isDateDisabled, weekStartsOn, calendarHeader, yearRange, classNames, styles: partStyles, ...rest },
   ref,
 ) {
+  const part = parts<DatePickerPart>('date-picker', { classNames, styles: partStyles });
   const dialogId = useId();
   const [date, setDate] = useControllable<Date | null>(value, defaultValue, onValueChange);
   const p = usePicker();
   const show = format ?? ((d: Date) => formatDate(d, locale));
   return (
     <>
-      <Trigger ref={mergeRefs(ref, p.anchor)} open={p.open} text={date ? show(date) : undefined} placeholder={placeholder} dialogId={dialogId} onToggle={() => p.setOpen(!p.open)} {...rest} />
+      <Trigger ref={mergeRefs(ref, p.anchor)} open={p.open} text={date ? show(date) : undefined} placeholder={placeholder} dialogId={dialogId} onToggle={() => p.setOpen(!p.open)} halo="date-picker" classNames={classNames} styles={partStyles} {...rest} />
       {p.open && (
         <Portal>
-          <div ref={p.floating} id={dialogId} role="dialog" aria-label="Choose a date" className={styles.popover} style={p.style}>
+          <div ref={p.floating} id={dialogId} role="dialog" aria-label="Choose a date" {...part('popover', styles.popover, p.style)}>
             <Calendar
+              {...part('calendar')}
               value={date}
               onChange={(d) => {
                 setDate(d);
@@ -178,9 +193,10 @@ export interface DateRangePickerProps extends Omit<PickerBase, 'placeholder'> {
 
 /** A box that opens a two-month Calendar to pick a start and end day, then Apply. */
 export const DateRangePicker = forwardRef<HTMLButtonElement, DateRangePickerProps>(function DateRangePicker(
-  { value, defaultValue = null, onValueChange, startPlaceholder = 'Start date', endPlaceholder = 'End date', locale, format, presets, min, max, isDateDisabled, weekStartsOn, ...rest },
+  { value, defaultValue = null, onValueChange, startPlaceholder = 'Start date', endPlaceholder = 'End date', locale, format, presets, min, max, isDateDisabled, weekStartsOn, classNames, styles: partStyles, ...rest },
   ref,
 ) {
+  const part = parts<DatePickerPart>('date-range-picker', { classNames, styles: partStyles });
   const dialogId = useId();
   const [range, setRange] = useControllable<DateRange | null>(value, defaultValue, onValueChange);
   const [draft, setDraft] = useState<DateRange | null>(range);
@@ -198,12 +214,16 @@ export const DateRangePicker = forwardRef<HTMLButtonElement, DateRangePickerProp
           setDraft(range);
           p.setOpen(!p.open);
         }}
+        halo="date-range-picker"
+        classNames={classNames}
+        styles={partStyles}
         {...rest}
       />
       {p.open && (
         <Portal>
-          <div ref={p.floating} id={dialogId} role="dialog" aria-label="Choose dates" className={styles.popover} style={p.style}>
+          <div ref={p.floating} id={dialogId} role="dialog" aria-label="Choose dates" {...part('popover', styles.popover, p.style)}>
             <Calendar
+              {...part('calendar')}
               mode="range"
               value={draft}
               onChange={setDraft}
@@ -275,10 +295,13 @@ export const MultiDatePicker = forwardRef<HTMLButtonElement, MultiDatePickerProp
     invalid,
     disabled,
     className,
+    classNames,
+    styles: partStyles,
     ...aria
   },
   ref,
 ) {
+  const part = parts<DatePickerPart>('multi-date-picker', { classNames, styles: partStyles });
   const dialogId = useId();
   const [dates, setDates] = useControllable<Date[]>(value, defaultValue, onValueChange);
   const p = usePicker();
@@ -296,14 +319,14 @@ export const MultiDatePicker = forwardRef<HTMLButtonElement, MultiDatePickerProp
     <>
       <div
         ref={p.anchor as unknown as RefObject<HTMLDivElement>}
-        className={cx(inputStyles.box, inputStyles[size], selectStyles.combobox, selectStyles.multiple, styles.multi, isInvalid && inputStyles.invalid, disabled && inputStyles.disabled, className)}
+        {...part('root', [inputStyles.box, inputStyles[size], selectStyles.combobox, selectStyles.multiple, styles.multi, isInvalid && inputStyles.invalid, disabled && inputStyles.disabled, className])}
         onClick={(e) => {
           if (disabled || (e.target as HTMLElement).closest('button')) return;
           p.setOpen(true);
         }}
       >
-        <Icon name="CalendarBlank" className={cx(inputStyles.icon, styles.multiIcon)} />
-        <div className={selectStyles.values}>
+        <Icon name="CalendarBlank" {...part('icon', [inputStyles.icon, styles.multiIcon])} />
+        <div {...part('values', selectStyles.values)}>
           {dates.map((d) => (
             <Tag key={d.getTime()} size={size === 'sm' ? 'sm' : 'md'} disabled={disabled} removeLabel={`Remove ${full(d)}`} onRemove={() => remove(d)}>
               {show(d)}
@@ -321,7 +344,7 @@ export const MultiDatePicker = forwardRef<HTMLButtonElement, MultiDatePickerProp
             aria-invalid={isInvalid || undefined}
             aria-required={aria.required || undefined}
             disabled={disabled}
-            className={cx(styles.multiButton, !dates.length && selectStyles.placeholder)}
+            {...part('button', [styles.multiButton, !dates.length && selectStyles.placeholder])}
             onClick={() => p.setOpen(!p.open)}
             onKeyDown={(e) => {
               if (e.key === 'ArrowDown' && !p.open) {
@@ -340,8 +363,9 @@ export const MultiDatePicker = forwardRef<HTMLButtonElement, MultiDatePickerProp
       </div>
       {p.open && (
         <Portal>
-          <div ref={p.floating} id={dialogId} role="dialog" aria-label="Choose dates" className={styles.popover} style={p.style}>
+          <div ref={p.floating} id={dialogId} role="dialog" aria-label="Choose dates" {...part('popover', styles.popover, p.style)}>
             <Calendar
+              {...part('calendar')}
               mode="multiple"
               value={dates}
               onChange={setDates}
@@ -379,16 +403,16 @@ export const MultiDatePicker = forwardRef<HTMLButtonElement, MultiDatePickerProp
 
 /* ---------- Fields ---------- */
 
-type FieldBits = Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> & { fieldClassName?: string };
+type FieldBits = Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> & Pick<FieldWrapperProps, 'fieldClassName' | 'fieldClassNames' | 'fieldStyles'>;
 
 export type DatePickerFieldProps = Omit<DatePickerProps, 'aria-describedby' | 'aria-invalid'> & FieldBits;
 /** A DatePicker with a label and hint. */
 export const DatePickerField = forwardRef<HTMLButtonElement, DatePickerFieldProps>(function DatePickerField(
-  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, fieldClassNames, fieldStyles, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <DatePicker ref={ref} {...rest} {...c} />}
     </Field>
   );
@@ -397,11 +421,11 @@ export const DatePickerField = forwardRef<HTMLButtonElement, DatePickerFieldProp
 export type DateRangePickerFieldProps = Omit<DateRangePickerProps, 'aria-describedby' | 'aria-invalid'> & FieldBits;
 /** A DateRangePicker with a label and hint. */
 export const DateRangePickerField = forwardRef<HTMLButtonElement, DateRangePickerFieldProps>(function DateRangePickerField(
-  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, fieldClassNames, fieldStyles, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <DateRangePicker ref={ref} {...rest} {...c} />}
     </Field>
   );
@@ -410,11 +434,11 @@ export const DateRangePickerField = forwardRef<HTMLButtonElement, DateRangePicke
 export type MultiDatePickerFieldProps = Omit<MultiDatePickerProps, 'aria-describedby' | 'aria-invalid'> & FieldBits;
 /** A MultiDatePicker with a label and hint. Figma: Multiple date field. */
 export const MultiDatePickerField = forwardRef<HTMLButtonElement, MultiDatePickerFieldProps>(function MultiDatePickerField(
-  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, fieldClassNames, fieldStyles, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <MultiDatePicker ref={ref} {...rest} {...c} />}
     </Field>
   );

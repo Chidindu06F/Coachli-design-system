@@ -1,10 +1,14 @@
 import { useRef } from 'react';
 import type { ClipboardEvent, KeyboardEvent } from 'react';
-import { cx } from '../../internal/cx';
 import { useControllable } from '../../internal/useControllable';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './VerificationCode.module.css';
 
-export interface VerificationCodeProps {
+/** Parts you can style with `classNames` and `styles`. */
+export type VerificationCodePart = 'root' | 'digit';
+
+export interface VerificationCodeProps extends PartsProps<VerificationCodePart> {
   /** Number of digits. */
   length?: number;
   value?: string;
@@ -32,8 +36,11 @@ export function VerificationCode({
   invalid,
   disabled,
   className,
+  classNames,
+  styles: partStyles,
   'aria-label': ariaLabel = 'Verification code',
 }: VerificationCodeProps) {
+  const part = parts<VerificationCodePart>('verification-code', { classNames, styles: partStyles });
   const [code, setCode] = useControllable(value, defaultValue, onValueChange);
   const refs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -58,14 +65,14 @@ export function VerificationCode({
   };
 
   return (
-    <div role="group" aria-label={ariaLabel} className={cx(styles.code, styles[size], className)}>
+    <div role="group" aria-label={ariaLabel} {...part('root', [styles.code, styles[size], className])}>
       {Array.from({ length }, (_, i) => (
         <input
           key={i}
           ref={(el) => {
             refs.current[i] = el;
           }}
-          className={styles.digit}
+          {...part('digit', styles.digit)}
           inputMode="numeric"
           autoComplete={i === 0 ? 'one-time-code' : 'off'}
           maxLength={1}

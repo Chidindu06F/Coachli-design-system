@@ -1,12 +1,13 @@
 import { forwardRef, useEffect, useId, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import { mergeRefs, Portal, useDismiss, useFloating } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
 import { StatusIcon } from '../../internal/StatusIcon';
 import { useControllable } from '../../internal/useControllable';
 import { Field } from '../Field';
-import type { FieldProps } from '../Field';
+import type { FieldProps, FieldWrapperProps } from '../Field';
 import inputStyles from '../Input/Input.module.css';
 import menuStyles from '../Menu/Menu.module.css';
 import styles from './Select.module.css';
@@ -19,7 +20,10 @@ export interface SelectOption {
   disabled?: boolean;
 }
 
-export interface SelectProps {
+/** Parts you can style with `classNames` and `styles`. The menu opens in a layer over the page. */
+export type SelectPart = 'root' | 'icon' | 'value' | 'caret' | 'menu' | 'option';
+
+export interface SelectProps extends PartsProps<SelectPart> {
   options: SelectOption[];
   value?: string;
   defaultValue?: string;
@@ -43,9 +47,10 @@ export interface SelectProps {
 
 /** Picks one option from a known list. Typing jumps to a match. Figma: Select. */
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select(
-  { options, value, defaultValue, onValueChange, placeholder = 'Select an option', icon, size = 'md', invalid, disabled, name, id, className, required, ...aria },
+  { options, value, defaultValue, onValueChange, placeholder = 'Select an option', icon, size = 'md', invalid, disabled, name, id, className, classNames, styles: partStyles, required, ...aria },
   ref,
 ) {
+  const part = parts<SelectPart>('select', { classNames, styles: partStyles });
   const listId = useId();
   const [v, setV] = useControllable<string | undefined>(value, defaultValue, onValueChange as (v: string | undefined) => void);
   const [open, setOpen] = useState(false);
@@ -122,19 +127,19 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
         aria-describedby={aria['aria-describedby']}
         aria-required={required || undefined}
         disabled={disabled}
-        className={cx(inputStyles.box, inputStyles[size], styles.trigger, (invalid || aria['aria-invalid']) && inputStyles.invalid, disabled && inputStyles.disabled, className)}
+        {...part('root', [inputStyles.box, inputStyles[size], styles.trigger, (invalid || aria['aria-invalid']) && inputStyles.invalid, disabled && inputStyles.disabled, className])}
         onClick={() => setOpen(!open)}
         onKeyDown={onKey}
       >
-        {(selected?.icon ?? icon) && <span className={inputStyles.icon} aria-hidden="true">{selected?.icon ?? icon}</span>}
-        <span className={cx(styles.value, !selected && styles.placeholder)}>{selected?.label ?? placeholder}</span>
+        {(selected?.icon ?? icon) && <span {...part('icon', inputStyles.icon)} aria-hidden="true">{selected?.icon ?? icon}</span>}
+        <span {...part('value', [styles.value, !selected && styles.placeholder])}>{selected?.label ?? placeholder}</span>
         <StatusIcon invalid={invalid || !!aria['aria-invalid']} disabled={disabled} />
-        <Icon name="CaretDown" className={cx(styles.caret, open && styles.caretOpen)} />
+        <Icon name="CaretDown" {...part('caret', [styles.caret, open && styles.caretOpen])} />
       </button>
       {name && <input type="hidden" name={name} value={v ?? ''} />}
       {open && (
         <Portal>
-          <div ref={floating} id={listId} role="listbox" className={menuStyles.menu} style={style}>
+          <div ref={floating} id={listId} role="listbox" {...part('menu', menuStyles.menu, style)}>
             {options.map((o, i) => (
               <div
                 key={o.value}
@@ -144,7 +149,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
                 aria-selected={o.value === v}
                 aria-disabled={o.disabled || undefined}
                 data-active={i === active}
-                className={menuStyles.item}
+                {...part('option', menuStyles.item)}
                 onPointerEnter={() => !o.disabled && setActive(i)}
                 onPointerDown={(e) => e.preventDefault()}
                 onClick={() => choose(i)}
@@ -163,15 +168,17 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
 
 export interface SelectFieldProps extends Omit<SelectProps, 'aria-describedby' | 'aria-invalid'>, Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> {
   fieldClassName?: string;
+  fieldClassNames?: FieldWrapperProps['fieldClassNames'];
+  fieldStyles?: FieldWrapperProps['fieldStyles'];
 }
 
 /** A Select with a label and hint. Figma: Select field. */
 export const SelectField = forwardRef<HTMLButtonElement, SelectFieldProps>(function SelectField(
-  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, fieldClassNames, fieldStyles, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <Select ref={ref} {...rest} {...c} />}
     </Field>
   );

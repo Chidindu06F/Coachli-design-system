@@ -1,9 +1,10 @@
 import { createContext, forwardRef, useContext, useId } from 'react';
 import type { FieldsetHTMLAttributes, InputHTMLAttributes, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
 import { useControllable } from '../../internal/useControllable';
 import { FieldLabel } from '../Field';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Radio.module.css';
 
 export type RadioSize = 'sm' | 'md';
@@ -18,7 +19,10 @@ interface GroupCtx {
 }
 const RadioGroupContext = createContext<GroupCtx | null>(null);
 
-export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+/** Parts you can style with `classNames` and `styles`. `className` goes on the root; other props go on the input. */
+export type RadioPart = 'root' | 'control' | 'input' | 'text' | 'label' | 'description';
+
+export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'>, PartsProps<RadioPart> {
   /** What choosing this option means. Figma: Label. */
   label?: ReactNode;
   /** Extra detail under the label. Figma: Description. */
@@ -32,9 +36,10 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 
 /** One option in a RadioGroup. A single radio on its own can't be unchosen; use a Checkbox for that. */
 export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio(
-  { label, description, size, value, invalid, disabled, className, id, onChange, ...rest },
+  { label, description, size, value, invalid, disabled, className, classNames, styles: partStyles, id, onChange, ...rest },
   ref,
 ) {
+  const part = parts<RadioPart>('radio', { classNames, styles: partStyles });
   const g = useContext(RadioGroupContext);
   const autoId = useId();
   const inputId = id ?? autoId;
@@ -43,14 +48,14 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio(
   const isDisabled = disabled ?? g?.disabled;
   const isInvalid = invalid ?? g?.invalid;
   return (
-    <label className={cx(styles.field, styles[s], isDisabled && styles.disabled, className)} htmlFor={inputId}>
-      <span className={styles.control}>
+    <label {...part('root', [styles.field, styles[s], isDisabled && styles.disabled, className])} htmlFor={inputId}>
+      <span {...part('control', styles.control)}>
         <input
           {...rest}
           ref={ref}
           id={inputId}
           type="radio"
-          className={styles.input}
+          {...part('input', styles.input, rest.style)}
           value={value}
           name={g?.name ?? rest.name}
           checked={g ? g.value === value : rest.checked}
@@ -64,16 +69,19 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio(
         />
       </span>
       {(label || description) && (
-        <span className={styles.text}>
-          {label && <span className={styles.label}>{label}</span>}
-          {description && <span id={descId} className={styles.description}>{description}</span>}
+        <span {...part('text', styles.text)}>
+          {label && <span {...part('label', styles.label)}>{label}</span>}
+          {description && <span id={descId} {...part('description', styles.description)}>{description}</span>}
         </span>
       )}
     </label>
   );
 });
 
-export interface RadioGroupProps extends Omit<FieldsetHTMLAttributes<HTMLFieldSetElement>, 'onChange' | 'defaultValue'> {
+/** Parts you can style with `classNames` and `styles`. */
+export type RadioGroupPart = 'root' | 'legend' | 'options' | 'hint';
+
+export interface RadioGroupProps extends Omit<FieldsetHTMLAttributes<HTMLFieldSetElement>, 'onChange' | 'defaultValue'>, PartsProps<RadioGroupPart> {
   /** Names the group with a Field label. Figma: Label. */
   label: ReactNode;
   /** Hides the label visually but keeps it for screen readers. */
@@ -97,9 +105,10 @@ export interface RadioGroupProps extends Omit<FieldsetHTMLAttributes<HTMLFieldSe
 
 /** A labelled set of radios where exactly one can be chosen. Arrow keys move between them. */
 export const RadioGroup = forwardRef<HTMLFieldSetElement, RadioGroupProps>(function RadioGroup(
-  { label, hideLabel, required, optional, hint, error, value, defaultValue, onValueChange, orientation = 'vertical', size = 'md', name, disabled = false, className, children, ...rest },
+  { label, hideLabel, required, optional, hint, error, value, defaultValue, onValueChange, orientation = 'vertical', size = 'md', name, disabled = false, className, classNames, styles: partStyles, children, ...rest },
   ref,
 ) {
+  const part = parts<RadioGroupPart>('radio-group', { classNames, styles: partStyles });
   const autoName = useId();
   const [v, setV] = useControllable<string | undefined>(value, defaultValue, onValueChange as (v: string | undefined) => void);
   const hintId = `${autoName}-hint`;
@@ -107,20 +116,20 @@ export const RadioGroup = forwardRef<HTMLFieldSetElement, RadioGroupProps>(funct
   return (
     <fieldset
       ref={ref}
-      className={cx(styles.group, className)}
       disabled={disabled}
       aria-describedby={message ? hintId : undefined}
       aria-required={required || undefined}
       {...rest}
+      {...part('root', [styles.group, className], rest.style)}
     >
-      <legend className={hideLabel ? styles.srOnly : styles.legend}>
+      <legend {...part('legend', hideLabel ? styles.srOnly : styles.legend)}>
         <FieldLabel required={required} optional={optional}>{label}</FieldLabel>
       </legend>
       <RadioGroupContext.Provider value={{ name: name ?? autoName, value: v, setValue: setV, size, invalid: error != null, disabled }}>
-        <div role="radiogroup" className={cx(styles.options, styles[orientation], styles[size])}>{children}</div>
+        <div role="radiogroup" {...part('options', [styles.options, styles[orientation], styles[size]])}>{children}</div>
       </RadioGroupContext.Provider>
       {message && (
-        <span id={hintId} className={cx(styles.hint, error != null && styles.error)}>
+        <span id={hintId} {...part('hint', [styles.hint, error != null && styles.error])}>
           {error != null && <Icon name="WarningCircle" className={styles.hintIcon} />}
           {message}
         </span>

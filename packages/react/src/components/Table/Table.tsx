@@ -7,13 +7,19 @@ import { Button } from '../Button';
 import { Checkbox } from '../Checkbox';
 import { Pagination } from '../Pagination';
 import { Select } from '../Select';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Table.module.css';
 
 const SizeCtx = createContext<'md' | 'sm'>('md');
 
+/** Parts you can style with `classNames` and `styles` on Table or DataTable. Rows, cells, the toolbar and the footer pick them up too. */
+export type TablePart = 'root' | 'scroll' | 'table' | 'caption' | 'headerCell' | 'row' | 'cell' | 'toolbar' | 'footer' | 'empty';
+const PartCtx = createContext(parts<TablePart>('table', {}));
+
 /* ---------- Building blocks ---------- */
 
-export interface TableProps extends HTMLAttributes<HTMLTableElement> {
+export interface TableProps extends HTMLAttributes<HTMLTableElement>, PartsProps<TablePart> {
   /** Row height: 52 or 40px. Figma: Size. */
   size?: 'md' | 'sm';
   /** Toolbar above the table, like a TableToolbar. */
@@ -28,21 +34,24 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
 
 /** A styled HTML table. Scrolls sideways when it is wider than its container. */
 export const Table = forwardRef<HTMLTableElement, TableProps>(function Table(
-  { size = 'md', toolbar, footer, bordered = true, caption, className, children, ...rest },
+  { size = 'md', toolbar, footer, bordered = true, caption, className, classNames, styles: partStyles, children, ...rest },
   ref,
 ) {
+  const part = useMemo(() => parts<TablePart>('table', { classNames, styles: partStyles }), [classNames, partStyles]);
   return (
     <SizeCtx.Provider value={size}>
-      <div className={cx(styles.frame, bordered && styles.bordered, className)}>
-        {toolbar}
-        <div className={styles.scroll}>
-          <table ref={ref} className={styles.table} {...rest}>
-            {caption && <caption className={styles.caption}>{caption}</caption>}
-            {children}
-          </table>
+      <PartCtx.Provider value={part}>
+        <div {...part('root', [styles.frame, bordered && styles.bordered, className])}>
+          {toolbar}
+          <div {...part('scroll', styles.scroll)}>
+            <table ref={ref} {...rest} {...part('table', styles.table, rest.style)}>
+              {caption && <caption {...part('caption', styles.caption)}>{caption}</caption>}
+              {children}
+            </table>
+          </div>
+          {footer}
         </div>
-        {footer}
-      </div>
+      </PartCtx.Provider>
     </SizeCtx.Provider>
   );
 });
@@ -55,7 +64,8 @@ export interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
   selected?: boolean;
 }
 export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(function TableRow({ selected, className, ...rest }, ref) {
-  return <tr ref={ref} className={cx(styles.row, selected && styles.selected, className)} {...rest} />;
+  const part = useContext(PartCtx);
+  return <tr ref={ref} {...rest} {...part('row', [styles.row, selected && styles.selected, className], rest.style)} />;
 });
 
 export type SortDirection = 'ascending' | 'descending';
@@ -73,12 +83,13 @@ export interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElem
 export function TableHeaderCell({ align = 'left', sort, onSort, checkbox, className, children, ...rest }: TableHeaderCellProps) {
   const sortable = sort !== undefined;
   const icon = sort === 'ascending' ? 'ArrowUp' : sort === 'descending' ? 'ArrowDown' : 'CaretUpDown';
+  const part = useContext(PartCtx);
   return (
     <th
       scope="col"
       aria-sort={sortable ? (sort === 'none' ? 'none' : sort) : undefined}
-      className={cx(styles.th, align === 'right' && styles.right, checkbox && styles.checkboxCell, className)}
       {...rest}
+      {...part('headerCell', [styles.th, align === 'right' && styles.right, checkbox && styles.checkboxCell, className], rest.style)}
     >
       {sortable ? (
         <button type="button" className={cx(styles.sort, sort !== 'none' && styles.sorted)} onClick={onSort}>
@@ -104,8 +115,9 @@ export interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
 
 export function TableCell({ align, numeric, description, checkbox, className, children, ...rest }: TableCellProps) {
   const size = useContext(SizeCtx);
+  const part = useContext(PartCtx);
   return (
-    <td className={cx(styles.td, styles[size], (align === 'right' || numeric) && styles.right, numeric && styles.numeric, checkbox && styles.checkboxCell, className)} {...rest}>
+    <td {...rest} {...part('cell', [styles.td, styles[size], (align === 'right' || numeric) && styles.right, numeric && styles.numeric, checkbox && styles.checkboxCell, className], rest.style)}>
       {description ? (
         <div className={styles.stack}>
           <div>{children}</div>
@@ -134,8 +146,9 @@ export interface TableToolbarProps extends Omit<HTMLAttributes<HTMLDivElement>, 
 
 export function TableToolbar({ title, description, actions, selectedCount = 0, onClearSelection, bulkActions, className, ...rest }: TableToolbarProps) {
   const selecting = selectedCount > 0;
+  const part = useContext(PartCtx);
   return (
-    <div className={cx(styles.toolbar, selecting && styles.toolbarSelected, className)} {...rest}>
+    <div {...rest} {...part('toolbar', [styles.toolbar, selecting && styles.toolbarSelected, className], rest.style)}>
       {selecting ? (
         <>
           <div className={styles.selection} aria-live="polite">
@@ -185,8 +198,9 @@ export function TableFooter({
 }: TableFooterProps) {
   const from = total === 0 ? 0 : (page - 1) * rowsPerPage + 1;
   const to = Math.min(page * rowsPerPage, total ?? page * rowsPerPage);
+  const part = useContext(PartCtx);
   return (
-    <div className={cx(styles.footer, className)} {...rest}>
+    <div {...rest} {...part('footer', [styles.footer, className], rest.style)}>
       {onRowsPerPageChange && (
         <div className={styles.footerGroup}>
           <span className={styles.description}>Rows per page</span>
@@ -209,6 +223,15 @@ export function TableFooter({
 }
 
 /* ---------- Data table ---------- */
+
+function EmptyCell({ colSpan, children }: { colSpan: number; children: ReactNode }) {
+  const part = useContext(PartCtx);
+  return (
+    <td colSpan={colSpan} {...part('empty', styles.emptyCell)}>
+      {children}
+    </td>
+  );
+}
 
 export interface DataTableColumn<T> {
   key: string;
@@ -325,7 +348,7 @@ export function DataTable<T>({
       <TableBody>
         {visible.length === 0 && (
           <tr>
-            <td colSpan={columns.length + (selectable ? 1 : 0)} className={styles.emptyCell}>{empty ?? 'No rows'}</td>
+            <EmptyCell colSpan={columns.length + (selectable ? 1 : 0)}>{empty ?? 'No rows'}</EmptyCell>
           </tr>
         )}
         {visible.map((row) => {

@@ -7,11 +7,11 @@ export function StatusIcon({ invalid, valid, disabled, className }: { invalid?: 
   if (disabled || (!invalid && !valid)) return null;
   // The error message under the field already explains an error, so its icon stays hidden. A check has no message, so it is announced.
   return invalid ? (
-    <span className={cx(styles.status, styles.error, className)}>
+    <span className={cx(styles.status, styles.error, className)} data-part="status">
       <Icon name="WarningCircle" />
     </span>
   ) : (
-    <span className={cx(styles.status, styles.valid, className)} role="img" aria-label="Valid">
+    <span className={cx(styles.status, styles.valid, className)} data-part="status" role="img" aria-label="Valid">
       <Icon name="CheckCircle" />
     </span>
   );

@@ -1,11 +1,16 @@
 import { cloneElement, isValidElement, useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties, FocusEvent, KeyboardEvent, MouseEvent, ReactElement, ReactNode, Ref } from 'react';
 import { createPortal } from 'react-dom';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Tooltip.module.css';
 
 export type TooltipSide = 'top' | 'bottom' | 'left' | 'right';
 
-export interface TooltipProps {
+/** Parts you can style with `classNames` and `styles`. */
+export type TooltipPart = 'root' | 'bubble';
+
+export interface TooltipProps extends PartsProps<TooltipPart> {
   /** The tooltip text. Keep it to a few words. Figma: Label. */
   content: ReactNode;
   /** Which side it appears on. Flips if there is no room. Figma: Placement. */
@@ -50,7 +55,8 @@ function Arrow({ side }: { side: TooltipSide }) {
   );
 }
 
-export function Tooltip({ content, side = 'top', delay = 500, children }: TooltipProps) {
+export function Tooltip({ content, side = 'top', delay = 500, children, classNames, styles: partStyles }: TooltipProps) {
+  const part = parts<TooltipPart>('tooltip', { classNames, styles: partStyles });
   const id = useId();
   const triggerRef = useRef<HTMLElement | null>(null);
   const tipRef = useRef<HTMLDivElement | null>(null);
@@ -168,13 +174,12 @@ export function Tooltip({ content, side = 'top', delay = 500, children }: Toolti
             ref={tipRef}
             id={id}
             role="tooltip"
-            className={styles.tooltip}
+            {...part('root', styles.tooltip, style)}
             data-side={pos?.side ?? side}
-            style={style}
             onMouseEnter={() => clearTimers()}
             onMouseLeave={() => hide(100)}
           >
-            <span className={styles.bubble}>{content}</span>
+            <span {...part('bubble', styles.bubble)}>{content}</span>
             <Arrow side={pos?.side ?? side} />
           </div>,
           document.body,

@@ -3,9 +3,14 @@ import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
 import { CompactButton } from '../CompactButton';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Carousel.module.css';
 
-export interface CarouselProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
+/** Parts you can style with `classNames` and `styles`. */
+export type CarouselPart = 'root' | 'viewport' | 'track' | 'slide' | 'previous' | 'next' | 'dots' | 'dot';
+
+export interface CarouselProps extends Omit<HTMLAttributes<HTMLElement>, 'children'>, PartsProps<CarouselPart> {
   /** Names the carousel for screen readers, like "Featured courses". */
   'aria-label': string;
   /** CarouselSlide elements. */
@@ -25,9 +30,10 @@ export interface CarouselProps extends Omit<HTMLAttributes<HTMLElement>, 'childr
  * Figma: Carousel.
  */
 export const Carousel = forwardRef<HTMLElement, CarouselProps>(function Carousel(
-  { children, slidesPerView = 1, showArrows = true, showDots = true, onIndexChange, className, style, ...rest },
+  { children, slidesPerView = 1, showArrows = true, showDots = true, onIndexChange, className, classNames, styles: partStyles, style, ...rest },
   ref,
 ) {
+  const part = parts<CarouselPart>('carousel', { classNames, styles: partStyles });
   const track = useRef<HTMLDivElement>(null);
   const slides = Children.toArray(children);
   const positions = Math.max(1, slides.length - slidesPerView + 1);
@@ -67,14 +73,13 @@ export const Carousel = forwardRef<HTMLElement, CarouselProps>(function Carousel
     <section
       ref={ref}
       aria-roledescription="carousel"
-      className={cx(styles.carousel, className)}
-      style={{ ...style, '--per-view': slidesPerView } as CSSProperties}
       {...rest}
+      {...part('root', [styles.carousel, className], { ...style, '--per-view': slidesPerView } as CSSProperties)}
     >
-      <div className={styles.viewport}>
+      <div {...part('viewport', styles.viewport)}>
         <div
           ref={track}
-          className={styles.track}
+          {...part('track', styles.track)}
           tabIndex={0}
           aria-live="polite"
           onKeyDown={(e) => {
@@ -88,7 +93,7 @@ export const Carousel = forwardRef<HTMLElement, CarouselProps>(function Carousel
               role="group"
               aria-roledescription="slide"
               aria-label={`${i + 1} of ${slides.length}`}
-              className={styles.slide}
+              {...part('slide', styles.slide)}
             >
               {s}
             </div>
@@ -96,22 +101,22 @@ export const Carousel = forwardRef<HTMLElement, CarouselProps>(function Carousel
         </div>
         {showArrows && positions > 1 && (
           <>
-            <CompactButton round variant="stroke" className={cx(styles.arrow, styles.prev)} aria-label="Previous slide" disabled={index === 0} onClick={() => go(index - 1)}>
+            <CompactButton round variant="stroke" {...part('previous', [styles.arrow, styles.prev])} aria-label="Previous slide" disabled={index === 0} onClick={() => go(index - 1)}>
               <Icon name="CaretLeft" />
             </CompactButton>
-            <CompactButton round variant="stroke" className={cx(styles.arrow, styles.next)} aria-label="Next slide" disabled={index >= positions - 1} onClick={() => go(index + 1)}>
+            <CompactButton round variant="stroke" {...part('next', [styles.arrow, styles.next])} aria-label="Next slide" disabled={index >= positions - 1} onClick={() => go(index + 1)}>
               <Icon name="CaretRight" />
             </CompactButton>
           </>
         )}
       </div>
       {showDots && positions > 1 && (
-        <div className={styles.dots}>
+        <div {...part('dots', styles.dots)}>
           {Array.from({ length: positions }, (_, i) => (
             <button
               key={i}
               type="button"
-              className={styles.dot}
+              {...part('dot', styles.dot)}
               aria-label={`Go to slide ${i + 1}`}
               aria-current={i === index || undefined}
               onClick={() => go(i)}

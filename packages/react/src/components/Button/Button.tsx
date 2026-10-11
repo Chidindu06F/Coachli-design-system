@@ -1,12 +1,17 @@
 import { forwardRef } from 'react';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { Spinner } from '../Spinner';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Button.module.css';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive';
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
-interface ButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+/** Parts you can style with `classNames` and `styles`. */
+export type ButtonPart = 'root' | 'spinner' | 'icon' | 'label';
+
+interface ButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElement>, PartsProps<ButtonPart> {
   /** Emphasis of the button. Figma: Type. */
   variant?: ButtonVariant;
   /** Height, padding, label and icon size. Figma: Size. */
@@ -42,32 +47,30 @@ interface ButtonIconOnlyProps extends ButtonBaseProps {
 export type ButtonProps = ButtonWithLabelProps | ButtonIconOnlyProps;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { variant = 'primary', size = 'md', iconOnly = false, iconLeft, iconRight, loading = false, children, className, type = 'button', onClick, ...rest },
+  { variant = 'primary', size = 'md', iconOnly = false, iconLeft, iconRight, loading = false, children, className, classNames, styles: partStyles, style, type = 'button', onClick, ...rest },
   ref,
 ) {
-  const classes = [styles.button, styles[variant], styles[size], iconOnly && styles.iconOnly, loading && styles.loading, className]
-    .filter(Boolean)
-    .join(' ');
+  const part = parts<ButtonPart>('button', { classNames, styles: partStyles });
   const spinnerColor = variant === 'primary' || variant === 'destructive' ? 'onBrand' : 'neutral';
 
   return (
     <button
       ref={ref}
       type={type}
-      className={classes}
+      {...part('root', [styles.button, styles[variant], styles[size], iconOnly && styles.iconOnly, loading && styles.loading, className], style)}
       aria-busy={loading || undefined}
       aria-disabled={loading || rest['aria-disabled'] || undefined}
       onClick={loading ? (e) => e.preventDefault() : onClick}
       {...rest}
     >
-      {loading && <Spinner className={styles.spinner} size={size === 'xs' || size === 'sm' ? 'xs' : 'sm'} color={spinnerColor} label="" />}
+      {loading && <Spinner {...part('spinner', styles.spinner)} size={size === 'xs' || size === 'sm' ? 'xs' : 'sm'} color={spinnerColor} label="" />}
       {iconOnly ? (
-        <span className={styles.icon} aria-hidden="true">{children}</span>
+        <span {...part('icon', styles.icon)} aria-hidden="true">{children}</span>
       ) : (
         <>
-          {iconLeft && <span className={styles.icon} aria-hidden="true">{iconLeft}</span>}
-          <span className={styles.label}>{children}</span>
-          {iconRight && <span className={styles.icon} aria-hidden="true">{iconRight}</span>}
+          {iconLeft && <span {...part('icon', styles.icon)} aria-hidden="true">{iconLeft}</span>}
+          <span {...part('label', styles.label)}>{children}</span>
+          {iconRight && <span {...part('icon', styles.icon)} aria-hidden="true">{iconRight}</span>}
         </>
       )}
     </button>

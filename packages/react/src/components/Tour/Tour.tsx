@@ -1,6 +1,8 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import { Portal, useFloating } from '../../internal/floating';
 import type { Align, Side } from '../../internal/floating';
 import { useControllable } from '../../internal/useControllable';
@@ -36,7 +38,10 @@ export interface TourLabels {
 
 const LABELS: TourLabels = { next: 'Next', back: 'Back', skip: 'Skip', done: 'Done', progress: (s, t) => `${s} of ${t}` };
 
-export interface TourProps {
+/** Parts you can style with `classNames` and `styles`. */
+export type TourPart = 'spotlight' | 'root' | 'arrow' | 'panel' | 'media' | 'title' | 'description' | 'footer' | 'progress' | 'buttons';
+
+export interface TourProps extends PartsProps<TourPart> {
   steps: TourStep[];
   open?: boolean;
   defaultOpen?: boolean;
@@ -118,7 +123,10 @@ export function Tour({
   progress = 'count',
   labels,
   className,
+  classNames,
+  styles: partStyles,
 }: TourProps) {
+  const part = parts<TourPart>('tour', { classNames, styles: partStyles });
   const id = useId();
   const text = { ...LABELS, ...labels };
   const [isOpen, setOpen] = useControllable(open, defaultOpen, onOpenChange);
@@ -225,7 +233,7 @@ export function Tour({
   return (
     <Portal>
       {spotlight && (
-        <svg className={styles.spotlight} aria-hidden="true">
+        <svg {...part('spotlight', styles.spotlight)} aria-hidden="true">
           <path d={holePath(centred ? null : rect)} fillRule="evenodd" />
         </svg>
       )}
@@ -238,36 +246,35 @@ export function Tour({
         aria-labelledby={`${id}-title`}
         aria-describedby={current.description ? `${id}-desc` : undefined}
         tabIndex={-1}
-        className={cx(styles.tour, !centred && popoverStyles.withArrow, centred && styles.centred, className)}
+        {...part('root', [styles.tour, !centred && popoverStyles.withArrow, centred && styles.centred, className], centred ? undefined : style)}
         data-side={placed}
-        style={centred ? undefined : style}
         onKeyDown={onKeyDown}
       >
-        {!centred && <span className={popoverStyles.arrow} style={arrowShift ? { translate: arrowShift } : undefined} aria-hidden="true" />}
-        <div className={cx(popoverStyles.panel, styles.panel)}>
-          {current.media && <div className={styles.media}>{current.media}</div>}
+        {!centred && <span {...part('arrow', popoverStyles.arrow, arrowShift ? { translate: arrowShift } : undefined)} aria-hidden="true" />}
+        <div {...part('panel', [popoverStyles.panel, styles.panel])}>
+          {current.media && <div {...part('media', styles.media)}>{current.media}</div>}
           <div className={styles.text}>
-            <div id={`${id}-title`} className={popoverStyles.title}>
+            <div id={`${id}-title`} {...part('title', popoverStyles.title)}>
               {current.title}
             </div>
             {current.description && (
-              <div id={`${id}-desc`} className={styles.description}>
+              <div id={`${id}-desc`} {...part('description', styles.description)}>
                 {current.description}
               </div>
             )}
           </div>
-          <div className={styles.footer}>
+          <div {...part('footer', styles.footer)}>
             {progress === 'dots' ? (
-              <span className={styles.dots}>
+              <span {...part('progress', styles.dots)}>
                 {steps.map((_, i) => (
                   <span key={i} className={cx(styles.dot, i === index && styles.dotActive)} aria-hidden="true" />
                 ))}
                 <span className={styles.srOnly}>{counter}</span>
               </span>
             ) : (
-              <span className={styles.count}>{counter}</span>
+              <span {...part('progress', styles.count)}>{counter}</span>
             )}
-            <span className={styles.buttons}>
+            <span {...part('buttons', styles.buttons)}>
               {!last && (
                 <Button variant="ghost" size="sm" onClick={skip}>
                   {text.skip}

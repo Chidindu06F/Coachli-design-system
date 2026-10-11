@@ -1,15 +1,19 @@
 import { useEffect, useId, useRef } from 'react';
 import type { ReactElement, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { Portal, useDismiss, useFloating } from '../../internal/floating';
 import type { Align, Side } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
 import { cloneTrigger } from '../../internal/trigger';
 import { useControllable } from '../../internal/useControllable';
 import { CompactButton } from '../CompactButton';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Popover.module.css';
 
-export interface PopoverProps {
+/** Parts you can style with `classNames` and `styles`. */
+export type PopoverPart = 'root' | 'arrow' | 'panel' | 'header' | 'title' | 'description' | 'close' | 'content' | 'actions';
+
+export interface PopoverProps extends PartsProps<PopoverPart> {
   /** The element that opens the popover, like a Button. */
   trigger: ReactElement;
   /** Which side of the trigger it opens on. Flips when there is no room. Figma: Placement. */
@@ -49,7 +53,10 @@ export function Popover({
   onOpenChange,
   children,
   className,
+  classNames,
+  styles: partStyles,
 }: PopoverProps) {
+  const part = parts<PopoverPart>('popover', { classNames, styles: partStyles });
   const id = useId();
   const [isOpen, setOpen] = useControllable(open, defaultOpen, onOpenChange);
   const anchor = useRef<HTMLElement | null>(null);
@@ -80,27 +87,26 @@ export function Popover({
             role={interactive ? 'dialog' : undefined}
             aria-labelledby={title ? `${id}-title` : undefined}
             tabIndex={-1}
-            className={cx(styles.popover, arrow && styles.withArrow, className)}
+            {...part('root', [styles.popover, arrow && styles.withArrow, className], style)}
             data-side={placed}
-            style={style}
           >
-            {arrow && <span className={styles.arrow} aria-hidden="true" />}
-            <div className={styles.panel}>
+            {arrow && <span {...part('arrow', styles.arrow)} aria-hidden="true" />}
+            <div {...part('panel', styles.panel)}>
               {(title || showClose) && (
-                <div className={styles.header}>
+                <div {...part('header', styles.header)}>
                   <div className={styles.headText}>
-                    {title && <div id={`${id}-title`} className={styles.title}>{title}</div>}
-                    {description && <div className={styles.description}>{description}</div>}
+                    {title && <div id={`${id}-title`} {...part('title', styles.title)}>{title}</div>}
+                    {description && <div {...part('description', styles.description)}>{description}</div>}
                   </div>
                   {showClose && (
-                    <CompactButton variant="ghost" aria-label="Close" onClick={close}>
+                    <CompactButton variant="ghost" aria-label="Close" {...part('close')} onClick={close}>
                       <Icon name="X" />
                     </CompactButton>
                   )}
                 </div>
               )}
-              {children && <div className={styles.content}>{children}</div>}
-              {actions && <div className={styles.actions}>{actions}</div>}
+              {children && <div {...part('content', styles.content)}>{children}</div>}
+              {actions && <div {...part('actions', styles.actions)}>{actions}</div>}
             </div>
           </div>
         </Portal>

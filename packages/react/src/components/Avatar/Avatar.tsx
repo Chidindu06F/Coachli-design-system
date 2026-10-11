@@ -5,12 +5,17 @@ import type { AvatarSize, AvatarStatusProps, AvatarStatusType } from './AvatarSt
 import { Award } from '../Award';
 import type { AwardName, AwardProps } from '../Award';
 import { USER } from './icons';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Avatar.module.css';
 
 export type AvatarColor = 'neutral' | 'purple' | 'blue' | 'green' | 'orange';
 type StatusSlot = AvatarStatusType | ReactElement<AvatarStatusProps>;
 
-export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
+/** Parts you can style with `classNames` and `styles`. */
+export type AvatarPart = 'root' | 'circle' | 'image' | 'initials' | 'icon';
+
+export interface AvatarProps extends HTMLAttributes<HTMLSpanElement>, PartsProps<AvatarPart> {
   /** Photo or illustration. If it is missing or fails to load, initials or the icon show instead. Figma: Type=Image. */
   src?: string;
   /** The person's name. Read by screen readers and used to make initials. */
@@ -59,7 +64,7 @@ function renderStatus(slot: StatusSlot | undefined, size: AvatarSize, position: 
 
 /** A person or team shown as a photo, initials or an icon, with optional status badges and an award. */
 export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
-  { src, name, initials, icon, size = 'md', color = 'neutral', status, topStatus, award, className, ...rest },
+  { src, name, initials, icon, size = 'md', color = 'neutral', status, topStatus, award, className, classNames, styles: partStyles, style, ...rest },
   ref,
 ) {
   const [failed, setFailed] = useState(false);
@@ -67,22 +72,22 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
 
   const letters = initials ?? (name ? initialsOf(name) : '');
   const showImage = src && !failed;
-  const classes = [styles.avatar, styles[size], className].filter(Boolean).join(' ');
+  const part = parts<AvatarPart>('avatar', { classNames, styles: partStyles });
 
   return (
-    <span ref={ref} className={classes} {...rest}>
+    <span ref={ref} {...part('root', [styles.avatar, styles[size], className], style)} {...rest}>
       <span
-        className={`${styles.circle} ${showImage ? '' : styles[color]}`}
+        {...part('circle', [styles.circle, !showImage && styles[color]])}
         role={name ? 'img' : undefined}
         aria-label={name}
         aria-hidden={name ? undefined : true}
       >
         {showImage ? (
-          <img className={styles.image} src={src} alt="" onError={() => setFailed(true)} />
+          <img {...part('image', styles.image)} src={src} alt="" onError={() => setFailed(true)} />
         ) : letters ? (
-          <span className={styles.initials}>{letters}</span>
+          <span {...part('initials', styles.initials)}>{letters}</span>
         ) : (
-          <span className={styles.icon}>
+          <span {...part('icon', styles.icon)}>
             {icon ?? (
               <svg viewBox="0 0 256 256" fill="currentColor">
                 <path d={USER} />

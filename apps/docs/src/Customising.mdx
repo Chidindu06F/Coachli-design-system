@@ -1,0 +1,105 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { Alert, Button, InputField } from '@halo-ds/react';
+
+<Meta title="Customising" />
+
+# Customising
+
+Theming changes the whole system at once. Sometimes you only need one component to look different on one screen. Every Halo component lets you do that, from the outside in:
+
+1. **Tokens** for the whole app (see Theming).
+2. **`className` and `style`** for the outer element of one component.
+3. **`classNames` and `styles`** for the parts inside it, like a modal's header or a table's cells.
+4. **`data-halo` and `data-part`** attributes, for styling parts from your own CSS files.
+
+Your styles always win over Halo's: classes are added after Halo's own, and inline styles are merged on top.
+
+## See it
+
+The same alert and field, as they ship and with a few parts changed.
+
+<div className="sb-unstyled" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, margin: '24px 0' }}>
+  <div style={{ display: 'grid', gap: 16 }}>
+    <Alert type="information" title="Your trial ends in 3 days" description="Pick a plan to keep your projects." />
+    <InputField label="Work email" placeholder="you@company.com" />
+  </div>
+  <div style={{ display: 'grid', gap: 16 }}>
+    <Alert
+      type="information"
+      title="Your trial ends in 3 days"
+      description="Pick a plan to keep your projects."
+      styles={{ root: { borderRadius: 4 }, title: { textTransform: 'uppercase', letterSpacing: '0.04em' } }}
+    />
+    <InputField
+      label="Work email"
+      placeholder="you@company.com"
+      fieldStyles={{ label: { color: 'var(--halo-text-brand)' } }}
+      styles={{ root: { borderRadius: 4 } }}
+    />
+  </div>
+</div>
+
+## The outer element
+
+`className` and `style` go on the outer element, the one that also takes `ref` and the other HTML props.
+
+```tsx
+<Card className="pricing-card" style={{ maxWidth: 360 }} />
+```
+
+Form controls with a label inside, like `Checkbox`, `Radio` and `Switch`, are the exception: `className` goes on the outer label, and the other props go on the input itself, so `id`, `name` and `aria-*` land where they should.
+
+## Parts inside a component
+
+Pass `classNames` or `styles`, keyed by part name. Each component lists its parts in its props table, and in TypeScript you get autocomplete from its `…Part` type, like `ModalPart`.
+
+```tsx
+<Modal
+  open={open}
+  onOpenChange={setOpen}
+  title="Delete project"
+  classNames={{ header: 'danger-header', actions: 'sticky-actions' }}
+  styles={{ content: { maxHeight: 400 } }}
+/>
+```
+
+Compound components share one setting with all their pieces. Set `classNames` on `Table`, `Tabs` or `Accordion`, and every row, tab or item picks it up:
+
+```tsx
+<Table classNames={{ row: 'zebra', headerCell: 'caps' }}>…</Table>
+```
+
+### Fields
+
+Components that come with a label and hint, like `InputField`, `SelectField` and `DatePickerField`, have two sets: `classNames` and `styles` for the control, and `fieldClassNames` and `fieldStyles` for the field around it (`root`, `label`, `hintRow`, `hint`, `count`).
+
+```tsx
+<SelectField
+  label="Country"
+  options={countries}
+  styles={{ menu: { maxHeight: 240 } }}
+  fieldStyles={{ label: { fontWeight: 600 } }}
+/>
+```
+
+## From your own CSS
+
+Every component's outer element has `data-halo` with its name, and every part has `data-part`. Use them instead of Halo's internal class names, which change between builds.
+
+```css
+/* Every modal header in the app */
+[data-halo='modal'] [data-part='header'] {
+  border-bottom: 1px solid var(--halo-border-secondary);
+}
+
+/* Only inside the settings page */
+.settings [data-halo='tabs'] [data-part='tab'] {
+  padding-inline: 20px;
+}
+```
+
+Names are kebab-case for the component (`date-range-picker`, `event-calendar`, `toast-region`) and camelCase for the part (`headerCell`, `dayHeader`). When a component sits inside another, the part name from the outer one wins, so the close button in a modal reads `data-part="close"` and still has `data-halo="compact-button"`.
+
+## In Figma
+
+The same idea applies to design. Change tokens in the variables for the whole file, use instance properties and slots for one-off content, and detach only as a last resort, so the design keeps getting library updates.

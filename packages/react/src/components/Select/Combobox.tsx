@@ -1,19 +1,24 @@
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import { mergeRefs, Portal, useDismiss, useFloating } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
 import { StatusIcon } from '../../internal/StatusIcon';
 import { useControllable } from '../../internal/useControllable';
 import { Field } from '../Field';
-import type { FieldProps } from '../Field';
+import type { FieldProps, FieldWrapperProps } from '../Field';
 import inputStyles from '../Input/Input.module.css';
 import menuStyles from '../Menu/Menu.module.css';
 import { Tag } from '../Tag';
 import styles from './Select.module.css';
 import type { SelectOption } from './Select';
 
-interface ComboboxBase {
+/** Parts you can style with `classNames` and `styles`. The menu opens in a layer over the page. */
+export type ComboboxPart = 'root' | 'values' | 'input' | 'caret' | 'menu' | 'option' | 'empty';
+
+interface ComboboxBase extends PartsProps<ComboboxPart> {
   options: SelectOption[];
   placeholder?: string;
   size?: 'sm' | 'md' | 'lg';
@@ -51,7 +56,8 @@ export interface MultiComboboxProps extends ComboboxBase {
  * Use a Select when people just pick from a short known list. Figma: Combobox.
  */
 export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiComboboxProps>(function Combobox(props, ref) {
-  const { options, placeholder = 'Search', size = 'md', invalid, disabled, onCreate, emptyText = 'No matches', id, className, required } = props;
+  const { options, placeholder = 'Search', size = 'md', invalid, disabled, onCreate, emptyText = 'No matches', id, className, required, classNames, styles: partStyles } = props;
+  const part = parts<ComboboxPart>('combobox', { classNames, styles: partStyles });
   const listId = useId();
   const multiple = props.multiple === true;
   const [values, setValues] = useControllable<string[]>(
@@ -121,7 +127,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
     <>
       <div
         ref={box}
-        className={cx(
+        {...part('root', [
           inputStyles.box,
           inputStyles[size],
           styles.combobox,
@@ -129,11 +135,11 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
           (invalid || props['aria-invalid']) && inputStyles.invalid,
           disabled && inputStyles.disabled,
           className,
-        )}
+        ])}
         onClick={() => input.current?.focus()}
       >
         {!multiple && <Icon name="MagnifyingGlass" className={cx(inputStyles.icon, styles.caret)} />}
-        <div className={styles.values}>
+        <div {...part('values', styles.values)}>
           {multiple &&
             values.map((v) => (
               <Tag key={v} size={size === 'sm' ? 'sm' : 'md'} disabled={disabled} onRemove={() => setValues(values.filter((x) => x !== v))}>
@@ -152,7 +158,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
             aria-describedby={props['aria-describedby']}
             aria-invalid={invalid || props['aria-invalid'] || undefined}
             aria-required={required || undefined}
-            className={styles.comboInput}
+            {...part('input', styles.comboInput)}
             placeholder={multiple && values.length ? '' : placeholder}
             disabled={disabled}
             value={query}
@@ -165,11 +171,11 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
           />
         </div>
         <StatusIcon invalid={invalid || !!props['aria-invalid']} disabled={disabled} />
-        <Icon name="CaretDown" className={cx(styles.caret, open && styles.caretOpen)} />
+        <Icon name="CaretDown" {...part('caret', [styles.caret, open && styles.caretOpen])} />
       </div>
       {open && (
         <Portal>
-          <div ref={floating} id={listId} role="listbox" aria-multiselectable={multiple || undefined} className={menuStyles.menu} style={style}>
+          <div ref={floating} id={listId} role="listbox" aria-multiselectable={multiple || undefined} {...part('menu', menuStyles.menu, style)}>
             {shown.map((o, i) => {
               const on = values.includes(o.value);
               return (
@@ -181,7 +187,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
                   aria-selected={on}
                   aria-disabled={o.disabled || undefined}
                   data-active={i === active}
-                  className={menuStyles.item}
+                  {...part('option', menuStyles.item)}
                   onPointerEnter={() => setActive(i)}
                   onPointerDown={(e) => e.preventDefault()}
                   onClick={() => pick(i)}
@@ -199,7 +205,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
                 role="option"
                 aria-selected={false}
                 data-active={active === shown.length}
-                className={menuStyles.item}
+                {...part('option', menuStyles.item)}
                 onPointerEnter={() => setActive(shown.length)}
                 onPointerDown={(e) => e.preventDefault()}
                 onClick={() => pick(shown.length)}
@@ -208,7 +214,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
                 <span className={menuStyles.itemLabel}>Add "{query.trim()}"</span>
               </div>
             )}
-            {count === 0 && <div className={menuStyles.empty}>{emptyText}</div>}
+            {count === 0 && <div {...part('empty', menuStyles.empty)}>{emptyText}</div>}
           </div>
         </Portal>
       )}
@@ -216,16 +222,16 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
   );
 });
 
-type FieldBits = Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> & { fieldClassName?: string };
+type FieldBits = Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> & Pick<FieldWrapperProps, 'fieldClassName' | 'fieldClassNames' | 'fieldStyles'>;
 export type ComboboxFieldProps = (Omit<ComboboxProps, 'aria-describedby' | 'aria-invalid'> | Omit<MultiComboboxProps, 'aria-describedby' | 'aria-invalid'>) & FieldBits;
 
 /** A Combobox with a label and hint. */
 export const ComboboxField = forwardRef<HTMLInputElement, ComboboxFieldProps>(function ComboboxField(
-  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, fieldClassNames, fieldStyles, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <Combobox ref={ref} {...(rest as ComboboxProps)} {...c} />}
     </Field>
   );

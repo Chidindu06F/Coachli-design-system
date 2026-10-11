@@ -1,14 +1,18 @@
 import { useId, useRef } from 'react';
 import type { ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { useModal } from '../../internal/dialog';
 import { Portal } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import { CompactButton } from '../CompactButton';
 import { Overlay } from '../Overlay';
 import styles from './Drawer.module.css';
 
-export interface DrawerProps {
+/** Parts you can style with `classNames` and `styles`. */
+export type DrawerPart = 'overlay' | 'root' | 'handle' | 'header' | 'title' | 'description' | 'close' | 'content' | 'footer';
+
+export interface DrawerProps extends PartsProps<DrawerPart> {
   open: boolean;
   /** Called on Escape, the close button, or a click on the overlay. */
   onClose: () => void;
@@ -48,7 +52,10 @@ export function Drawer({
   overlay = 'dim',
   children,
   className,
+  classNames,
+  styles: partStyles,
 }: DrawerProps) {
+  const part = parts<DrawerPart>('drawer', { classNames, styles: partStyles });
   const id = useId();
   const panel = useRef<HTMLDivElement | null>(null);
   useModal(open, panel, onClose);
@@ -57,6 +64,7 @@ export function Drawer({
   return (
     <Portal>
       <Overlay
+        {...part('overlay')}
         variant={overlay}
         position={side}
         onPointerDown={(e) => {
@@ -70,26 +78,26 @@ export function Drawer({
           aria-labelledby={`${id}-title`}
           aria-describedby={description ? `${id}-desc` : undefined}
           tabIndex={-1}
-          className={cx(styles.drawer, styles[side], side !== 'bottom' && styles[size], className)}
+          {...part('root', [styles.drawer, styles[side], side !== 'bottom' && styles[size], className])}
         >
           {side === 'bottom' && (
-            <div className={styles.handle} aria-hidden="true">
+            <div {...part('handle', styles.handle)} aria-hidden="true">
               <span className={styles.grip} />
             </div>
           )}
-          <div className={styles.header}>
+          <div {...part('header', styles.header)}>
             <div className={styles.text}>
-              <h2 id={`${id}-title`} className={styles.title}>{title}</h2>
-              {description && <p id={`${id}-desc`} className={styles.description}>{description}</p>}
+              <h2 id={`${id}-title`} {...part('title', styles.title)}>{title}</h2>
+              {description && <p id={`${id}-desc`} {...part('description', styles.description)}>{description}</p>}
             </div>
             {showClose && (
-              <CompactButton variant="ghost" aria-label="Close" onClick={onClose}>
+              <CompactButton variant="ghost" aria-label="Close" {...part('close')} onClick={onClose}>
                 <Icon name="X" />
               </CompactButton>
             )}
           </div>
-          <div className={styles.content}>{children}</div>
-          {actions && <div className={styles.footer}>{actions}</div>}
+          <div {...part('content', styles.content)}>{children}</div>
+          {actions && <div {...part('footer', styles.footer)}>{actions}</div>}
         </div>
       </Overlay>
     </Portal>

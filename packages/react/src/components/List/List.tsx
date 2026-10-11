@@ -1,11 +1,16 @@
 import { Children, createContext, forwardRef, Fragment, isValidElement, useContext } from 'react';
 import type { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './List.module.css';
 
 const SizeCtx = createContext<'md' | 'sm'>('md');
 
-export interface ListProps extends HTMLAttributes<HTMLUListElement> {
+/** Parts you can style with `classNames` and `styles`. */
+export type ListPart = 'root' | 'divider';
+
+export interface ListProps extends HTMLAttributes<HTMLUListElement>, PartsProps<ListPart> {
   /** plain, divided (lines between items) or card (a bordered box). Figma: Style. */
   variant?: 'plain' | 'divided' | 'card';
   /** Figma: Size. */
@@ -13,14 +18,15 @@ export interface ListProps extends HTMLAttributes<HTMLUListElement> {
 }
 
 /** A vertical list of ListItems, like files, settings or people. */
-export const List = forwardRef<HTMLUListElement, ListProps>(function List({ variant = 'plain', size = 'md', className, children, ...rest }, ref) {
+export const List = forwardRef<HTMLUListElement, ListProps>(function List({ variant = 'plain', size = 'md', className, classNames, styles: partStyles, children, ...rest }, ref) {
+  const part = parts<ListPart>('list', { classNames, styles: partStyles });
   const items = Children.toArray(children).filter(isValidElement);
   return (
     <SizeCtx.Provider value={size}>
-      <ul ref={ref} className={cx(styles.list, styles[variant], className)} {...rest}>
+      <ul ref={ref} {...rest} {...part('root', [styles.list, styles[variant], className], rest.style)}>
         {items.map((child, i) => (
           <Fragment key={child.key ?? i}>
-            {variant === 'divided' && i > 0 && <li role="presentation" className={styles.divider} />}
+            {variant === 'divided' && i > 0 && <li role="presentation" {...part('divider', styles.divider)} />}
             {child}
           </Fragment>
         ))}
@@ -29,7 +35,10 @@ export const List = forwardRef<HTMLUListElement, ListProps>(function List({ vari
   );
 });
 
-export interface ListItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'title' | 'onClick'> {
+/** Parts you can style with `classNames` and `styles`. */
+export type ListItemPart = 'root' | 'row' | 'icon' | 'slot' | 'text' | 'title' | 'description';
+
+export interface ListItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'title' | 'onClick'>, PartsProps<ListItemPart> {
   /** Figma: Title. */
   title: ReactNode;
   /** Figma: Description. */
@@ -53,35 +62,36 @@ export interface ListItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'titl
 
 /** One row of a List. Pass `href` or `onClick` to make the whole row clickable. */
 export const ListItem = forwardRef<HTMLLIElement, ListItemProps>(function ListItem(
-  { title, description, icon, leading, trailing, trailingIcon, href, onClick, selected, disabled, className, ...rest },
+  { title, description, icon, leading, trailing, trailingIcon, href, onClick, selected, disabled, className, classNames, styles: partStyles, ...rest },
   ref,
 ) {
+  const part = parts<ListItemPart>('list-item', { classNames, styles: partStyles });
   const size = useContext(SizeCtx);
   const inner = (
     <>
-      {icon && <span className={styles.icon} aria-hidden="true">{icon}</span>}
-      {leading && <span className={styles.slot}>{leading}</span>}
-      <span className={styles.text}>
-        <span className={styles.title}>{title}</span>
-        {description && <span className={styles.description}>{description}</span>}
+      {icon && <span {...part('icon', styles.icon)} aria-hidden="true">{icon}</span>}
+      {leading && <span {...part('slot', styles.slot)}>{leading}</span>}
+      <span {...part('text', styles.text)}>
+        <span {...part('title', styles.title)}>{title}</span>
+        {description && <span {...part('description', styles.description)}>{description}</span>}
       </span>
-      {trailing && <span className={styles.slot}>{trailing}</span>}
-      {trailingIcon && <span className={cx(styles.icon, styles.trailingIcon)} aria-hidden="true">{trailingIcon}</span>}
+      {trailing && <span {...part('slot', styles.slot)}>{trailing}</span>}
+      {trailingIcon && <span {...part('icon', [styles.icon, styles.trailingIcon])} aria-hidden="true">{trailingIcon}</span>}
     </>
   );
   const rowClass = cx(styles.row, styles[size], selected && styles.selected, disabled && styles.disabled);
   return (
-    <li ref={ref} className={cx(styles.item, className)} {...rest}>
+    <li ref={ref} {...rest} {...part('root', [styles.item, className], rest.style)}>
       {href && !disabled ? (
-        <a href={href} className={cx(rowClass, styles.interactive)} aria-current={selected ? 'page' : undefined} onClick={onClick}>
+        <a href={href} {...part('row', [rowClass, styles.interactive])} aria-current={selected ? 'page' : undefined} onClick={onClick}>
           {inner}
         </a>
       ) : onClick || href ? (
-        <button type="button" className={cx(rowClass, styles.interactive)} aria-pressed={selected} disabled={disabled} onClick={onClick}>
+        <button type="button" {...part('row', [rowClass, styles.interactive])} aria-pressed={selected} disabled={disabled} onClick={onClick}>
           {inner}
         </button>
       ) : (
-        <div className={rowClass}>{inner}</div>
+        <div {...part('row', rowClass)}>{inner}</div>
       )}
     </li>
   );

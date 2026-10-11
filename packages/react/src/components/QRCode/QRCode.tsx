@@ -1,6 +1,7 @@
 import { forwardRef, useMemo } from 'react';
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import { Icon } from '../../internal/Icon';
 import { Button } from '../Button';
 import { Spinner } from '../Spinner';
@@ -19,7 +20,10 @@ export interface QRCodeLabels {
 
 const LABELS: QRCodeLabels = { expired: 'Code expired', refresh: 'Refresh', scanned: 'Scanned', scannedHint: 'Confirm on your phone' };
 
-export interface QRCodeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+/** Parts you can style with `classNames` and `styles`. */
+export type QRCodePart = 'root' | 'code' | 'logo' | 'overlay' | 'message';
+
+export interface QRCodeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>, PartsProps<QRCodePart> {
   /** The text or link to encode. Up to about 2,900 characters at level L. */
   value: string;
   /** Width and height in px, including the light border. Figma: Size. */
@@ -55,9 +59,10 @@ export interface QRCodeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'child
 
 /** A scannable QR code drawn as SVG, with no dependencies. It always stays dark on light, in dark mode too, so every phone can read it. Figma: QR code. */
 export const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(function QRCode(
-  { value, size = 160, level, margin = 4, logo, status = 'active', onRefresh, color, bgColor, labels, label, className, style, ...rest },
+  { value, size = 160, level, margin = 4, logo, status = 'active', onRefresh, color, bgColor, labels, label, className, style, classNames, styles: partStyles, ...rest },
   ref,
 ) {
+  const part = parts<QRCodePart>('qr-code', { classNames, styles: partStyles });
   const ecl = level ?? (logo ? 'H' : 'M');
   const text = { ...LABELS, ...labels };
   const colours = { ...(color && { '--qr-dark': color }), ...(bgColor && { '--qr-light': bgColor }) } as CSSProperties;
@@ -80,30 +85,29 @@ export const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(function QRCode(
   return (
     <div
       ref={ref}
-      className={cx(styles.qr, status !== 'active' && styles.covered, className)}
-      style={{ width: size, height: size, ...colours, ...style }}
+      {...part('root', [styles.qr, status !== 'active' && styles.covered, className], { width: size, height: size, ...colours, ...style })}
       role="img"
       aria-label={status === 'expired' ? `${label}. ${text.expired}.` : status === 'scanned' ? `${label}. ${text.scanned}. ${text.scannedHint}.` : label}
       aria-busy={status === 'loading' || undefined}
       {...rest}
     >
-      <svg className={styles.code} viewBox={`0 0 ${path.count} ${path.count}`} width={size} height={size} shapeRendering="crispEdges" aria-hidden="true">
+      <svg {...part('code', styles.code)} viewBox={`0 0 ${path.count} ${path.count}`} width={size} height={size} shapeRendering="crispEdges" aria-hidden="true">
         <rect width={path.count} height={path.count} className={styles.light} />
         <path d={path.d} className={styles.dark} />
       </svg>
       {logo && status === 'active' && (
-        <span className={styles.logo} style={{ width: size * 0.22, height: size * 0.22 }} aria-hidden="true">
+        <span {...part('logo', styles.logo, { width: size * 0.22, height: size * 0.22 })} aria-hidden="true">
           {logo}
         </span>
       )}
       {status === 'loading' && (
-        <span className={styles.overlay}>
+        <span {...part('overlay', styles.overlay)}>
           <Spinner size="md" label="" />
         </span>
       )}
       {status === 'expired' && (
-        <span className={styles.overlay}>
-          <span className={styles.message}>{text.expired}</span>
+        <span {...part('overlay', styles.overlay)}>
+          <span {...part('message', styles.message)}>{text.expired}</span>
           {onRefresh && (
             <Button size={size < 140 ? 'xs' : 'sm'} variant="secondary" onClick={onRefresh}>
               {text.refresh}
@@ -112,9 +116,9 @@ export const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(function QRCode(
         </span>
       )}
       {status === 'scanned' && (
-        <span className={cx(styles.overlay, styles.scanned)} aria-live="polite">
+        <span {...part('overlay', [styles.overlay, styles.scanned])} aria-live="polite">
           <Icon name="CheckCircle" className={styles.check} />
-          <span className={styles.message}>{text.scanned}</span>
+          <span {...part('message', styles.message)}>{text.scanned}</span>
           {size >= 140 && <span className={styles.hint}>{text.scannedHint}</span>}
         </span>
       )}

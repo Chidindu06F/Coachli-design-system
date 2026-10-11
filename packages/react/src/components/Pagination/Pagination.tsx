@@ -1,11 +1,15 @@
 import type { HTMLAttributes } from 'react';
-import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
 import { useControllable } from '../../internal/useControllable';
 import { Button } from '../Button';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Pagination.module.css';
 
-export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, 'onChange' | 'defaultValue'> {
+/** Parts you can style with `classNames` and `styles`. */
+export type PaginationPart = 'root' | 'previous' | 'next' | 'pages' | 'page' | 'ellipsis' | 'count';
+
+export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, 'onChange' | 'defaultValue'>, PartsProps<PaginationPart> {
   /** Number of pages. */
   pageCount: number;
   /** The current page, starting at 1. */
@@ -42,9 +46,12 @@ export function Pagination({
   size = 'md',
   siblings = 1,
   className,
+  classNames,
+  styles: partStyles,
   'aria-label': label = 'Pagination',
   ...rest
 }: PaginationProps) {
+  const part = parts<PaginationPart>('pagination', { classNames, styles: partStyles });
   const [current, setCurrent] = useControllable(page, defaultPage, onPageChange);
   const go = (p: number) => setCurrent(Math.min(pageCount, Math.max(1, p)));
   const first = current <= 1;
@@ -52,33 +59,33 @@ export function Pagination({
   const buttonSize = size === 'sm' ? 'sm' : 'md';
 
   return (
-    <nav aria-label={label} className={cx(styles.pagination, styles[size], className)} {...rest}>
+    <nav aria-label={label} {...rest} {...part('root', [styles.pagination, styles[size], className], rest.style)}>
       {variant === 'compact' ? (
         <>
-          <Button variant="ghost" size={buttonSize} iconOnly aria-label="Previous page" disabled={first} onClick={() => go(current - 1)}>
+          <Button {...part('previous')} variant="ghost" size={buttonSize} iconOnly aria-label="Previous page" disabled={first} onClick={() => go(current - 1)}>
             <Icon name="CaretLeft" />
           </Button>
-          <span className={styles.count} aria-live="polite">
+          <span {...part('count', styles.count)} aria-live="polite">
             Page {current} of {pageCount}
           </span>
-          <Button variant="ghost" size={buttonSize} iconOnly aria-label="Next page" disabled={last} onClick={() => go(current + 1)}>
+          <Button {...part('next')} variant="ghost" size={buttonSize} iconOnly aria-label="Next page" disabled={last} onClick={() => go(current + 1)}>
             <Icon name="CaretRight" />
           </Button>
         </>
       ) : (
         <>
-          <Button variant="ghost" size={buttonSize} iconLeft={<Icon name="CaretLeft" />} disabled={first} onClick={() => go(current - 1)}>
+          <Button {...part('previous')} variant="ghost" size={buttonSize} iconLeft={<Icon name="CaretLeft" />} disabled={first} onClick={() => go(current - 1)}>
             Previous
           </Button>
-          <ul className={styles.pages}>
+          <ul {...part('pages', styles.pages)}>
             {pageRange(current, pageCount, siblings).map((p, i) =>
               p === 'ellipsis' ? (
-                <li key={`e${i}`} className={cx(styles.page, styles.ellipsis)} aria-hidden="true">…</li>
+                <li key={`e${i}`} {...part('ellipsis', [styles.page, styles.ellipsis])} aria-hidden="true">…</li>
               ) : (
                 <li key={p}>
                   <button
                     type="button"
-                    className={cx(styles.page, p === current && styles.selected)}
+                    {...part('page', [styles.page, p === current && styles.selected])}
                     aria-label={`Page ${p}`}
                     aria-current={p === current ? 'page' : undefined}
                     onClick={() => go(p)}
@@ -89,7 +96,7 @@ export function Pagination({
               ),
             )}
           </ul>
-          <Button variant="ghost" size={buttonSize} iconRight={<Icon name="CaretRight" />} disabled={last} onClick={() => go(current + 1)}>
+          <Button {...part('next')} variant="ghost" size={buttonSize} iconRight={<Icon name="CaretRight" />} disabled={last} onClick={() => go(current + 1)}>
             Next
           </Button>
         </>

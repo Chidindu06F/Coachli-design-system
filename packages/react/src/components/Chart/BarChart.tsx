@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { ChartLegend, ChartTooltip, DataTable, tooltipPosition } from './ChartParts';
 import { defaultFormat, labelStep, niceTicks, num, seriesColor, showLabel, useWidth } from './chartUtils';
 import type { ChartDatum, ChartSeries } from './chartUtils';
+import { chartParts } from './ChartParts';
+import type { ChartPartsProps } from './ChartParts';
 import styles from './Chart.module.css';
 
-export interface BarChartProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface BarChartProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>, ChartPartsProps {
   /** One object per category, like { month: 'Jan', card: 120, transfer: 80 }. */
   data: ChartDatum[];
   /** The field that names each category. */
@@ -38,7 +39,8 @@ function barPath(x: number, y: number, w: number, h: number, horizontal: boolean
 }
 
 /** Compares amounts across categories. Point, hover or use the arrow keys to see the values. Figma: Bar chart. */
-export function BarChart({ data, xKey, series, label, orientation = 'vertical', mode = 'grouped', height = 240, legend = true, formatValue = defaultFormat, formatX = (v) => String(v), categoryWidth = 96, className, ...rest }: BarChartProps) {
+export function BarChart({ data, xKey, series, label, orientation = 'vertical', mode = 'grouped', height = 240, legend = true, formatValue = defaultFormat, formatX = (v) => String(v), categoryWidth = 96, className, classNames, styles: partStyles, ...rest }: BarChartProps) {
+  const part = chartParts('bar-chart', { classNames, styles: partStyles });
   const [box, width] = useWidth<HTMLDivElement>();
   const [active, setActive] = useState<number | null>(null);
   const horizontal = orientation === 'horizontal';
@@ -101,33 +103,33 @@ export function BarChart({ data, xKey, series, label, orientation = 'vertical', 
   const tip = active != null ? (horizontal ? tooltipPosition(M.left + scale(totals[active] ?? 0), M.top + active * band, width) : tooltipPosition(M.left + (active + 0.5) * band, M.top, width)) : undefined;
 
   return (
-    <div className={cx(styles.chart, className)} role="figure" aria-label={label} tabIndex={0} onKeyDown={onKey} onBlur={() => setActive(null)} {...rest}>
-      {legend && <ChartLegend items={series.map((s, i) => ({ label: s.label, color: seriesColor(s, i) }))} />}
-      <div ref={box} className={styles.plot} style={{ height: h }}>
+    <div {...rest} {...part('root', [styles.chart, className], rest.style)} role="figure" aria-label={label} tabIndex={0} onKeyDown={onKey} onBlur={() => setActive(null)}>
+      {legend && <ChartLegend {...part('legend')} items={series.map((s, i) => ({ label: s.label, color: seriesColor(s, i) }))} />}
+      <div ref={box} {...part('plot', styles.plot, { height: h })}>
         {width > 0 && (
           <svg width={width} height={h} aria-hidden="true" onPointerLeave={() => setActive(null)}>
             {ticks.map((t) => {
               const p = horizontal ? M.left + scale(t) : M.top + plotH - scale(t);
               return horizontal ? (
                 <g key={t}>
-                  <line className={styles.grid} x1={p} x2={p} y1={M.top} y2={M.top + plotH} />
-                  <text className={styles.axisLabel} x={p} y={h - 8} textAnchor="middle">{formatValue(t)}</text>
+                  <line {...part('grid', styles.grid)} x1={p} x2={p} y1={M.top} y2={M.top + plotH} />
+                  <text {...part('axisLabel', styles.axisLabel)} x={p} y={h - 8} textAnchor="middle">{formatValue(t)}</text>
                 </g>
               ) : (
                 <g key={t}>
-                  <line className={styles.grid} x1={M.left} x2={M.left + plotW} y1={p} y2={p} />
-                  <text className={styles.axisLabel} x={M.left - 8} y={p} textAnchor="end" dominantBaseline="middle">{formatValue(t)}</text>
+                  <line {...part('grid', styles.grid)} x1={M.left} x2={M.left + plotW} y1={p} y2={p} />
+                  <text {...part('axisLabel', styles.axisLabel)} x={M.left - 8} y={p} textAnchor="end" dominantBaseline="middle">{formatValue(t)}</text>
                 </g>
               );
             })}
             {bars.map((b, i) => (
-              <g key={i} className={cx(styles.barGroup, active != null && active !== i && styles.dimmed)} onPointerEnter={() => setActive(i)} onPointerDown={() => setActive(i)}>
+              <g key={i} {...part('bar', [styles.barGroup, active != null && active !== i && styles.dimmed])} onPointerEnter={() => setActive(i)} onPointerDown={() => setActive(i)}>
                 {horizontal ? <rect x={0} y={b.start} width={width} height={band} fill="transparent" /> : <rect x={b.start} y={M.top} width={band} height={plotH} fill="transparent" />}
                 {b.parts.map((p) => <path key={p.key} d={p.d} fill={p.color} />)}
                 {horizontal ? (
-                  <text className={styles.axisLabel} x={M.left - 8} y={b.start + band / 2} textAnchor="end" dominantBaseline="middle">{formatX(data[i]?.[xKey])}</text>
+                  <text {...part('axisLabel', styles.axisLabel)} x={M.left - 8} y={b.start + band / 2} textAnchor="end" dominantBaseline="middle">{formatX(data[i]?.[xKey])}</text>
                 ) : (
-                  showLabel(i, data.length, step) && <text className={styles.axisLabel} x={b.start + band / 2} y={h - 8} textAnchor="middle">{formatX(data[i]?.[xKey])}</text>
+                  showLabel(i, data.length, step) && <text {...part('axisLabel', styles.axisLabel)} x={b.start + band / 2} y={h - 8} textAnchor="middle">{formatX(data[i]?.[xKey])}</text>
                 )}
               </g>
             ))}
@@ -135,9 +137,9 @@ export function BarChart({ data, xKey, series, label, orientation = 'vertical', 
         )}
         {row && width > 0 && (
           <ChartTooltip
+            {...part('tooltip', undefined, tip)}
             title={formatX(row[xKey])}
             rows={series.map((s, si) => ({ label: s.label, value: formatValue(num(row[s.key])), color: seriesColor(s, si) }))}
-            style={tip}
           />
         )}
       </div>

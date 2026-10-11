@@ -1,13 +1,17 @@
 import { forwardRef, useState } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
-import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
 import { useControllable } from '../../internal/useControllable';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Rating.module.css';
 
 export type RatingSize = 'sm' | 'md' | 'lg';
 
-export interface RatingProps {
+/** Parts you can style with `classNames` and `styles`. */
+export type RatingPart = 'root' | 'star' | 'empty' | 'fill';
+
+export interface RatingProps extends PartsProps<RatingPart> {
   value?: number;
   defaultValue?: number;
   onValueChange?: (value: number) => void;
@@ -30,9 +34,10 @@ export interface RatingProps {
 
 /** Stars for giving or showing a score. Arrow keys change it; click a star to set it. Figma: Rating. */
 export const Rating = forwardRef<HTMLDivElement, RatingProps>(function Rating(
-  { value, defaultValue = 0, onValueChange, max = 5, allowHalf = false, readOnly = false, disabled = false, size = 'md', name, className, ...aria },
+  { value, defaultValue = 0, onValueChange, max = 5, allowHalf = false, readOnly = false, disabled = false, size = 'md', name, className, classNames, styles: partStyles, ...aria },
   ref,
 ) {
+  const part = parts<RatingPart>('rating', { classNames, styles: partStyles });
   const [v, setV] = useControllable<number>(value, defaultValue, onValueChange as (v: number) => void);
   const [hover, setHover] = useState<number | null>(null);
   const step = allowHalf ? 0.5 : 1;
@@ -64,13 +69,13 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(function Rating(
     return (
       <span
         key={i}
-        className={styles.star}
+        {...part('star', styles.star)}
         onPointerMove={interactive ? (e) => setHover(fromPointer(e, i)) : undefined}
         onClick={interactive ? (e) => setV(fromPointer(e, i)) : undefined}
       >
-        <Icon name="StarFill" className={styles.empty} />
+        <Icon name="StarFill" {...part('empty', styles.empty)} />
         {fill > 0 && (
-          <span className={styles.fill} style={{ width: `${fill * 100}%` }}>
+          <span {...part('fill', styles.fill, { width: `${fill * 100}%` })}>
             <Icon name="StarFill" />
           </span>
         )}
@@ -81,7 +86,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(function Rating(
   return (
     <div
       ref={ref}
-      className={cx(styles.rating, styles[size], interactive && styles.interactive, disabled && styles.disabled, className)}
+      {...part('root', [styles.rating, styles[size], interactive && styles.interactive, disabled && styles.disabled, className])}
       {...(readOnly
         ? { role: 'img', 'aria-label': aria['aria-label'] ? `${aria['aria-label']}: ${text}` : text }
         : {

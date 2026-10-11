@@ -1,13 +1,14 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import { Icon } from '../../internal/Icon';
 import { StatusIcon } from '../../internal/StatusIcon';
 import type { IconName } from '../../internal/iconPaths';
 import { Button } from '../Button';
 import { CompactButton } from '../CompactButton';
 import { Field } from '../Field';
-import type { FieldProps } from '../Field';
+import type { FieldProps, FieldWrapperProps } from '../Field';
 import { Input } from '../Input';
 import { Menu } from '../Menu';
 import { Popover } from '../Popover';
@@ -21,7 +22,10 @@ export interface RichTextEditorHandle {
   focus: () => void;
 }
 
-export interface RichTextEditorProps {
+/** Parts you can style with `classNames` and `styles`. */
+export type RichTextEditorPart = 'root' | 'toolbar' | 'group' | 'divider' | 'body' | 'placeholder' | 'content';
+
+export interface RichTextEditorProps extends PartsProps<RichTextEditorPart> {
   /** Starting content as HTML. The editor keeps its own state after that. */
   defaultValue?: string;
   /** Called with the new HTML after each change. */
@@ -69,7 +73,7 @@ const TEXT_STYLES = [
  * editing, use a dedicated editor library styled with Halo tokens.
  */
 export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorProps>(function RichTextEditor(
-  { defaultValue = '', onChange, placeholder = 'Start writing…', invalid, disabled, size = 'md', tools = {}, minHeight = size === 'sm' ? 120 : 160, id, className, ...aria },
+  { defaultValue = '', onChange, placeholder = 'Start writing…', invalid, disabled, size = 'md', tools = {}, minHeight = size === 'sm' ? 120 : 160, id, className, classNames, styles: partStyles, ...aria },
   ref,
 ) {
   const area = useRef<HTMLDivElement | null>(null);
@@ -156,11 +160,12 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
     </CompactButton>
   );
 
-  const divider = (key: string) => <span key={key} className={styles.divider} aria-hidden="true" />;
+  const part = parts<RichTextEditorPart>('rich-text-editor', { classNames, styles: partStyles });
+  const divider = (key: string) => <span key={key} {...part('divider', styles.divider)} aria-hidden="true" />;
 
   return (
-    <div className={cx(styles.editor, size === 'sm' && styles.sm, invalid || aria['aria-invalid'] ? styles.invalid : undefined, disabled && styles.disabled, className)}>
-      <div role="toolbar" aria-label="Formatting" aria-controls={id} className={styles.toolbar}>
+    <div {...part('root', [styles.editor, size === 'sm' && styles.sm, invalid || aria['aria-invalid'] ? styles.invalid : undefined, disabled && styles.disabled, className])}>
+      <div role="toolbar" aria-label="Formatting" aria-controls={id} {...part('toolbar', styles.toolbar)}>
         {show.textStyle && (
           <>
             <Menu
@@ -175,26 +180,26 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
             {divider('d1')}
           </>
         )}
-        {show.format && <div className={styles.group}>{FORMAT.map((c) => tool(c, !!active[c.cmd], () => run(c.cmd)))}</div>}
+        {show.format && <div {...part('group', styles.group)}>{FORMAT.map((c) => tool(c, !!active[c.cmd], () => run(c.cmd)))}</div>}
         {show.format && (show.blocks || show.insert) && divider('d2')}
-        {show.blocks && <div className={styles.group}>{BLOCKS.map((c) => tool(c, !!active[c.state ?? c.cmd], () => toggleBlock(c)))}</div>}
+        {show.blocks && <div {...part('group', styles.group)}>{BLOCKS.map((c) => tool(c, !!active[c.state ?? c.cmd], () => toggleBlock(c)))}</div>}
         {show.blocks && show.insert && divider('d3')}
         {show.insert && (
-          <div className={styles.group}>
+          <div {...part('group', styles.group)}>
             <UrlPopover label="Link" icon="Link" placeholder="https://" disabled={disabled} onApply={(url) => run('createLink', url)} />
             <UrlPopover label="Image" icon="Image" placeholder="Image address" disabled={disabled} onApply={(url) => run('insertImage', url)} />
           </div>
         )}
         <span className={styles.spacer} />
         {show.history && (
-          <div className={styles.group}>
+          <div {...part('group', styles.group)}>
             {tool({ cmd: 'undo', icon: 'ArrowCounterClockwise', label: 'Undo', shortcut: 'Ctrl+Z' }, false, () => run('undo'))}
             {tool({ cmd: 'redo', icon: 'ArrowClockwise', label: 'Redo', shortcut: 'Ctrl+Y' }, false, () => run('redo'))}
           </div>
         )}
       </div>
-      <div className={styles.contentWrap}>
-        {empty && <div className={styles.placeholder} aria-hidden="true">{placeholder}</div>}
+      <div {...part('body', styles.contentWrap)}>
+        {empty && <div {...part('placeholder', styles.placeholder)} aria-hidden="true">{placeholder}</div>}
         <StatusIcon className={styles.status} invalid={invalid || !!aria['aria-invalid']} disabled={disabled} />
         <div
           ref={area}
@@ -209,8 +214,7 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
           aria-placeholder={placeholder}
           contentEditable={!disabled}
           suppressContentEditableWarning
-          className={styles.content}
-          style={{ minHeight }}
+          {...part('content', styles.content, { minHeight })}
           onInput={changed}
           onKeyUp={refresh}
           onMouseUp={refresh}
@@ -272,11 +276,13 @@ export interface RichTextEditorFieldProps extends Omit<RichTextEditorProps, 'ari
   /** Shows a character count, with this as the limit. Figma: Count. */
   maxLength?: number;
   fieldClassName?: string;
+  fieldClassNames?: FieldWrapperProps['fieldClassNames'];
+  fieldStyles?: FieldWrapperProps['fieldStyles'];
 }
 
 /** A RichTextEditor with a label, hint and optional character count. */
 export const RichTextEditorField = forwardRef<RichTextEditorHandle, RichTextEditorFieldProps>(function RichTextEditorField(
-  { label, hint, error, optional, info, required, id, maxLength, fieldClassName, onChange, defaultValue, ...rest },
+  { label, hint, error, optional, info, required, id, maxLength, fieldClassName, fieldClassNames, fieldStyles, onChange, defaultValue, ...rest },
   ref,
 ) {
   const textOf = (html: string) => {
@@ -298,7 +304,7 @@ export const RichTextEditorField = forwardRef<RichTextEditorHandle, RichTextEdit
       info={info}
       count={count}
       controlId={id}
-      className={fieldClassName}
+      className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}
     >
       {(c) => (
         <RichTextEditor

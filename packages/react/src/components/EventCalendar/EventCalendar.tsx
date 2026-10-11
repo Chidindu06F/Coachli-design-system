@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import { Icon } from '../../internal/Icon';
 import { Portal, useDismiss, useFloating } from '../../internal/floating';
 import { MonthYearPanel } from '../../internal/MonthYearPanel';
@@ -36,7 +38,14 @@ export interface CalendarEvent {
 
 export type EventCalendarView = 'day' | 'week' | 'month' | 'year';
 
-export interface EventCalendarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
+/** Parts you can style with `classNames` and `styles`. */
+export type EventCalendarPart =
+  | 'root' | 'header' | 'nav' | 'title' | 'controls' | 'viewSwitch' | 'jumpPanel'
+  | 'month' | 'weekday' | 'week' | 'day' | 'date' | 'event' | 'more' | 'extra' | 'agenda'
+  | 'year' | 'monthCell'
+  | 'timeGrid' | 'dayHeader' | 'allDay' | 'hours' | 'column' | 'now';
+
+export interface EventCalendarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'>, PartsProps<EventCalendarPart> {
   events?: CalendarEvent[];
   /** The selected day. */
   value?: Date | null;
@@ -171,8 +180,11 @@ export function EventCalendar({
   onEventClick,
   onSlotClick,
   className,
+  classNames,
+  styles: partStyles,
   ...rest
 }: EventCalendarProps) {
+  const part = parts<EventCalendarPart>('event-calendar', { classNames, styles: partStyles });
   const today = startOfDay(new Date());
   const [selected, setSelected] = useControllable<Date | null>(value, defaultValue, (d) => d && onValueChange?.(d));
   const [shown, setShown] = useControllable<Date>(month, startOfDay(defaultMonth ?? defaultValue ?? today), onMonthChange);
@@ -265,8 +277,7 @@ export function EventCalendar({
       <button
         key={e.id}
         type="button"
-        className={cx(styles.event, c.className, extra)}
-        style={{ ...c.style, ...style }}
+        {...part('event', [styles.event, c.className, extra], { ...c.style, ...style })}
         aria-label={`${e.title}, ${span(e)}`}
         onClick={() => onEventClick?.(e)}
       >
@@ -286,16 +297,16 @@ export function EventCalendar({
   const viewNames: Record<EventCalendarView, string> = { day: 'Day', week: 'Week', month: 'Month', year: 'Year' };
 
   return (
-    <div className={cx(styles.root, className)} {...rest}>
-      <div className={styles.header}>
+    <div {...rest} {...part('root', [styles.root, className], rest.style)}>
+      <div {...part('header', styles.header)}>
         <div className={styles.lead}>
           {/* The arrows sit either side of the period they move, so it is clear what they change. */}
-          <span className={styles.nav}>
+          <span {...part('nav', styles.nav)}>
             <CompactButton variant="ghost" aria-label={`Previous ${navLabel}`} title={`Previous ${navLabel}`} onClick={() => step(-1)}>
               <Icon name="CaretLeft" />
             </CompactButton>
             {header === 'full' ? (
-              <h2 className={cx(styles.title, styles[`title-${mode}`])}>
+              <h2 {...part('title', [styles.title, styles[`title-${mode}`]])}>
                 <button
                   ref={jumpAnchor}
                   type="button"
@@ -309,7 +320,7 @@ export function EventCalendar({
                 </button>
               </h2>
             ) : (
-              <h2 className={cx(styles.title, styles[`title-${mode}`])} aria-live="polite">{title}</h2>
+              <h2 {...part('title', [styles.title, styles[`title-${mode}`]])} aria-live="polite">{title}</h2>
             )}
             <CompactButton variant="ghost" aria-label={`Next ${navLabel}`} title={`Next ${navLabel}`} onClick={() => step(1)}>
               <Icon name="CaretRight" />
@@ -317,10 +328,10 @@ export function EventCalendar({
           </span>
         </div>
         {header === 'full' && views.length > 1 && (
-          <div className={styles.controls}>
+          <div {...part('controls', styles.controls)}>
             {(
               <SegmentedControl
-                className={styles.viewSwitch}
+                {...part('viewSwitch', styles.viewSwitch)}
                 aria-label="View"
                 size="sm"
                 value={mode}
@@ -334,7 +345,7 @@ export function EventCalendar({
 
       {jumping && (
         <Portal>
-          <div ref={jumpPanel} role="dialog" aria-label={mode === 'year' ? 'Choose a year' : 'Choose a date'} className={styles.jumpPanel} style={jumpStyle}>
+          <div ref={jumpPanel} role="dialog" aria-label={mode === 'year' ? 'Choose a year' : 'Choose a date'} {...part('jumpPanel', styles.jumpPanel, jumpStyle)}>
             {mode === 'year' ? (
               <MonthYearPanel
                 className={styles.yearJump}
@@ -367,7 +378,7 @@ export function EventCalendar({
       )}
 
       {mode === 'year' && (
-        <div className={styles.year} role="list" aria-label={title}>
+        <div {...part('year', styles.year)} role="list" aria-label={title}>
           {monthNames.map((_, m) => {
             const mDate = new Date(first.getFullYear(), m, 1);
             const mEnd = new Date(first.getFullYear(), m + 1, 0);
@@ -377,7 +388,7 @@ export function EventCalendar({
               <div key={m} role="listitem" className={styles.monthCellWrap}>
                 <button
                   type="button"
-                  className={cx(styles.monthCell, current && styles.current)}
+                  {...part('monthCell', [styles.monthCell, current && styles.current])}
                   aria-current={current ? 'date' : undefined}
                   onClick={() => {
                     goMonth(first.getFullYear(), m);
@@ -397,7 +408,7 @@ export function EventCalendar({
                     </span>
                   )}
                 </button>
-                {renderMonth && <div className={styles.extra}>{renderMonth(mDate, inMonth)}</div>}
+                {renderMonth && <div {...part('extra', styles.extra)}>{renderMonth(mDate, inMonth)}</div>}
               </div>
             );
           })}
@@ -420,15 +431,16 @@ export function EventCalendar({
             setMode('day');
           } : undefined}
           onSlotClick={onSlotClick}
+          part={part}
         />
       )}
 
       {mode === 'month' && (
         <>
-          <div ref={grid} className={styles.month} role="grid" aria-label={title} onKeyDown={onKey}>
+          <div ref={grid} {...part('month', styles.month)} role="grid" aria-label={title} onKeyDown={onKey}>
             <div className={styles.weekdays} role="row">
               {weekdays.map((w) => (
-                <span key={w.long} role="columnheader" className={styles.weekday}>
+                <span key={w.long} role="columnheader" {...part('weekday', styles.weekday)}>
                   <abbr title={w.long}>{w.short}</abbr>
                 </span>
               ))}
@@ -441,8 +453,7 @@ export function EventCalendar({
                 <div
                   key={week[0]!.toISOString()}
                   role="row"
-                  className={styles.week}
-                  style={{ '--rows': rows + (hidden.some((h) => h.length) ? 1 : 0) } as CSSProperties}
+                  {...part('week', styles.week, { '--rows': rows + (hidden.some((h) => h.length) ? 1 : 0) } as CSSProperties)}
                 >
                   {week.map((d, i) => {
                     const dayEvents = events.filter((e) => onDay(e, d));
@@ -452,8 +463,7 @@ export function EventCalendar({
                         key={d.toISOString()}
                         role="gridcell"
                         aria-selected={isSelected || undefined}
-                        className={cx(styles.day, !sameMonth(d, first) && styles.outside, isSelected && styles.selected)}
-                        style={{ gridColumn: i + 1 }}
+                        {...part('day', [styles.day, !sameMonth(d, first) && styles.outside, isSelected && styles.selected], { gridColumn: i + 1 })}
                       >
                         <button
                           type="button"
@@ -461,7 +471,7 @@ export function EventCalendar({
                           tabIndex={sameDay(d, tabbable) ? 0 : -1}
                           aria-current={sameDay(d, today) ? 'date' : undefined}
                           aria-label={`${formatDate(d, locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}${dayEvents.length ? `, ${dayEvents.length} ${dayEvents.length === 1 ? 'event' : 'events'}` : ''}`}
-                          className={cx(styles.date, sameDay(d, today) && styles.today)}
+                          {...part('date', [styles.date, sameDay(d, today) && styles.today])}
                           onClick={() => choose(d)}
                           onFocus={() => setFocus(d)}
                         >
@@ -475,7 +485,7 @@ export function EventCalendar({
                             })}
                           </span>
                         )}
-                        {renderDay && <div className={styles.extra}>{renderDay(d, dayEvents)}</div>}
+                        {renderDay && <div {...part('extra', styles.extra)}>{renderDay(d, dayEvents)}</div>}
                       </div>
                     );
                   })}
@@ -490,7 +500,7 @@ export function EventCalendar({
                     )}
                   {hidden.map((list, i) =>
                     list.length ? (
-                      <span key={i} className={styles.moreWrap} style={{ gridColumn: i + 1, gridRow: maxEvents + 2 }}>
+                      <span key={i} {...part('more', styles.moreWrap, { gridColumn: i + 1, gridRow: maxEvents + 2 })}>
                         <Popover
                           title={formatDate(week[i]!, locale, { weekday: 'long', day: 'numeric', month: 'long' })}
                           showClose
@@ -505,7 +515,7 @@ export function EventCalendar({
               );
             })}
           </div>
-          <section className={styles.agenda} aria-label={`Events on ${formatDate(agendaDay, locale, { day: 'numeric', month: 'long' })}`}>
+          <section {...part('agenda', styles.agenda)} aria-label={`Events on ${formatDate(agendaDay, locale, { day: 'numeric', month: 'long' })}`}>
             <h3 className={styles.agendaTitle}>{formatDate(agendaDay, locale, { weekday: 'long', day: 'numeric', month: 'long' })}</h3>
             {agenda.length === 0 ? (
               <p className={styles.empty}>No events</p>
@@ -536,10 +546,11 @@ interface TimeGridProps {
   eventButton: (e: CalendarEvent, extra?: string, style?: CSSProperties, children?: ReactNode) => ReactNode;
   onDayClick?: (d: Date) => void;
   onSlotClick?: (d: Date) => void;
+  part: ReturnType<typeof parts<EventCalendarPart>>;
 }
 
 /** Hours down the side, days across, and timed events placed by their start and end. */
-function TimeGrid({ days, events, today, locale, hourHeight, startHour, maxEvents, time, eventButton, onDayClick, onSlotClick }: TimeGridProps) {
+function TimeGrid({ days, events, today, locale, hourHeight, startHour, maxEvents, time, eventButton, onDayClick, onSlotClick, part }: TimeGridProps) {
   const scroller = useRef<HTMLDivElement | null>(null);
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
@@ -564,7 +575,7 @@ function TimeGrid({ days, events, today, locale, hourHeight, startHour, maxEvent
   };
 
   return (
-    <div className={styles.timeGrid} style={{ '--cols': days.length, '--hour': `${hourHeight}px` } as CSSProperties}>
+    <div {...part('timeGrid', styles.timeGrid, { '--cols': days.length, '--hour': `${hourHeight}px` } as CSSProperties)}>
       <div ref={scroller} className={styles.tgScroll}>
         {/* Sticky inside the scroller, so the day columns line up with the hours below whatever the scrollbar. */}
         <div className={styles.tgSticky}>
@@ -580,18 +591,18 @@ function TimeGrid({ days, events, today, locale, hourHeight, startHour, maxEvent
               const label = formatDate(d, locale, { weekday: 'long', day: 'numeric', month: 'long' });
               const current = sameDay(d, today) ? 'date' : undefined;
               return onDayClick ? (
-                <button key={d.toISOString()} type="button" className={styles.tgDay} aria-label={`Open ${label}`} aria-current={current} onClick={() => onDayClick(d)}>
+                <button key={d.toISOString()} type="button" {...part('dayHeader', styles.tgDay)} aria-label={`Open ${label}`} aria-current={current} onClick={() => onDayClick(d)}>
                   {content}
                 </button>
               ) : (
-                <span key={d.toISOString()} className={styles.tgDay} aria-current={current}>
+                <span key={d.toISOString()} {...part('dayHeader', styles.tgDay)} aria-current={current}>
                   {content}
                 </span>
               );
             })}
           </div>
           {placed.length > 0 && (
-            <div className={styles.allDay} style={{ '--rows': rows } as CSSProperties}>
+            <div {...part('allDay', styles.allDay, { '--rows': rows } as CSSProperties)}>
               <span className={styles.allDayLabel}>All day</span>
               {placed
                 .filter((p) => p.row < maxEvents)
@@ -606,7 +617,7 @@ function TimeGrid({ days, events, today, locale, hourHeight, startHour, maxEvent
           )}
         </div>
         <div className={styles.tgBody} style={{ height: hourHeight * 24 }}>
-          <div className={styles.hours} aria-hidden="true">
+          <div {...part('hours', styles.hours)} aria-hidden="true">
             {hours.slice(1).map((h) => (
               <span key={h} className={styles.hour} style={{ top: h * hourHeight }}>
                 {hourLabel(h)}
@@ -616,7 +627,7 @@ function TimeGrid({ days, events, today, locale, hourHeight, startHour, maxEvent
           {days.map((d) => {
             const timed = layoutTimed(events.filter((e) => isTimed(e) && sameDay(e.start, d)));
             return (
-              <div key={d.toISOString()} className={styles.tgCol} onClick={(e) => slot(d, e)} data-clickable={!!onSlotClick || undefined}>
+              <div key={d.toISOString()} {...part('column', styles.tgCol)} onClick={(e) => slot(d, e)} data-clickable={!!onSlotClick || undefined}>
                 {timed.map(({ event: e, col, cols }) => {
                   const top = (minutes(e.start) / 60) * hourHeight;
                   const height = Math.max(20, ((endMin(e) - minutes(e.start)) / 60) * hourHeight - 2);
@@ -642,7 +653,7 @@ function TimeGrid({ days, events, today, locale, hourHeight, startHour, maxEvent
                     </>,
                   );
                 })}
-                {sameDay(d, today) && <span className={styles.now} style={{ top: (minutes(now) / 60) * hourHeight }} aria-hidden="true" />}
+                {sameDay(d, today) && <span {...part('now', styles.now, { top: (minutes(now) / 60) * hourHeight })} aria-hidden="true" />}
               </div>
             );
           })}

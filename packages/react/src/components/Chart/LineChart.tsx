@@ -1,12 +1,13 @@
 import { useId, useState } from 'react';
 import type { HTMLAttributes, KeyboardEvent, PointerEvent, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { ChartLegend, ChartTooltip, DataTable, tooltipPosition } from './ChartParts';
 import { defaultFormat, labelStep, linearPath, niceTicks, num, seriesColor, showLabel, smoothPath, useWidth } from './chartUtils';
 import type { ChartDatum, ChartSeries } from './chartUtils';
+import { chartParts } from './ChartParts';
+import type { ChartPartsProps } from './ChartParts';
 import styles from './Chart.module.css';
 
-export interface LineChartProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface LineChartProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>, ChartPartsProps {
   /** One object per point on the x axis, like { day: 'Mon', revenue: 420 }. */
   data: ChartDatum[];
   /** The field that labels the x axis. */
@@ -32,7 +33,8 @@ export interface LineChartProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ch
 const M = { top: 8, right: 16, bottom: 28, left: 44 };
 
 /** Shows how values change over time. Point, hover or use the arrow keys to see the values. Figma: Line chart. */
-export function LineChart({ data, xKey, series, label, area, curve = 'smooth', height = 240, legend = true, formatValue = defaultFormat, formatX = (v) => String(v), className, ...rest }: LineChartProps) {
+export function LineChart({ data, xKey, series, label, area, curve = 'smooth', height = 240, legend = true, formatValue = defaultFormat, formatX = (v) => String(v), className, classNames, styles: partStyles, ...rest }: LineChartProps) {
+  const part = chartParts('line-chart', { classNames, styles: partStyles });
   const [box, width] = useWidth<HTMLDivElement>();
   const [active, setActive] = useState<number | null>(null);
   const gradId = useId();
@@ -66,9 +68,9 @@ export function LineChart({ data, xKey, series, label, area, curve = 'smooth', h
   };
 
   return (
-    <div className={cx(styles.chart, className)} role="figure" aria-label={label} tabIndex={0} onKeyDown={onKey} onBlur={() => setActive(null)} {...rest}>
-      {legend && <ChartLegend shape="line" items={series.map((s, i) => ({ label: s.label, color: seriesColor(s, i) }))} />}
-      <div ref={box} className={styles.plot} style={{ height }}>
+    <div {...rest} {...part('root', [styles.chart, className], rest.style)} role="figure" aria-label={label} tabIndex={0} onKeyDown={onKey} onBlur={() => setActive(null)}>
+      {legend && <ChartLegend {...part('legend')} shape="line" items={series.map((s, i) => ({ label: s.label, color: seriesColor(s, i) }))} />}
+      <div ref={box} {...part('plot', styles.plot, { height })}>
         {width > 0 && (
           <svg width={width} height={height} aria-hidden="true" onPointerMove={onMove} onPointerLeave={() => setActive(null)} onPointerDown={onMove}>
             <defs>
@@ -81,12 +83,12 @@ export function LineChart({ data, xKey, series, label, area, curve = 'smooth', h
             </defs>
             {ticks.map((t) => (
               <g key={t}>
-                <line className={styles.grid} x1={M.left} x2={M.left + plotW} y1={y(t)} y2={y(t)} />
-                <text className={styles.axisLabel} x={M.left - 8} y={y(t)} textAnchor="end" dominantBaseline="middle">{formatValue(t)}</text>
+                <line {...part('grid', styles.grid)} x1={M.left} x2={M.left + plotW} y1={y(t)} y2={y(t)} />
+                <text {...part('axisLabel', styles.axisLabel)} x={M.left - 8} y={y(t)} textAnchor="end" dominantBaseline="middle">{formatValue(t)}</text>
               </g>
             ))}
             {data.map((d, i) => showLabel(i, data.length, step) && (
-              <text key={i} className={styles.axisLabel} x={x(i)} y={height - 8} textAnchor={i === 0 && data.length > 1 ? 'start' : i === data.length - 1 && data.length > 1 ? 'end' : 'middle'}>{formatX(d[xKey])}</text>
+              <text key={i} {...part('axisLabel', styles.axisLabel)} x={x(i)} y={height - 8} textAnchor={i === 0 && data.length > 1 ? 'start' : i === data.length - 1 && data.length > 1 ? 'end' : 'middle'}>{formatX(d[xKey])}</text>
             ))}
             {series.map((s, si) => {
               const pts = data.map((d, i) => [x(i), y(num(d[s.key]))] as [number, number]);
@@ -110,10 +112,10 @@ export function LineChart({ data, xKey, series, label, area, curve = 'smooth', h
         )}
         {row && active != null && width > 0 && (
           <ChartTooltip
+            {...part('tooltip', undefined, tooltipPosition(x(active), M.top, width))}
             shape="line"
             title={formatX(row[xKey])}
             rows={series.map((s, si) => ({ label: s.label, value: formatValue(num(row[s.key])), color: seriesColor(s, si) }))}
-            style={tooltipPosition(x(active), M.top, width)}
           />
         )}
       </div>

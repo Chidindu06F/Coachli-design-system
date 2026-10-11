@@ -8,3 +8,4 @@ export { Sparkline } from './Sparkline';
 export type { SparklineProps } from './Sparkline';
 export { ChartLegend } from './ChartParts';
 export type { ChartDatum, ChartSeries, SeriesColor } from './chartUtils';
+export type { ChartPart } from './ChartParts';

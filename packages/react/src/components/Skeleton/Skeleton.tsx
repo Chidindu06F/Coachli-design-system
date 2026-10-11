@@ -26,6 +26,7 @@ export const Skeleton = forwardRef<HTMLSpanElement, SkeletonProps>(function Skel
     <span
       ref={ref}
       aria-hidden="true"
+      data-halo="skeleton"
       className={cx(styles.skeleton, styles[shape], animation === 'shimmer' && styles.shimmer, className)}
       style={{ width: width ?? w, height: height ?? h, ...style }}
       {...rest}

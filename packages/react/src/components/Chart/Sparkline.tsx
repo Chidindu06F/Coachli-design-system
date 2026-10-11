@@ -30,7 +30,7 @@ export function Sparkline({ data, label, width = 120, height = 40, fill = true, 
   const line = smoothPath(pts);
   const last = pts[pts.length - 1];
   return (
-    <svg className={cx(styles.sparkline, className)} width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={label} {...rest}>
+    <svg data-halo="sparkline" className={cx(styles.sparkline, className)} width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={label} {...rest}>
       <defs>
         <linearGradient id={id} x1="0" x2="0" y1="0" y2="1">
           <stop offset="0%" stopColor={stroke} stopOpacity={0.16} />

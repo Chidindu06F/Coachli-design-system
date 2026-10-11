@@ -1,6 +1,14 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Chart.module.css';
+
+/** Parts of the charts you can style with `classNames` and `styles`. */
+export type ChartPart = 'root' | 'legend' | 'plot' | 'grid' | 'axisLabel' | 'tooltip' | 'bar' | 'slice' | 'center';
+export type ChartPartsProps = PartsProps<ChartPart>;
+export const chartParts = (name: string, props: ChartPartsProps) => parts<ChartPart>(name, props);
+type PartAttrs = { className?: string; style?: CSSProperties; 'data-part'?: string };
 
 export interface LegendItem {
   label: ReactNode;
@@ -9,9 +17,9 @@ export interface LegendItem {
 }
 
 /** The coloured dots or lines that name each series. Figma: Chart legend item. */
-export function ChartLegend({ items, shape = 'dot', direction = 'row', className }: { items: LegendItem[]; shape?: 'dot' | 'line'; direction?: 'row' | 'column'; className?: string }) {
+export function ChartLegend({ items, shape = 'dot', direction = 'row', className, style, 'data-part': dataPart = 'legend' }: { items: LegendItem[]; shape?: 'dot' | 'line'; direction?: 'row' | 'column' } & PartAttrs) {
   return (
-    <ul className={cx(styles.legend, direction === 'column' && styles.legendColumn, className)}>
+    <ul className={cx(styles.legend, direction === 'column' && styles.legendColumn, className)} style={style} data-part={dataPart}>
       {items.map((it, i) => (
         <li key={i} className={styles.legendItem}>
           <span className={cx(styles.swatch, shape === 'line' && styles.swatchLine)} style={{ background: it.color }} aria-hidden="true" />
@@ -30,9 +38,9 @@ export interface TooltipRow {
 }
 
 /** The hover and focus card. It has a border, not a shadow. Figma: Chart tooltip. */
-export function ChartTooltip({ title, rows, style, shape = 'dot' }: { title?: ReactNode; rows: TooltipRow[]; style?: CSSProperties; shape?: 'dot' | 'line' }) {
+export function ChartTooltip({ title, rows, style, shape = 'dot', className, 'data-part': dataPart = 'tooltip' }: { title?: ReactNode; rows: TooltipRow[]; shape?: 'dot' | 'line' } & PartAttrs) {
   return (
-    <div className={styles.tooltip} style={style} aria-hidden="true">
+    <div className={cx(styles.tooltip, className)} style={style} data-part={dataPart} aria-hidden="true">
       {title != null && <div className={styles.tooltipTitle}>{title}</div>}
       {rows.map((r, i) => (
         <div key={i} className={styles.tooltipRow}>

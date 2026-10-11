@@ -1,17 +1,21 @@
 import { createContext, forwardRef, useContext } from 'react';
 import type { AnchorHTMLAttributes, HTMLAttributes, MouseEventHandler, ReactNode, Ref } from 'react';
-import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
 import { useControllable } from '../../internal/useControllable';
 import { Badge } from '../Badge';
 import { CompactButton } from '../CompactButton';
 import { Tooltip } from '../Tooltip';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Navigation.module.css';
 
 type NavType = 'sidebar' | 'collapsed' | 'top';
 const NavCtx = createContext<NavType>('sidebar');
 
-export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'onClick'> {
+/** Parts you can style with `classNames` and `styles` on NavItem. */
+export type NavItemPart = 'root' | 'icon' | 'label' | 'chevron';
+
+export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'onClick'>, PartsProps<NavItemPart> {
   /** Figma: Label. */
   children: ReactNode;
   /** Figma: L icon. Needed in a collapsed Sidebar. */
@@ -29,28 +33,28 @@ export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElemen
 
 /** A link in a Sidebar or TopBar. In a collapsed Sidebar it shows only the icon, with the label as a tooltip. */
 export const NavItem = forwardRef<HTMLElement, NavItemProps>(function NavItem(
-  { children, icon, badge, expanded, selected, disabled, href, onClick, className, ...rest },
+  { children, icon, badge, expanded, selected, disabled, href, onClick, className, classNames, styles: partStyles, ...rest },
   ref,
 ) {
+  const part = parts<NavItemPart>('nav-item', { classNames, styles: partStyles });
   const type = useContext(NavCtx);
   const collapsed = type === 'collapsed';
-  const classes = cx(styles.item, type === 'collapsed' && styles.typeCollapsed, type === 'top' && styles.typeTop, selected && styles.selected, disabled && styles.disabled, className);
   const body = (
     <>
-      {icon && <span className={styles.icon} aria-hidden="true">{icon}</span>}
-      <span className={collapsed ? styles.srOnly : styles.label}>{children}</span>
+      {icon && <span {...part('icon', styles.icon)} aria-hidden="true">{icon}</span>}
+      <span {...part('label', collapsed ? styles.srOnly : styles.label)}>{children}</span>
       {!collapsed && badge !== undefined && (typeof badge === 'number' ? <Badge size="xs" count={badge} /> : typeof badge === 'string' ? <Badge size="xs">{badge}</Badge> : badge)}
-      {!collapsed && expanded !== undefined && <Icon name="CaretDown" className={cx(styles.chevron, expanded && styles.chevronOpen)} />}
+      {!collapsed && expanded !== undefined && <Icon name="CaretDown" {...part('chevron', [styles.chevron, expanded && styles.chevronOpen])} />}
     </>
   );
   const common = {
-    className: classes,
+    ...part('root', [styles.item, type === 'collapsed' && styles.typeCollapsed, type === 'top' && styles.typeTop, selected && styles.selected, disabled && styles.disabled, className], rest.style),
     'aria-current': selected ? ('page' as const) : undefined,
     'aria-expanded': expanded,
   };
   const el =
     href && !disabled ? (
-      <a ref={ref as Ref<HTMLAnchorElement>} href={href} onClick={onClick} {...common} {...rest}>
+      <a ref={ref as Ref<HTMLAnchorElement>} href={href} onClick={onClick} {...rest} {...common}>
         {body}
       </a>
     ) : (
@@ -69,7 +73,10 @@ export const NavItem = forwardRef<HTMLElement, NavItemProps>(function NavItem(
 
 /* ---------- Sidebar ---------- */
 
-export interface SidebarProps extends HTMLAttributes<HTMLElement> {
+/** Parts you can style with `classNames` and `styles` on Sidebar. */
+export type SidebarPart = 'root' | 'header' | 'brand' | 'collapse' | 'items' | 'footer' | 'divider' | 'user';
+
+export interface SidebarProps extends HTMLAttributes<HTMLElement>, PartsProps<SidebarPart> {
   /** Logo or workspace name at the top. */
   header?: ReactNode;
   /** NavItems below the main ones, like Settings and Help. */
@@ -94,32 +101,35 @@ export function Sidebar({
   defaultCollapsed = false,
   onCollapsedChange,
   className,
+  classNames,
+  styles: partStyles,
   children,
   'aria-label': label = 'Main',
   ...rest
 }: SidebarProps) {
+  const part = parts<SidebarPart>('sidebar', { classNames, styles: partStyles });
   const [isCollapsed, setCollapsed] = useControllable(collapsed, defaultCollapsed, onCollapsedChange);
   const toggle = onCollapsedChange || collapsed === undefined;
   return (
     <NavCtx.Provider value={isCollapsed ? 'collapsed' : 'sidebar'}>
-      <nav aria-label={label} className={cx(styles.sidebar, isCollapsed && styles.isCollapsed, className)} {...rest}>
+      <nav aria-label={label} {...rest} {...part('root', [styles.sidebar, isCollapsed && styles.isCollapsed, className], rest.style)}>
         {(header || toggle) && (
-          <div className={styles.sidebarHeader}>
-            {!isCollapsed && header && <div className={styles.brand}>{header}</div>}
+          <div {...part('header', styles.sidebarHeader)}>
+            {!isCollapsed && header && <div {...part('brand', styles.brand)}>{header}</div>}
             {toggle && (
-              <CompactButton variant="ghost" aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'} aria-expanded={!isCollapsed} onClick={() => setCollapsed(!isCollapsed)}>
+              <CompactButton {...part('collapse')} variant="ghost" aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'} aria-expanded={!isCollapsed} onClick={() => setCollapsed(!isCollapsed)}>
                 <Icon name="SidebarSimple" />
               </CompactButton>
             )}
           </div>
         )}
-        <div className={styles.items}>{children}</div>
+        <div {...part('items', styles.items)}>{children}</div>
         <div className={styles.spacer} />
-        {footer && <div className={styles.items}>{footer}</div>}
+        {footer && <div {...part('footer', styles.items)}>{footer}</div>}
         {user && (
           <>
-            <hr className={styles.divider} />
-            <div className={styles.user}>{user}</div>
+            <hr {...part('divider', styles.divider)} />
+            <div {...part('user', styles.user)}>{user}</div>
           </>
         )}
       </nav>
@@ -129,7 +139,10 @@ export function Sidebar({
 
 /* ---------- Top bar ---------- */
 
-export interface TopBarProps extends HTMLAttributes<HTMLElement> {
+/** Parts you can style with `classNames` and `styles` on TopBar. */
+export type TopBarPart = 'root' | 'menu' | 'brand' | 'links' | 'actions';
+
+export interface TopBarProps extends HTMLAttributes<HTMLElement>, PartsProps<TopBarPart> {
   /** Logo or product name on the left. */
   logo?: ReactNode;
   /** Search, notifications and the account menu on the right. */
@@ -140,23 +153,24 @@ export interface TopBarProps extends HTMLAttributes<HTMLElement> {
 }
 
 /** A bar across the top of the app. Children are NavItems; they hide on small screens. */
-export function TopBar({ logo, actions, onMenuClick, className, children, 'aria-label': label = 'Main', ...rest }: TopBarProps) {
+export function TopBar({ logo, actions, onMenuClick, className, classNames, styles: partStyles, children, 'aria-label': label = 'Main', ...rest }: TopBarProps) {
+  const part = parts<TopBarPart>('top-bar', { classNames, styles: partStyles });
   return (
     <NavCtx.Provider value="top">
-      <header className={cx(styles.topBar, className)} {...rest}>
+      <header {...rest} {...part('root', [styles.topBar, className], rest.style)}>
         {onMenuClick && (
-          <CompactButton variant="ghost" aria-label="Open menu" className={styles.menuButton} onClick={onMenuClick}>
+          <CompactButton variant="ghost" aria-label="Open menu" {...part('menu', styles.menuButton)} onClick={onMenuClick}>
             <Icon name="List" />
           </CompactButton>
         )}
-        {logo && <div className={styles.brand}>{logo}</div>}
+        {logo && <div {...part('brand', styles.brand)}>{logo}</div>}
         {children && (
-          <nav aria-label={label} className={styles.links}>
+          <nav aria-label={label} {...part('links', styles.links)}>
             {children}
           </nav>
         )}
         <div className={styles.spacer} />
-        {actions && <div className={styles.actions}>{actions}</div>}
+        {actions && <div {...part('actions', styles.actions)}>{actions}</div>}
       </header>
     </NavCtx.Provider>
   );

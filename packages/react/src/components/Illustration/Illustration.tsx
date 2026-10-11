@@ -32,6 +32,7 @@ export const Illustration = forwardRef<SVGSVGElement, IllustrationProps>(functio
       aria-label={title}
       aria-hidden={title ? undefined : true}
       focusable="false"
+      data-halo="illustration"
       className={cx(styles.illustration, className)}
       // The drawings are fixed strings from this package, never user input.
       dangerouslySetInnerHTML={{ __html: illustrationMarkup(name) }}

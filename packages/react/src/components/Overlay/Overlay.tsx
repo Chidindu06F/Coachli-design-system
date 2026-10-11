@@ -15,5 +15,5 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(function Overlay
   { variant = 'dim', position = 'center', className, ...rest },
   ref,
 ) {
-  return <div ref={ref} className={cx(styles.overlay, styles[variant], styles[position], className)} {...rest} />;
+  return <div ref={ref} data-halo="overlay" className={cx(styles.overlay, styles[variant], styles[position], className)} {...rest} />;
 });

@@ -25,7 +25,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(function Text(
   const Tag = as as ElementType;
   const classes = [styles.text, styles[size], styles[weight], styles[color], className].filter(Boolean).join(' ');
   return (
-    <Tag ref={ref} className={classes} {...rest}>
+    <Tag ref={ref} data-halo="text" className={classes} {...rest}>
       {children}
     </Tag>
   );

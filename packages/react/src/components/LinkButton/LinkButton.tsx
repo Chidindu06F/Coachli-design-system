@@ -1,11 +1,16 @@
 import { forwardRef } from 'react';
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode, Ref } from 'react';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './LinkButton.module.css';
 
 export type LinkButtonVariant = 'primary' | 'destructive';
 export type LinkButtonSize = 'sm' | 'md';
 
-interface LinkButtonBaseProps {
+/** Parts you can style with `classNames` and `styles`. */
+export type LinkButtonPart = 'root' | 'icon' | 'label';
+
+interface LinkButtonBaseProps extends PartsProps<LinkButtonPart> {
   /** Brand purple or red. Figma: Type. */
   variant?: LinkButtonVariant;
   /** md is 14px with 20px icons (default); sm is 12px with 16px icons. Figma: Size. */
@@ -26,13 +31,14 @@ type AsButton = LinkButtonBaseProps & Omit<ButtonHTMLAttributes<HTMLButtonElemen
 export type LinkButtonProps = AsLink | AsButton;
 
 export const LinkButton = forwardRef<HTMLAnchorElement | HTMLButtonElement, LinkButtonProps>(function LinkButton(props, ref) {
-  const { variant = 'primary', size = 'md', iconLeft, iconRight, children, disabled = false, className, ...rest } = props;
-  const classes = [styles.link, styles[variant], styles[size], className].filter(Boolean).join(' ');
+  const { variant = 'primary', size = 'md', iconLeft, iconRight, children, disabled = false, className, classNames, styles: partStyles, style, ...rest } = props;
+  const part = parts<LinkButtonPart>('link-button', { classNames, styles: partStyles });
+  const root = part('root', [styles.link, styles[variant], styles[size], className], style);
   const content = (
     <>
-      {iconLeft && <span className={styles.icon} aria-hidden="true">{iconLeft}</span>}
-      <span className={styles.label}>{children}</span>
-      {iconRight && <span className={styles.icon} aria-hidden="true">{iconRight}</span>}
+      {iconLeft && <span {...part('icon', styles.icon)} aria-hidden="true">{iconLeft}</span>}
+      <span {...part('label', styles.label)}>{children}</span>
+      {iconRight && <span {...part('icon', styles.icon)} aria-hidden="true">{iconRight}</span>}
     </>
   );
 
@@ -40,7 +46,7 @@ export const LinkButton = forwardRef<HTMLAnchorElement | HTMLButtonElement, Link
     const { href, ...anchorProps } = rest as AnchorHTMLAttributes<HTMLAnchorElement>;
     // A disabled link has no href, so it can't be followed or focused.
     return (
-      <a ref={ref as Ref<HTMLAnchorElement>} className={classes} href={disabled ? undefined : href} aria-disabled={disabled || undefined} {...anchorProps}>
+      <a ref={ref as Ref<HTMLAnchorElement>} {...root} href={disabled ? undefined : href} aria-disabled={disabled || undefined} {...anchorProps}>
         {content}
       </a>
     );
@@ -48,7 +54,7 @@ export const LinkButton = forwardRef<HTMLAnchorElement | HTMLButtonElement, Link
 
   const { type = 'button', ...buttonProps } = rest as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
-    <button ref={ref as Ref<HTMLButtonElement>} type={type} className={classes} disabled={disabled} {...buttonProps}>
+    <button ref={ref as Ref<HTMLButtonElement>} type={type} {...root} disabled={disabled} {...buttonProps}>
       {content}
     </button>
   );

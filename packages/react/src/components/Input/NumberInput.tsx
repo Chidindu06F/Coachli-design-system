@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
 import { useControllable } from '../../internal/useControllable';
 import { CompactButton } from '../CompactButton';
@@ -30,7 +31,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
       {...rest}
       size={size}
       disabled={disabled}
-      className={styles.number}
+      className={cx(styles.number, rest.className)}
       inputMode="decimal"
       value={String(n)}
       onChange={(e) => {

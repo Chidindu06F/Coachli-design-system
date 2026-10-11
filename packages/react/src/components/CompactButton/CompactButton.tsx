@@ -1,11 +1,16 @@
 import { forwardRef } from 'react';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './CompactButton.module.css';
 
 export type CompactButtonVariant = 'stroke' | 'ghost' | 'fill';
 export type CompactButtonSize = 'md' | 'lg';
 
-export interface CompactButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+/** Parts you can style with `classNames` and `styles`. */
+export type CompactButtonPart = 'root' | 'icon';
+
+export interface CompactButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, PartsProps<CompactButtonPart> {
   /** Background and outline. Figma: Style. */
   variant?: CompactButtonVariant;
   /** lg is 24px with a 20px icon, md is 20px with a 16px icon. Figma: Size. */
@@ -21,16 +26,14 @@ export interface CompactButtonProps extends ButtonHTMLAttributes<HTMLButtonEleme
 }
 
 export const CompactButton = forwardRef<HTMLButtonElement, CompactButtonProps>(function CompactButton(
-  { variant = 'stroke', size = 'lg', round = false, selected, children, className, type = 'button', ...rest },
+  { variant = 'stroke', size = 'lg', round = false, selected, children, className, classNames, styles: partStyles, style, type = 'button', ...rest },
   ref,
 ) {
-  const classes = [styles.button, styles[variant], styles[size], round && styles.round, selected && styles.selected, className]
-    .filter(Boolean)
-    .join(' ');
+  const part = parts<CompactButtonPart>('compact-button', { classNames, styles: partStyles });
 
   return (
-    <button ref={ref} type={type} className={classes} aria-pressed={selected} {...rest}>
-      <span className={styles.icon} aria-hidden="true">{children}</span>
+    <button ref={ref} type={type} {...part('root', [styles.button, styles[variant], styles[size], round && styles.round, selected && styles.selected, className], style)} aria-pressed={selected} {...rest}>
+      <span {...part('icon', styles.icon)} aria-hidden="true">{children}</span>
     </button>
   );
 });

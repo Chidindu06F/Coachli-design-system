@@ -35,7 +35,7 @@ export const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(function
 ) {
   const buttons = Children.toArray(children).filter(isValidElement);
   return (
-    <div ref={ref} role="group" className={[styles.group, className].filter(Boolean).join(' ')} {...rest}>
+    <div ref={ref} role="group" data-halo="button-group" className={[styles.group, className].filter(Boolean).join(' ')} {...rest}>
       {buttons.map((button) => styleButton(button, size))}
     </div>
   );

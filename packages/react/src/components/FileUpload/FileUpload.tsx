@@ -5,6 +5,8 @@ import { Icon } from '../../internal/Icon';
 import { Button } from '../Button';
 import { CompactButton } from '../CompactButton';
 import { ProgressBar } from '../Progress';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './FileUpload.module.css';
 
 /** Turns a byte count into "2.4 MB". */
@@ -30,7 +32,10 @@ function accepts(file: File, accept?: string) {
   });
 }
 
-export interface FileUploadProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title' | 'onError'> {
+/** Parts you can style with `classNames` and `styles`. */
+export type FileUploadPart = 'root' | 'icon' | 'text' | 'title' | 'description' | 'button';
+
+export interface FileUploadProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title' | 'onError'>, PartsProps<FileUploadPart> {
   /** Called with the files that pass `accept` and `maxSize`. */
   onFiles: (files: File[]) => void;
   /** Called with files that were turned away and why. */
@@ -67,10 +72,13 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(function F
     icon,
     buttonLabel = 'Browse files',
     className,
+    classNames,
+    styles: partStyles,
     ...rest
   },
   ref,
 ) {
+  const part = parts<FileUploadPart>('file-upload', { classNames, styles: partStyles });
   const input = useRef<HTMLInputElement | null>(null);
   const [over, setOver] = useState(false);
   const descId = useId();
@@ -96,7 +104,6 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(function F
   return (
     <div
       ref={ref}
-      className={cx(styles.drop, over && styles.over, !!error && styles.error, disabled && styles.disabled, className)}
       onDragEnter={(e) => onDrag(e, true)}
       onDragOver={(e) => onDrag(e, true)}
       onDragLeave={(e) => {
@@ -107,19 +114,20 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(function F
         take(e.dataTransfer.files);
       }}
       {...rest}
+      {...part('root', [styles.drop, over && styles.over, !!error && styles.error, disabled && styles.disabled, className], rest.style)}
     >
-      <span className={styles.iconWrap} aria-hidden="true">
+      <span {...part('icon', styles.iconWrap)} aria-hidden="true">
         {icon ?? <Icon name="CloudArrowUp" />}
       </span>
-      <div className={styles.text}>
-        <div className={styles.title}>{title}</div>
+      <div {...part('text', styles.text)}>
+        <div {...part('title', styles.title)}>{title}</div>
         {(description || error) && (
-          <div id={descId} className={cx(styles.description, !!error && styles.errorText)}>
+          <div id={descId} {...part('description', [styles.description, !!error && styles.errorText])}>
             {error || description}
           </div>
         )}
       </div>
-      <Button variant="secondary" size="sm" disabled={disabled} aria-describedby={description || error ? descId : undefined} onClick={() => input.current?.click()}>
+      <Button {...part('button')} variant="secondary" size="sm" disabled={disabled} aria-describedby={description || error ? descId : undefined} onClick={() => input.current?.click()}>
         {buttonLabel}
       </Button>
       <input
@@ -138,7 +146,10 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(function F
   );
 });
 
-export interface FileItemProps extends HTMLAttributes<HTMLDivElement> {
+/** Parts you can style with `classNames` and `styles`. */
+export type FileItemPart = 'root' | 'icon' | 'body' | 'name' | 'meta' | 'details' | 'actions';
+
+export interface FileItemProps extends HTMLAttributes<HTMLDivElement>, PartsProps<FileItemPart> {
   name: string;
   /** Size in bytes. */
   size?: number;
@@ -157,9 +168,10 @@ export interface FileItemProps extends HTMLAttributes<HTMLDivElement> {
 
 /** One file in an upload list: progress while uploading, then done or failed. */
 export const FileItem = forwardRef<HTMLDivElement, FileItemProps>(function FileItem(
-  { name, size, status = 'complete', progress = 0, error = 'Upload failed. Try again.', icon, onCancel, onRemove, onRetry, className, ...rest },
+  { name, size, status = 'complete', progress = 0, error = 'Upload failed. Try again.', icon, onCancel, onRemove, onRetry, className, classNames, styles: partStyles, ...rest },
   ref,
 ) {
+  const part = parts<FileItemPart>('file-item', { classNames, styles: partStyles });
   const sizeText = size !== undefined ? formatBytes(size) : undefined;
   const details =
     status === 'uploading'
@@ -168,18 +180,18 @@ export const FileItem = forwardRef<HTMLDivElement, FileItemProps>(function FileI
         ? [sizeText, 'Uploaded'].filter(Boolean).join(' · ')
         : error;
   return (
-    <div ref={ref} className={cx(styles.item, status === 'error' && styles.itemError, className)} {...rest}>
-      <span className={styles.fileIcon} aria-hidden="true">{icon ?? <Icon name="File" />}</span>
-      <div className={styles.body}>
-        <div className={styles.name}>{name}</div>
-        <div className={styles.meta} aria-live="polite">
+    <div ref={ref} {...rest} {...part('root', [styles.item, status === 'error' && styles.itemError, className], rest.style)}>
+      <span {...part('icon', styles.fileIcon)} aria-hidden="true">{icon ?? <Icon name="File" />}</span>
+      <div {...part('body', styles.body)}>
+        <div {...part('name', styles.name)}>{name}</div>
+        <div {...part('meta', styles.meta)} aria-live="polite">
           {status === 'complete' && <Icon name="CheckCircle" className={cx(styles.statusIcon, styles.positive)} />}
           {status === 'error' && <Icon name="WarningCircle" className={cx(styles.statusIcon, styles.negative)} />}
-          <span className={cx(styles.details, status === 'error' && styles.errorText)}>{details}</span>
+          <span {...part('details', [styles.details, status === 'error' && styles.errorText])}>{details}</span>
         </div>
         {status === 'uploading' && <ProgressBar size="sm" value={progress} valueLabel={false} aria-label={`Uploading ${name}`} />}
       </div>
-      <div className={styles.actions}>
+      <div {...part('actions', styles.actions)}>
         {status === 'uploading' && onCancel && (
           <CompactButton variant="ghost" size="md" aria-label={`Cancel upload of ${name}`} onClick={onCancel}>
             <Icon name="X" />

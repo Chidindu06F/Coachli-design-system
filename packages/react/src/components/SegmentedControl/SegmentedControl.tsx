@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { useControllable } from '../../internal/useControllable';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './SegmentedControl.module.css';
 
 export interface SegmentedOption {
@@ -13,7 +14,10 @@ export interface SegmentedOption {
   disabled?: boolean;
 }
 
-export interface SegmentedControlProps {
+/** Parts you can style with `classNames` and `styles`. */
+export type SegmentedControlPart = 'root' | 'segment' | 'icon';
+
+export interface SegmentedControlProps extends PartsProps<SegmentedControlPart> {
   options: SegmentedOption[];
   value?: string;
   defaultValue?: string;
@@ -28,7 +32,8 @@ export interface SegmentedControlProps {
 }
 
 /** Picks one of 2 to 5 options and applies it straight away, like Day, Week or Month. */
-export function SegmentedControl({ options, value, defaultValue, onValueChange, size = 'md', fullWidth, className, ...rest }: SegmentedControlProps) {
+export function SegmentedControl({ options, value, defaultValue, onValueChange, size = 'md', fullWidth, className, classNames, styles: partStyles, ...rest }: SegmentedControlProps) {
+  const part = parts<SegmentedControlPart>('segmented-control', { classNames, styles: partStyles });
   const [v, setV] = useControllable(value, defaultValue ?? options[0]?.value ?? '', onValueChange);
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
   const enabled = options.map((o, i) => (o.disabled ? -1 : i)).filter((i) => i >= 0);
@@ -48,7 +53,7 @@ export function SegmentedControl({ options, value, defaultValue, onValueChange, 
   };
 
   return (
-    <div role="radiogroup" aria-label={rest['aria-label']} className={cx(styles.track, styles[size], fullWidth && styles.full, className)} onKeyDown={onKey}>
+    <div role="radiogroup" aria-label={rest['aria-label']} {...part('root', [styles.track, styles[size], fullWidth && styles.full, className])} onKeyDown={onKey}>
       {options.map((o, i) => {
         const on = o.value === v;
         return (
@@ -63,10 +68,10 @@ export function SegmentedControl({ options, value, defaultValue, onValueChange, 
             aria-label={o['aria-label']}
             tabIndex={on ? 0 : -1}
             disabled={o.disabled}
-            className={cx(styles.segment, !o.label && styles.iconOnly)}
+            {...part('segment', [styles.segment, !o.label && styles.iconOnly])}
             onClick={() => setV(o.value)}
           >
-            {o.icon && <span className={styles.icon} aria-hidden="true">{o.icon}</span>}
+            {o.icon && <span {...part('icon', styles.icon)} aria-hidden="true">{o.icon}</span>}
             {o.label}
           </button>
         );

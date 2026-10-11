@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { ChartLegend, ChartTooltip, DataTable } from './ChartParts';
 import { defaultFormat, useWidth } from './chartUtils';
 import type { SeriesColor } from './chartUtils';
+import { chartParts } from './ChartParts';
+import type { ChartPartsProps } from './ChartParts';
 import styles from './Chart.module.css';
 
 export interface PieSlice {
@@ -13,7 +14,7 @@ export interface PieSlice {
   color?: SeriesColor;
 }
 
-export interface PieChartProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface PieChartProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>, ChartPartsProps {
   /** Up to six slices read well; group the rest as "Other". */
   data: PieSlice[];
   /** What the chart shows. Read by screen readers. */
@@ -50,7 +51,8 @@ function arc(cx: number, cy: number, r: number, ir: number, a0: number, a1: numb
 }
 
 /** Shows how a whole splits into parts. Point, hover or use the arrow keys to see each slice. Figma: Pie chart. */
-export function PieChart({ data, label, variant = 'donut', size = 200, centerLabel = 'Total', centerValue, legend = 'auto', showPercent = true, formatValue = defaultFormat, className, ...rest }: PieChartProps) {
+export function PieChart({ data, label, variant = 'donut', size = 200, centerLabel = 'Total', centerValue, legend = 'auto', showPercent = true, formatValue = defaultFormat, className, classNames, styles: partStyles, ...rest }: PieChartProps) {
+  const part = chartParts('pie-chart', { classNames, styles: partStyles });
   const [box, width] = useWidth<HTMLDivElement>();
   const [active, setActive] = useState<number | null>(null);
   const total = data.reduce((a, s) => a + Math.max(0, s.value), 0);
@@ -79,35 +81,35 @@ export function PieChart({ data, label, variant = 'donut', size = 200, centerLab
   const tipAt = active != null ? slices[active] : null;
 
   return (
-    <div ref={box} className={cx(styles.chart, styles.pie, below && styles.pieBelow, className)} role="figure" aria-label={label} tabIndex={0} onKeyDown={onKey} onBlur={() => setActive(null)} {...rest}>
-      <div className={styles.pieGraphic} style={{ width: size, height: size }}>
+    <div ref={box} {...rest} {...part('root', [styles.chart, styles.pie, below && styles.pieBelow, className], rest.style)} role="figure" aria-label={label} tabIndex={0} onKeyDown={onKey} onBlur={() => setActive(null)}>
+      <div {...part('plot', styles.pieGraphic, { width: size, height: size })}>
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true" onPointerLeave={() => setActive(null)}>
           {slices.map(({ s, i, a0, a1 }) => (
             <path
               key={i}
               d={arc(r, r, active === i ? r : r - 2, ir, a0, a1)}
               fill={color(s, i)}
-              className={cx(styles.slice, active != null && active !== i && styles.dimmed)}
+              {...part('slice', [styles.slice, active != null && active !== i && styles.dimmed])}
               onPointerEnter={() => setActive(i)}
               onPointerDown={() => setActive(i)}
             />
           ))}
         </svg>
         {variant === 'donut' && (
-          <div className={styles.pieCenter} aria-hidden="true">
+          <div {...part('center', styles.pieCenter)} aria-hidden="true">
             {centerLabel != null && <span className={styles.pieCenterLabel}>{centerLabel}</span>}
             <span className={styles.pieCenterValue}>{centerValue ?? formatValue(total)}</span>
           </div>
         )}
         {tipAt && (
           <ChartTooltip
+            {...part('tooltip', undefined, { left: Math.min(size - 40, r + Math.cos(tipAt.mid) * r * 0.6), top: Math.max(0, r + Math.sin(tipAt.mid) * r * 0.6 - 20) })}
             rows={[{ label: tipAt.s.label, value: `${formatValue(tipAt.s.value)} · ${pct(tipAt.s.value)}`, color: color(tipAt.s, tipAt.i) }]}
-            style={{ left: Math.min(size - 40, r + Math.cos(tipAt.mid) * r * 0.6), top: Math.max(0, r + Math.sin(tipAt.mid) * r * 0.6 - 20) }}
           />
         )}
       </div>
       {legend !== false && (
-        <ChartLegend direction={below ? 'row' : 'column'} items={data.map((s, i) => ({ label: s.label, color: color(s, i), value: showPercent ? pct(s.value) : formatValue(s.value) }))} />
+        <ChartLegend {...part('legend')} direction={below ? 'row' : 'column'} items={data.map((s, i) => ({ label: s.label, color: color(s, i), value: showPercent ? pct(s.value) : formatValue(s.value) }))} />
       )}
       <DataTable caption={label} columns={['Part', 'Value', 'Share']} rows={data.map((s) => [s.label, formatValue(s.value), pct(s.value)])} />
     </div>

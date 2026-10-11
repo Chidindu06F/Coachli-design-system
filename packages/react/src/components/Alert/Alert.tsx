@@ -1,9 +1,10 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
 import type { IconName } from '../../internal/iconPaths';
 import { CompactButton } from '../CompactButton';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Alert.module.css';
 
 export type AlertType = 'information' | 'success' | 'warning' | 'error';
@@ -15,7 +16,10 @@ export const STATUS_ICONS: Record<AlertType, IconName> = {
   error: 'WarningCircle',
 };
 
-export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
+/** Parts you can style with `classNames` and `styles`. */
+export type AlertPart = 'root' | 'icon' | 'body' | 'text' | 'title' | 'description' | 'actions' | 'close';
+
+export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>, PartsProps<AlertPart> {
   /** Sets the colour and default icon. Figma: Type. */
   type?: AlertType;
   /** soft is tinted, outline is white with a coloured icon, filled is solid colour. Figma: Style. */
@@ -42,30 +46,31 @@ export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
  * Errors and warnings are announced straight away; others are announced politely.
  */
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  { type = 'information', variant = 'soft', layout = 'inline', size = 'md', title, description, icon, actions, onClose, closeLabel = 'Dismiss', className, ...rest },
+  { type = 'information', variant = 'soft', layout = 'inline', size = 'md', title, description, icon, actions, onClose, closeLabel = 'Dismiss', className, classNames, styles: partStyles, ...rest },
   ref,
 ) {
+  const part = parts<AlertPart>('alert', { classNames, styles: partStyles });
   return (
     <div
       ref={ref}
       role={type === 'error' || type === 'warning' ? 'alert' : 'status'}
-      className={cx(styles.alert, styles[type], styles[variant], styles[layout], styles[size], className)}
       {...rest}
+      {...part('root', [styles.alert, styles[type], styles[variant], styles[layout], styles[size], className], rest.style)}
     >
       {icon !== false && (
-        <span className={styles.icon} aria-hidden="true">
+        <span {...part('icon', styles.icon)} aria-hidden="true">
           {icon ?? <Icon name={STATUS_ICONS[type]} />}
         </span>
       )}
-      <div className={styles.body}>
-        <div className={styles.text}>
-          <div className={styles.title}>{title}</div>
-          {description && <div className={styles.description}>{description}</div>}
+      <div {...part('body', styles.body)}>
+        <div {...part('text', styles.text)}>
+          <div {...part('title', styles.title)}>{title}</div>
+          {description && <div {...part('description', styles.description)}>{description}</div>}
         </div>
-        {actions && <div className={styles.actions}>{actions}</div>}
+        {actions && <div {...part('actions', styles.actions)}>{actions}</div>}
       </div>
       {onClose && (
-        <CompactButton variant="ghost" size={size === 'sm' ? 'md' : 'lg'} aria-label={closeLabel} className={styles.close} onClick={onClose}>
+        <CompactButton variant="ghost" size={size === 'sm' ? 'md' : 'lg'} aria-label={closeLabel} {...part('close', styles.close)} onClick={onClose}>
           <Icon name="X" />
         </CompactButton>
       )}

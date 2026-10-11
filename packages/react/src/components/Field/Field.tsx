@@ -4,7 +4,22 @@ import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
 import { CompactButton } from '../CompactButton';
 import { Tooltip } from '../Tooltip';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Field.module.css';
+
+/** Parts of a Field you can style with `classNames` and `styles` (or `fieldClassNames` and `fieldStyles` on the *Field components). */
+export type FieldPart = 'root' | 'label' | 'hintRow' | 'hint' | 'count';
+
+/** Styling for the outer field of the *Field components. Their `classNames` and `styles` go to the control. */
+export interface FieldWrapperProps {
+  /** Class for the outer field, not the control. */
+  fieldClassName?: string;
+  /** Classes for the field's parts: root, label, hintRow, hint, count. */
+  fieldClassNames?: PartsProps<FieldPart>['classNames'];
+  /** Styles for the field's parts: root, label, hintRow, hint, count. */
+  fieldStyles?: PartsProps<FieldPart>['styles'];
+}
 
 export interface FieldLabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
   /** Adds a red asterisk. Figma: Indicator=Required. */
@@ -17,10 +32,11 @@ export interface FieldLabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
 }
 
 /** The label above a form control. Labels have no disabled state; only the control fades. */
-export function FieldLabel({ required, optional, info, className, children, ...rest }: FieldLabelProps) {
+export function FieldLabel({ required, optional, info, className, style, children, ...rest }: FieldLabelProps) {
+  const { 'data-part': _part, ...labelProps } = rest as typeof rest & { 'data-part'?: string };
   return (
-    <span className={cx(styles.labelRow, className)}>
-      <label className={styles.label} {...rest}>
+    <span className={cx(styles.labelRow, className)} style={style} data-part="label">
+      <label className={styles.label} {...labelProps}>
         {children}
         {required && <span className={styles.required} aria-hidden="true">*</span>}
         {optional && <span className={styles.optional}>(Optional)</span>}
@@ -36,7 +52,7 @@ export function FieldLabel({ required, optional, info, className, children, ...r
   );
 }
 
-export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>, PartsProps<FieldPart> {
   label?: ReactNode;
   required?: boolean;
   optional?: boolean;
@@ -54,27 +70,28 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
 }
 
 /** Lays out a label, a control and a hint row. Used by the *Field components. */
-export function Field({ label, required, optional, info, hint, error, count, children, controlId, className, ...rest }: FieldProps) {
+export function Field({ label, required, optional, info, hint, error, count, children, controlId, className, classNames, styles: partStyles, ...rest }: FieldProps) {
+  const part = parts<FieldPart>('field', { classNames, styles: partStyles });
   const autoId = useId();
   const id = controlId ?? autoId;
   const message = error ?? hint;
   const hintId = message ? `${id}-hint` : undefined;
   return (
-    <div className={cx(styles.field, className)} {...rest}>
+    <div {...rest} {...part('root', [styles.field, className], rest.style)}>
       {label && (
-        <FieldLabel htmlFor={id} required={required} optional={optional} info={info}>
+        <FieldLabel htmlFor={id} required={required} optional={optional} info={info} {...part('label')}>
           {label}
         </FieldLabel>
       )}
       {children({ id, 'aria-describedby': hintId, 'aria-invalid': error ? true : undefined, required })}
       {(message || count) && (
-        <div className={styles.hintRow}>
+        <div {...part('hintRow', styles.hintRow)}>
           {message && (
-            <span id={hintId} className={cx(styles.hint, error != null && styles.error)}>
+            <span id={hintId} {...part('hint', [styles.hint, error != null && styles.error])}>
               {message}
             </span>
           )}
-          {count && <span className={styles.count}>{count}</span>}
+          {count && <span {...part('count', styles.count)}>{count}</span>}
         </div>
       )}
     </div>

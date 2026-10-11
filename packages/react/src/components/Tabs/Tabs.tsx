@@ -1,8 +1,9 @@
 import { createContext, forwardRef, useContext, useId, useRef } from 'react';
 import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { useControllable } from '../../internal/useControllable';
 import { Badge } from '../Badge';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Tabs.module.css';
 
 interface TabsContext {
@@ -10,6 +11,7 @@ interface TabsContext {
   value: string | undefined;
   select: (value: string) => void;
   vertical: boolean;
+  part: ReturnType<typeof parts<TabsPart>>;
 }
 const Ctx = createContext<TabsContext | null>(null);
 const useTabs = () => {
@@ -19,7 +21,10 @@ const useTabs = () => {
 };
 const safe = (v: string) => v.replace(/[^\w-]/g, '_');
 
-export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
+/** Parts you can style with `classNames` and `styles` on Tabs. Every Tab, TabList and TabPanel picks them up. */
+export type TabsPart = 'root' | 'list' | 'tab' | 'icon' | 'label' | 'panel';
+
+export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'>, PartsProps<TabsPart> {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
@@ -35,12 +40,13 @@ export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'default
  * Switches between views in the same place. Arrow keys move between tabs and show the panel;
  * Home and End jump to the ends.
  */
-export function Tabs({ value, defaultValue, onValueChange, variant = 'line', size = 'md', layout = 'horizontal', className, children, ...rest }: TabsProps) {
+export function Tabs({ value, defaultValue, onValueChange, variant = 'line', size = 'md', layout = 'horizontal', className, classNames, styles: partStyles, children, ...rest }: TabsProps) {
   const id = useId();
+  const part = parts<TabsPart>('tabs', { classNames, styles: partStyles });
   const [current, select] = useControllable<string | undefined>(value, defaultValue, onValueChange as (v: string | undefined) => void);
   return (
-    <Ctx.Provider value={{ id, value: current, select, vertical: layout === 'vertical' }}>
-      <div className={cx(styles.tabs, styles[variant], styles[size], styles[layout], className)} {...rest}>
+    <Ctx.Provider value={{ id, value: current, select, vertical: layout === 'vertical', part }}>
+      <div {...rest} {...part('root', [styles.tabs, styles[variant], styles[size], styles[layout], className], rest.style)}>
         {children}
       </div>
     </Ctx.Provider>
@@ -54,7 +60,7 @@ export interface TabListProps extends HTMLAttributes<HTMLDivElement> {
 
 /** Holds the Tab buttons. */
 export function TabList({ className, children, ...rest }: TabListProps) {
-  const { vertical } = useTabs();
+  const { vertical, part } = useTabs();
   const list = useRef<HTMLDivElement | null>(null);
   const onKey = (e: KeyboardEvent<HTMLDivElement>) => {
     const tabs = [...(list.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]:not(:disabled)') ?? [])];
@@ -68,7 +74,7 @@ export function TabList({ className, children, ...rest }: TabListProps) {
     tab?.click();
   };
   return (
-    <div ref={list} role="tablist" aria-orientation={vertical ? 'vertical' : 'horizontal'} className={cx(styles.list, className)} onKeyDown={onKey} {...rest}>
+    <div ref={list} role="tablist" aria-orientation={vertical ? 'vertical' : 'horizontal'} onKeyDown={onKey} {...rest} {...part('list', [styles.list, className], rest.style)}>
       {children}
     </div>
   );
@@ -84,7 +90,7 @@ export interface TabProps extends Omit<HTMLAttributes<HTMLButtonElement>, 'value
 }
 
 export const Tab = forwardRef<HTMLButtonElement, TabProps>(function Tab({ value, icon, badge, disabled, className, children, onClick, ...rest }, ref) {
-  const { id, value: current, select } = useTabs();
+  const { id, value: current, select, part } = useTabs();
   const selected = current === value;
   return (
     <button
@@ -96,16 +102,16 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(function Tab({ value,
       aria-controls={`${id}-panel-${safe(value)}`}
       tabIndex={selected ? 0 : -1}
       disabled={disabled}
-      className={cx(styles.tab, selected && styles.selected, className)}
       onClick={(e) => {
         onClick?.(e);
         if (!e.defaultPrevented) select(value);
       }}
       {...rest}
+      {...part('tab', [styles.tab, selected && styles.selected, className], rest.style)}
     >
       <span className={styles.content}>
-        {icon && <span className={styles.icon} aria-hidden="true">{icon}</span>}
-        <span className={styles.label}>{children}</span>
+        {icon && <span {...part('icon', styles.icon)} aria-hidden="true">{icon}</span>}
+        <span {...part('label', styles.label)}>{children}</span>
         {badge !== undefined && (typeof badge === 'number' || typeof badge === 'string' ? <Badge size="xs" count={typeof badge === 'number' ? badge : undefined}>{typeof badge === 'string' ? badge : undefined}</Badge> : badge)}
       </span>
     </button>
@@ -120,7 +126,7 @@ export interface TabPanelProps extends HTMLAttributes<HTMLDivElement> {
 
 /** The content for one Tab. Only the selected panel shows. */
 export function TabPanel({ value, keepMounted, className, children, ...rest }: TabPanelProps) {
-  const { id, value: current } = useTabs();
+  const { id, value: current, part } = useTabs();
   const selected = current === value;
   if (!selected && !keepMounted) return null;
   return (
@@ -130,8 +136,8 @@ export function TabPanel({ value, keepMounted, className, children, ...rest }: T
       aria-labelledby={`${id}-tab-${safe(value)}`}
       hidden={!selected}
       tabIndex={0}
-      className={cx(styles.panel, className)}
       {...rest}
+      {...part('panel', [styles.panel, className], rest.style)}
     >
       {children}
     </div>

@@ -1,15 +1,19 @@
 import { createContext, forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { Portal } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
 import { CompactButton } from '../CompactButton';
 import { STATUS_ICONS } from '../Alert/Alert';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Toast.module.css';
 
 export type ToastType = 'neutral' | 'information' | 'success' | 'warning' | 'error';
 
-export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
+/** Parts you can style with `classNames` and `styles`. */
+export type ToastPart = 'root' | 'icon' | 'body' | 'text' | 'title' | 'description' | 'actions' | 'close';
+
+export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>, PartsProps<ToastPart> {
   /** Sets the icon colour and default icon. Neutral has no icon unless you pass one. Figma: Type. */
   type?: ToastType;
   /** default is white; inverse is dark and stands out more. Figma: Style. */
@@ -29,22 +33,23 @@ export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
 
 /** A short message about something that just happened. Use `useToast` to show one. */
 export const Toast = forwardRef<HTMLDivElement, ToastProps>(function Toast(
-  { type = 'neutral', variant = 'default', title, description, icon, actions, onClose, closeLabel = 'Dismiss', className, ...rest },
+  { type = 'neutral', variant = 'default', title, description, icon, actions, onClose, closeLabel = 'Dismiss', className, classNames, styles: partStyles, ...rest },
   ref,
 ) {
+  const part = parts<ToastPart>('toast', { classNames, styles: partStyles });
   const shownIcon = icon === false ? null : icon ?? (type === 'neutral' ? null : <Icon name={STATUS_ICONS[type]} />);
   return (
-    <div ref={ref} className={cx(styles.toast, styles[type], styles[variant], className)} {...rest}>
-      {shownIcon && <span className={styles.icon} aria-hidden="true">{shownIcon}</span>}
-      <div className={styles.body}>
-        <div className={styles.text}>
-          <div className={styles.title}>{title}</div>
-          {description && <div className={styles.description}>{description}</div>}
+    <div ref={ref} {...rest} {...part('root', [styles.toast, styles[type], styles[variant], className], rest.style)}>
+      {shownIcon && <span {...part('icon', styles.icon)} aria-hidden="true">{shownIcon}</span>}
+      <div {...part('body', styles.body)}>
+        <div {...part('text', styles.text)}>
+          <div {...part('title', styles.title)}>{title}</div>
+          {description && <div {...part('description', styles.description)}>{description}</div>}
         </div>
-        {actions && <div className={styles.actions}>{actions}</div>}
+        {actions && <div {...part('actions', styles.actions)}>{actions}</div>}
       </div>
       {onClose && (
-        <CompactButton variant="ghost" aria-label={closeLabel} className={styles.close} onClick={onClose}>
+        <CompactButton variant="ghost" aria-label={closeLabel} {...part('close', styles.close)} onClick={onClose}>
           <Icon name="X" />
         </CompactButton>
       )}
@@ -73,7 +78,10 @@ interface ToastApi {
 
 const ToastContext = createContext<ToastApi | null>(null);
 
-export interface ToastProviderProps {
+/** Parts of the toast stack you can style with `classNames` and `styles` on ToastProvider. */
+export type ToastRegionPart = 'root' | 'list' | 'item';
+
+export interface ToastProviderProps extends PartsProps<ToastRegionPart> {
   children: ReactNode;
   /** Corner of the screen the toasts stack in. */
   position?: 'bottom-right' | 'bottom-left' | 'bottom-center' | 'top-right' | 'top-left' | 'top-center';
@@ -82,7 +90,8 @@ export interface ToastProviderProps {
 }
 
 /** Wrap the app once. Toasts stack in a corner and are read out by screen readers. */
-export function ToastProvider({ children, position = 'bottom-right', limit = 3 }: ToastProviderProps) {
+export function ToastProvider({ children, position = 'bottom-right', limit = 3, classNames, styles: partStyles }: ToastProviderProps) {
+  const part = parts<ToastRegionPart>('toast-region', { classNames, styles: partStyles });
   const [entries, setEntries] = useState<Entry[]>([]);
   const next = useRef(1);
   const dismiss = useCallback((id: number) => setEntries((list) => list.filter((e) => e.id !== id)), []);
@@ -99,10 +108,10 @@ export function ToastProvider({ children, position = 'bottom-right', limit = 3 }
     <ToastContext.Provider value={api}>
       {children}
       <Portal>
-        <section aria-label="Notifications" className={cx(styles.region, styles[position])}>
-          <ol className={styles.list}>
+        <section aria-label="Notifications" {...part('root', [styles.region, styles[position]])}>
+          <ol {...part('list', styles.list)}>
             {entries.map((e) => (
-              <ToastItem key={e.id} entry={e} onDismiss={() => dismiss(e.id)} />
+              <ToastItem key={e.id} entry={e} onDismiss={() => dismiss(e.id)} part={part} />
             ))}
           </ol>
         </section>
@@ -111,7 +120,7 @@ export function ToastProvider({ children, position = 'bottom-right', limit = 3 }
   );
 }
 
-function ToastItem({ entry, onDismiss }: { entry: Entry; onDismiss: () => void }) {
+function ToastItem({ entry, onDismiss, part }: { entry: Entry; onDismiss: () => void; part: ReturnType<typeof parts<ToastRegionPart>> }) {
   const { id: _id, duration, dismissible = true, ...props } = entry;
   const wait = duration ?? (props.actions ? 8000 : 5000);
   const [paused, setPaused] = useState(false);
@@ -125,7 +134,7 @@ function ToastItem({ entry, onDismiss }: { entry: Entry; onDismiss: () => void }
   const urgent = props.type === 'error' || props.type === 'warning';
   return (
     <li
-      className={styles.item}
+      {...part('item', styles.item)}
       role={urgent ? 'alert' : 'status'}
       aria-live={urgent ? 'assertive' : 'polite'}
       onPointerEnter={() => setPaused(true)}

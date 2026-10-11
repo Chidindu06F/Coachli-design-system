@@ -1,10 +1,16 @@
 import { useId } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { useControllable } from '../../internal/useControllable';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Slider.module.css';
 
-interface SliderBase {
+/** Parts you can style with `classNames` and `styles`. */
+export type SliderPart = 'root' | 'header' | 'label' | 'value' | 'track' | 'range' | 'ends';
+
+type SliderPartFn = ReturnType<typeof parts<SliderPart>>;
+
+interface SliderBase extends PartsProps<SliderPart> {
   min?: number;
   max?: number;
   step?: number;
@@ -40,21 +46,21 @@ export interface RangeSliderProps extends SliderBase {
 
 const pct = (v: number, min: number, max: number) => ((v - min) / (max - min)) * 100;
 
-function Frame({ id, label, valueText, showMinMax, min, max, fmt, size, className, children }: {
-  id: string; label?: ReactNode; valueText?: string; showMinMax?: boolean; min: number; max: number;
+function Frame({ id, label, valueText, showMinMax, min, max, fmt, size, className, part, children }: {
+  part: SliderPartFn; id: string; label?: ReactNode; valueText?: string; showMinMax?: boolean; min: number; max: number;
   fmt: (v: number) => string; size: 'sm' | 'md'; className?: string; children: ReactNode;
 }) {
   return (
-    <div className={cx(styles.field, styles[size], className)}>
+    <div {...part('root', [styles.field, styles[size], className])}>
       {(label || valueText) && (
-        <div className={styles.header}>
-          {label && <span id={`${id}-label`} className={styles.label}>{label}</span>}
-          {valueText && <span className={styles.value} aria-hidden="true">{valueText}</span>}
+        <div {...part('header', styles.header)}>
+          {label && <span id={`${id}-label`} {...part('label', styles.label)}>{label}</span>}
+          {valueText && <span {...part('value', styles.value)} aria-hidden="true">{valueText}</span>}
         </div>
       )}
       {children}
       {showMinMax && (
-        <div className={styles.ends} aria-hidden="true">
+        <div {...part('ends', styles.ends)} aria-hidden="true">
           <span>{fmt(min)}</span>
           <span>{fmt(max)}</span>
         </div>
@@ -64,16 +70,17 @@ function Frame({ id, label, valueText, showMinMax, min, max, fmt, size, classNam
 }
 
 /** Picks a rough value by dragging along a track. Arrow keys, Page Up and Down, Home and End work. */
-export function Slider({ value, defaultValue, onValueChange, min = 0, max = 100, step = 1, size = 'md', disabled, label, showValue = true, showMinMax, formatValue, className, ...rest }: SliderProps) {
+export function Slider({ value, defaultValue, onValueChange, min = 0, max = 100, step = 1, size = 'md', disabled, label, showValue = true, showMinMax, formatValue, className, classNames, styles: partStyles, ...rest }: SliderProps) {
+  const part = parts<SliderPart>('slider', { classNames, styles: partStyles });
   const id = useId();
   const fmt = formatValue ?? String;
   const [v, setV] = useControllable(value, defaultValue ?? min, onValueChange);
   return (
-    <Frame id={id} label={label} valueText={showValue && label ? fmt(v) : undefined} showMinMax={showMinMax} min={min} max={max} fmt={fmt} size={size} className={className}>
-      <div className={styles.track} style={{ '--from': '0%', '--to': `${pct(v, min, max)}%` } as CSSProperties}>
+    <Frame id={id} label={label} valueText={showValue && label ? fmt(v) : undefined} showMinMax={showMinMax} min={min} max={max} fmt={fmt} size={size} className={className} part={part}>
+      <div {...part('track', styles.track, { '--from': '0%', '--to': `${pct(v, min, max)}%` } as CSSProperties)}>
         <input
           type="range"
-          className={styles.range}
+          {...part('range', styles.range)}
           min={min}
           max={max}
           step={step}
@@ -90,16 +97,17 @@ export function Slider({ value, defaultValue, onValueChange, min = 0, max = 100,
 }
 
 /** Picks a start and an end, like a price range. Two handles that can't cross. */
-export function RangeSlider({ value, defaultValue, onValueChange, min = 0, max = 100, step = 1, size = 'md', disabled, label, showValue = true, showMinMax, formatValue, handleLabels = ['Minimum', 'Maximum'], className }: RangeSliderProps) {
+export function RangeSlider({ value, defaultValue, onValueChange, min = 0, max = 100, step = 1, size = 'md', disabled, label, showValue = true, showMinMax, formatValue, handleLabels = ['Minimum', 'Maximum'], className, classNames, styles: partStyles }: RangeSliderProps) {
+  const part = parts<SliderPart>('range-slider', { classNames, styles: partStyles });
   const id = useId();
   const fmt = formatValue ?? String;
   const [[a, b], setV] = useControllable<[number, number]>(value, defaultValue ?? [min, max], onValueChange);
   return (
-    <Frame id={id} label={label} valueText={showValue && label ? `${fmt(a)} to ${fmt(b)}` : undefined} showMinMax={showMinMax} min={min} max={max} fmt={fmt} size={size} className={className}>
-      <div className={cx(styles.track, styles.dual)} style={{ '--from': `${pct(a, min, max)}%`, '--to': `${pct(b, min, max)}%` } as CSSProperties}>
+    <Frame id={id} label={label} valueText={showValue && label ? `${fmt(a)} to ${fmt(b)}` : undefined} showMinMax={showMinMax} min={min} max={max} fmt={fmt} size={size} className={className} part={part}>
+      <div {...part('track', [styles.track, styles.dual], { '--from': `${pct(a, min, max)}%`, '--to': `${pct(b, min, max)}%` } as CSSProperties)}>
         <input
           type="range"
-          className={styles.range}
+          {...part('range', styles.range)}
           min={min}
           max={max}
           step={step}
@@ -111,7 +119,7 @@ export function RangeSlider({ value, defaultValue, onValueChange, min = 0, max =
         />
         <input
           type="range"
-          className={styles.range}
+          {...part('range', styles.range)}
           min={min}
           max={max}
           step={step}

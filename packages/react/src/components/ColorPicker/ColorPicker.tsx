@@ -1,13 +1,15 @@
 import { forwardRef, useEffect, useId, useRef, useState } from 'react';
 import type { ButtonHTMLAttributes, CSSProperties, HTMLAttributes, KeyboardEvent, PointerEvent } from 'react';
 import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import { mergeRefs, Portal, useDismiss, useFloating } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
 import { StatusIcon } from '../../internal/StatusIcon';
 import { useControllable } from '../../internal/useControllable';
 import { CompactButton } from '../CompactButton';
 import { Field } from '../Field';
-import type { FieldProps } from '../Field';
+import type { FieldProps, FieldWrapperProps } from '../Field';
 import { Input } from '../Input';
 import inputStyles from '../Input/Input.module.css';
 import { Select } from '../Select';
@@ -38,6 +40,8 @@ export const ColorSwatch = forwardRef<HTMLButtonElement, ColorSwatchProps>(funct
       ref={ref}
       type="button"
       aria-pressed={selected}
+      data-halo="color-swatch"
+      data-part="root"
       className={cx(styles.swatch, styles[shape], styles[size], selected && styles.selected, className)}
       style={{ ...style, '--swatch': color } as CSSProperties}
       {...rest}
@@ -49,7 +53,10 @@ export const ColorSwatch = forwardRef<HTMLButtonElement, ColorSwatchProps>(funct
 
 export type ColorFormat = 'hex' | 'rgb' | 'hsl';
 
-export interface ColorPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
+/** Parts of the picker panel you can style with `classNames` and `styles`. */
+export type ColorPickerPart = 'root' | 'area' | 'thumb' | 'sliders' | 'track' | 'values' | 'format' | 'fields' | 'swatches';
+
+export interface ColorPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'>, PartsProps<ColorPickerPart> {
   /** A hex colour like "#CC1DD0", or "#CC1DD080" with opacity. */
   value?: string;
   defaultValue?: string;
@@ -68,11 +75,12 @@ const toHsva = (hex: string): Hsva => rgbToHsv(parseHex(hex) ?? { r: 0, g: 0, b:
 
 /** Picks a colour by dragging, typing a value or choosing a swatch. Every part works with the keyboard. */
 export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function ColorPicker(
-  { value, defaultValue = '#CC1DD0', onValueChange, showOpacity = true, showEyedropper = true, swatches, defaultFormat = 'hex', className, ...rest },
+  { value, defaultValue = '#CC1DD0', onValueChange, showOpacity = true, showEyedropper = true, swatches, defaultFormat = 'hex', className, classNames, styles: partStyles, ...rest },
   ref,
 ) {
   const [hex, setHex] = useControllable(value, defaultValue, onValueChange);
   // Keep HSV locally so the hue survives when the colour goes grey or black.
+  const part = parts<ColorPickerPart>('color-picker', { classNames, styles: partStyles });
   const [hsva, setHsva] = useState<Hsva>(() => toHsva(hex));
   const [format, setFormat] = useState<ColorFormat>(defaultFormat);
   const area = useRef<HTMLDivElement | null>(null);
@@ -133,15 +141,14 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
   );
 
   return (
-    <div ref={ref} className={cx(styles.picker, className)} {...rest}>
+    <div ref={ref} {...rest} {...part('root', [styles.picker, className], rest.style)}>
       <div
         ref={area}
         role="slider"
         tabIndex={0}
         aria-label="Saturation and brightness"
         aria-valuetext={`Saturation ${Math.round(hsva.s * 100)}%, brightness ${Math.round(hsva.v * 100)}%`}
-        className={styles.area}
-        style={{ '--hue': `hsl(${hsva.h} 100% 50%)` } as CSSProperties}
+        {...part('area', styles.area, { '--hue': `hsl(${hsva.h} 100% 50%)` } as CSSProperties)}
         onPointerDown={(e) => {
           e.currentTarget.setPointerCapture(e.pointerId);
           fromPointer(e);
@@ -149,10 +156,10 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
         onPointerMove={(e) => e.buttons === 1 && fromPointer(e)}
         onKeyDown={onAreaKey}
       >
-        <span className={styles.thumb} style={{ left: `${hsva.s * 100}%`, top: `${(1 - hsva.v) * 100}%`, background: solid }} />
+        <span {...part('thumb', styles.thumb, { left: `${hsva.s * 100}%`, top: `${(1 - hsva.v) * 100}%`, background: solid })} />
       </div>
 
-      <div className={styles.sliders}>
+      <div {...part('sliders', styles.sliders)}>
         {hasEyeDropper && (
           <CompactButton variant="ghost" aria-label="Pick a colour from the screen" onClick={pickFromScreen}>
             <Icon name="Eyedropper" />
@@ -165,7 +172,7 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
             min={0}
             max={359}
             value={Math.round(hsva.h)}
-            className={cx(styles.track, styles.hue)}
+            {...part('track', [styles.track, styles.hue])}
             onChange={(e) => commit({ ...hsva, h: Number(e.target.value) })}
           />
           {showOpacity && (
@@ -176,19 +183,18 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
               max={100}
               value={Math.round(hsva.a * 100)}
               aria-valuetext={`${Math.round(hsva.a * 100)}%`}
-              className={cx(styles.track, styles.alpha)}
-              style={{ '--solid': solid } as CSSProperties}
+              {...part('track', [styles.track, styles.alpha], { '--solid': solid } as CSSProperties)}
               onChange={(e) => commit({ ...hsva, a: Number(e.target.value) / 100 })}
             />
           )}
         </div>
       </div>
 
-      <div className={styles.values}>
+      <div {...part('values', styles.values)}>
         <Select
           size="sm"
           aria-label="Colour format"
-          className={styles.format}
+          {...part('format', styles.format)}
           value={format}
           onValueChange={(f) => setFormat(f as ColorFormat)}
           options={[
@@ -197,7 +203,7 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
             { value: 'hsl', label: 'HSL' },
           ]}
         />
-        <div className={styles.fields}>
+        <div {...part('fields', styles.fields)}>
           {format === 'hex' && <HexField value={solid} onCommit={(rgba) => commit({ ...rgbToHsv(rgba), a: hsva.a })} />}
           {format === 'rgb' && (
             <>
@@ -230,7 +236,7 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
       </div>
 
       {swatches && swatches.length > 0 && (
-        <div className={styles.swatches} role="group" aria-label="Swatches">
+        <div {...part('swatches', styles.swatches)} role="group" aria-label="Swatches">
           {swatches.map((s) => (
             <ColorSwatch
               key={s}
@@ -273,7 +279,10 @@ function HexField({ value, onCommit }: { value: string; onCommit: (rgba: { r: nu
 
 /* ---------- Field ---------- */
 
-export interface ColorFieldProps extends Omit<ColorPickerProps, 'id'> {
+/** Parts of the colour box you can style with `classNames` and `styles`. */
+export type ColorInputPart = 'root' | 'swatch' | 'input' | 'popover' | 'picker';
+
+export interface ColorFieldProps extends Omit<ColorPickerProps, 'id' | 'classNames' | 'styles'>, PartsProps<ColorInputPart> {
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   invalid?: boolean;
@@ -285,9 +294,10 @@ export interface ColorFieldProps extends Omit<ColorPickerProps, 'id'> {
 
 /** A box showing a colour and its hex. The swatch opens a ColorPicker. Figma: Color field. */
 export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function ColorInput(
-  { value, defaultValue = '#CC1DD0', onValueChange, size = 'md', disabled, invalid, id, showOpacity, showEyedropper, swatches, defaultFormat, className, ...aria },
+  { value, defaultValue = '#CC1DD0', onValueChange, size = 'md', disabled, invalid, id, showOpacity, showEyedropper, swatches, defaultFormat, className, classNames, styles: partStyles, ...aria },
   ref,
 ) {
+  const part = parts<ColorInputPart>('color-input', { classNames, styles: partStyles });
   const [hex, setHex] = useControllable(value, defaultValue, onValueChange);
   const [text, setText] = useState(hex);
   const [open, setOpen] = useState(false);
@@ -303,7 +313,7 @@ export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function
 
   return (
     <>
-      <div ref={box} className={cx(inputStyles.box, inputStyles[size], (invalid || aria['aria-invalid']) && inputStyles.invalid, disabled && inputStyles.disabled, className)}>
+      <div ref={box} {...part('root', [inputStyles.box, inputStyles[size], (invalid || aria['aria-invalid']) && inputStyles.invalid, disabled && inputStyles.disabled, className])}>
         <ColorSwatch
           ref={swatch}
           color={hex}
@@ -315,11 +325,12 @@ export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function
           aria-expanded={open}
           aria-controls={open ? dialogId : undefined}
           onClick={() => setOpen(!open)}
+          {...part('swatch')}
         />
         <input
           ref={mergeRefs(ref)}
           id={id}
-          className={inputStyles.input}
+          {...part('input', inputStyles.input)}
           value={text}
           disabled={disabled}
           spellCheck={false}
@@ -341,13 +352,12 @@ export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function
             id={dialogId}
             role="dialog"
             aria-label="Colour picker"
-            className={styles.popover}
-            style={style}
+            {...part('popover', styles.popover, style)}
             onKeyDown={(e) => {
               if (e.key === 'Escape') swatch.current?.focus();
             }}
           >
-            <ColorPicker value={hex} onValueChange={setHex} showOpacity={showOpacity} showEyedropper={showEyedropper} swatches={swatches} defaultFormat={defaultFormat} />
+            <ColorPicker {...part('picker')} value={hex} onValueChange={setHex} showOpacity={showOpacity} showEyedropper={showEyedropper} swatches={swatches} defaultFormat={defaultFormat} />
           </div>
         </Portal>
       )}
@@ -356,15 +366,15 @@ export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function
 });
 
 export type ColorFieldWithLabelProps = Omit<ColorFieldProps, 'aria-describedby' | 'aria-invalid'> &
-  Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> & { required?: boolean; fieldClassName?: string };
+  Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> & { required?: boolean } & Pick<FieldWrapperProps, 'fieldClassName' | 'fieldClassNames' | 'fieldStyles'>;
 
 /** A ColorInput with a label and hint. */
 export const ColorField = forwardRef<HTMLInputElement, ColorFieldWithLabelProps>(function ColorField(
-  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, fieldClassNames, fieldStyles, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <ColorInput ref={ref} {...rest} {...c} />}
     </Field>
   );

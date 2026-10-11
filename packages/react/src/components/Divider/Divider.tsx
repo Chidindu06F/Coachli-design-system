@@ -1,9 +1,14 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Divider.module.css';
 
-export interface DividerProps extends HTMLAttributes<HTMLDivElement> {
+/** Parts you can style with `classNames` and `styles`. */
+export type DividerPart = 'root' | 'line' | 'label';
+
+export interface DividerProps extends HTMLAttributes<HTMLDivElement>, PartsProps<DividerPart> {
   /** A line across, or a line between items in a row. Figma: Orientation. */
   orientation?: 'horizontal' | 'vertical';
   /** Optional text in the line, like "or". Figma: Label. */
@@ -18,9 +23,10 @@ export interface DividerProps extends HTMLAttributes<HTMLDivElement> {
 
 /** A thin line that separates content. */
 export const Divider = forwardRef<HTMLDivElement, DividerProps>(function Divider(
-  { orientation = 'horizontal', label, labelPosition = 'center', color = 'subtle', variant = 'solid', className, ...rest },
+  { orientation = 'horizontal', label, labelPosition = 'center', color = 'subtle', variant = 'solid', className, classNames, styles: partStyles, style, ...rest },
   ref,
 ) {
+  const part = parts<DividerPart>('divider', { classNames, styles: partStyles });
   const labelled = label != null;
   const cls = cx(
     styles.divider,
@@ -31,12 +37,12 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(function Divider
     labelled && styles[labelPosition],
     className,
   );
-  if (!labelled) return <div ref={ref} role="separator" aria-orientation={orientation} className={cls} {...rest} />;
+  if (!labelled) return <div ref={ref} role="separator" aria-orientation={orientation} {...part('root', cls, style)} {...rest} />;
   return (
-    <div ref={ref} role="separator" aria-orientation={orientation} className={cls} {...rest}>
-      <span className={styles.line} />
-      <span className={styles.label}>{label}</span>
-      <span className={styles.line} />
+    <div ref={ref} role="separator" aria-orientation={orientation} {...part('root', cls, style)} {...rest}>
+      <span {...part('line', styles.line)} />
+      <span {...part('label', styles.label)}>{label}</span>
+      <span {...part('line', styles.line)} />
     </div>
   );
 });

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
-import { cx } from '../../internal/cx';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import { Icon } from '../../internal/Icon';
 import { CompactButton } from '../CompactButton';
 import { MonthYearPanel } from '../../internal/MonthYearPanel';
@@ -14,7 +15,10 @@ export interface CalendarPreset {
   range: DateRange;
 }
 
-interface CalendarBase extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
+/** Parts you can style with `classNames` and `styles`. */
+export type CalendarPart = 'root' | 'presets' | 'preset' | 'header' | 'title' | 'month' | 'grid' | 'weekday' | 'cell' | 'day' | 'picker' | 'footer';
+
+interface CalendarBase extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'>, PartsProps<CalendarPart> {
   /** Earliest day that can be picked. */
   min?: Date;
   /** Latest day that can be picked. */
@@ -86,6 +90,8 @@ export function Calendar(props: CalendarProps) {
     header = 'arrows',
     yearRange,
     className,
+    classNames,
+    styles: partStyles,
     mode: _mode,
     value: _value,
     onChange: _onChange,
@@ -94,6 +100,7 @@ export function Calendar(props: CalendarProps) {
     ...rest
   } = props as CalendarBase & { mode?: unknown; value?: unknown; onChange?: unknown; presets?: unknown; maxCount?: unknown };
 
+  const part = parts<CalendarPart>('calendar', { classNames, styles: partStyles });
   const range = props.mode === 'range';
   const multiple = props.mode === 'multiple';
   const selectedStart = props.mode === 'range' ? props.value?.[0] : props.mode === 'multiple' ? props.value[0] : props.value;
@@ -182,12 +189,12 @@ export function Calendar(props: CalendarProps) {
   const tabbable = shown.some((m) => sameMonth(focus, m)) ? focus : shown[0]!;
 
   const renderMonth = (m: Date) => (
-    <div key={m.toISOString()} className={styles.month}>
-      <table role="grid" aria-multiselectable={multiple || undefined} className={styles.grid} aria-label={formatDate(m, locale, { month: 'long', year: 'numeric' })}>
+    <div key={m.toISOString()} {...part('month', styles.month)}>
+      <table role="grid" aria-multiselectable={multiple || undefined} {...part('grid', styles.grid)} aria-label={formatDate(m, locale, { month: 'long', year: 'numeric' })}>
         <thead>
           <tr>
             {weekdays.map((w) => (
-              <th key={w.long} scope="col" abbr={w.long} className={styles.weekday}>{w.short}</th>
+              <th key={w.long} scope="col" abbr={w.long} {...part('weekday', styles.weekday)}>{w.short}</th>
             ))}
           </tr>
         </thead>
@@ -196,7 +203,7 @@ export function Calendar(props: CalendarProps) {
             <tr key={i}>
               {week.map((d) => {
                 const outside = !sameMonth(d, m);
-                if (outside && months > 1) return <td key={d.toISOString()} className={styles.cell} />;
+                if (outside && months > 1) return <td key={d.toISOString()} {...part('cell', styles.cell)} />;
                 const off = disabled(d);
                 const isStart = painted ? sameDay(d, painted[0]) : false;
                 const isEnd = painted ? sameDay(d, painted[1]) : false;
@@ -205,12 +212,12 @@ export function Calendar(props: CalendarProps) {
                 return (
                   <td
                     key={d.toISOString()}
-                    className={cx(
+                    {...part('cell', [
                       styles.cell,
                       inRange && !(isStart && isEnd) && styles.inRange,
                       isStart && !isEnd && styles.rangeStart,
                       isEnd && !isStart && styles.rangeEnd,
-                    )}
+                    ])}
                     aria-selected={selected || inRange || undefined}
                   >
                     <button
@@ -220,7 +227,7 @@ export function Calendar(props: CalendarProps) {
                       disabled={off}
                       aria-current={sameDay(d, today) ? 'date' : undefined}
                       aria-label={formatDate(d, locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-                      className={cx(styles.day, selected && styles.selected, sameDay(d, today) && styles.today, outside && styles.outside)}
+                      {...part('day', [styles.day, selected && styles.selected, sameDay(d, today) && styles.today, outside && styles.outside])}
                       onClick={() => choose(d)}
                       onPointerEnter={() => anchor && setHovered(d)}
                       onFocus={() => anchor && setHovered(d)}
@@ -243,10 +250,10 @@ export function Calendar(props: CalendarProps) {
   const rangeValue = range ? props.value : null;
 
   return (
-    <div className={cx(styles.calendar, className)} {...rest}>
+    <div {...rest} {...part('root', [styles.calendar, className], rest.style)}>
       <div className={styles.body}>
         {presets && presets.length > 0 && (
-          <div className={styles.presets} role="group" aria-label="Presets">
+          <div {...part('presets', styles.presets)} role="group" aria-label="Presets">
             {presets.map((p) => {
               const on = !!rangeValue && sameDay(rangeValue[0], p.range[0]) && sameDay(rangeValue[1], p.range[1]);
               return (
@@ -254,7 +261,7 @@ export function Calendar(props: CalendarProps) {
                   key={p.label}
                   type="button"
                   aria-pressed={on}
-                  className={cx(styles.preset, on && styles.presetOn)}
+                  {...part('preset', [styles.preset, on && styles.presetOn])}
                   onClick={() => {
                     setAnchor(null);
                     setMonth(new Date(p.range[0].getFullYear(), p.range[0].getMonth(), 1));
@@ -270,20 +277,20 @@ export function Calendar(props: CalendarProps) {
         <div className={styles.months}>
           {/* While the month and year picker is open, its own header replaces this one. */}
           {!picking && (
-            <div className={styles.header}>
+            <div {...part('header', styles.header)}>
               <CompactButton variant="ghost" aria-label="Previous month" onClick={() => setMonth(addMonths(month, -1))}>
                 <Icon name="CaretLeft" />
               </CompactButton>
               {header === 'picker' && months === 1 ? (
                 <div className={styles.titles}>
-                  <button type="button" className={styles.titleButton} aria-expanded={picking} aria-label={`${formatDate(month, locale, { month: 'long', year: 'numeric' })}, choose a month and year`} onClick={() => setPicking(!picking)}>
+                  <button type="button" {...part('title', styles.titleButton)} aria-expanded={picking} aria-label={`${formatDate(month, locale, { month: 'long', year: 'numeric' })}, choose a month and year`} onClick={() => setPicking(!picking)}>
                     {formatDate(month, locale, { month: 'long', year: 'numeric' })}
                   </button>
                 </div>
               ) : (
                 <div className={styles.titles} aria-live="polite">
                   {shown.map((m) => (
-                    <span key={m.toISOString()} className={styles.monthTitle}>{formatDate(m, locale, { month: 'long', year: 'numeric' })}</span>
+                    <span key={m.toISOString()} {...part('title', styles.monthTitle)}>{formatDate(m, locale, { month: 'long', year: 'numeric' })}</span>
                   ))}
                 </div>
               )}
@@ -300,7 +307,7 @@ export function Calendar(props: CalendarProps) {
                 e.stopPropagation();
                 setPicking(false);
               }}
-              className={styles.picker}
+              {...part('picker', styles.picker)}
               value={month}
               fromYear={fromYear}
               toYear={toYear}
@@ -317,7 +324,7 @@ export function Calendar(props: CalendarProps) {
           )}
         </div>
       </div>
-      {footer && <div className={styles.footer}>{footer}</div>}
+      {footer && <div {...part('footer', styles.footer)}>{footer}</div>}
     </div>
   );
 }

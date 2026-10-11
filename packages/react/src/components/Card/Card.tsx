@@ -1,8 +1,13 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode, Ref } from 'react';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Card.module.css';
 
-export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, 'onClick'> {
+/** Parts you can style with `classNames` and `styles`. */
+export type CardPart = 'root' | 'media' | 'content';
+
+export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, 'onClick'>, PartsProps<CardPart> {
   /** Shown on top: an image, video thumbnail or illustration. Leave it out for no media. Figma: Media slot and Show media. */
   media?: ReactNode;
   /** Makes the whole card one link. Don't put other links or buttons inside. */
@@ -15,21 +20,22 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, 'onClick'> 
 
 /** A container for an image and content about one thing, like a file, a project or an article. */
 export const Card = forwardRef<HTMLElement, CardProps>(function Card(
-  { media, href, onClick, className, children, ...rest },
+  { media, href, onClick, className, style, classNames, styles: partStyles, children, ...rest },
   ref,
 ) {
   const clickable = Boolean(href || onClick);
-  const classes = [styles.card, clickable && styles.clickable, className].filter(Boolean).join(' ');
+  const part = parts<CardPart>('card', { classNames, styles: partStyles });
+  const root = part('root', [styles.card, clickable && styles.clickable, className], style);
   const inner = (
     <>
-      {media && <div className={styles.media}>{media}</div>}
-      <div className={styles.content}>{children}</div>
+      {media && <div {...part('media', styles.media)}>{media}</div>}
+      <div {...part('content', styles.content)}>{children}</div>
     </>
   );
 
   if (href) {
     return (
-      <a ref={ref as Ref<HTMLAnchorElement>} href={href} className={classes} onClick={onClick} {...rest}>
+      <a ref={ref as Ref<HTMLAnchorElement>} href={href} onClick={onClick} {...rest} {...root}>
         {inner}
       </a>
     );
@@ -43,7 +49,7 @@ export const Card = forwardRef<HTMLElement, CardProps>(function Card(
         ref={ref as Ref<HTMLDivElement>}
         role="button"
         tabIndex={0}
-        className={classes}
+        {...root}
         onClick={onClick}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -58,7 +64,7 @@ export const Card = forwardRef<HTMLElement, CardProps>(function Card(
   }
 
   return (
-    <article ref={ref} className={classes} {...rest}>
+    <article ref={ref} {...rest} {...root}>
       {inner}
     </article>
   );

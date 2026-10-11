@@ -2,6 +2,8 @@ import { Children, forwardRef, isValidElement, useEffect, useRef, useState } fro
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactElement, ReactNode } from 'react';
 import { CompactButton } from '../CompactButton';
 import { CARET_RIGHT, DOTS_THREE } from './icons';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import styles from './Breadcrumbs.module.css';
 
 export type BreadcrumbsSize = 'sm' | 'md';
@@ -16,7 +18,10 @@ export interface BreadcrumbItemProps extends AnchorHTMLAttributes<HTMLAnchorElem
   children: ReactNode;
 }
 
-export interface BreadcrumbsProps extends HTMLAttributes<HTMLElement> {
+/** Parts you can style with `classNames` and `styles`. */
+export type BreadcrumbsPart = 'root' | 'list' | 'item' | 'link' | 'current' | 'icon' | 'separator' | 'more';
+
+export interface BreadcrumbsProps extends HTMLAttributes<HTMLElement>, PartsProps<BreadcrumbsPart> {
   /** 12px (sm) or 14px (md) text. Figma: Size. */
   size?: BreadcrumbsSize;
   /** The mark between levels. Figma: Separator. */
@@ -33,9 +38,9 @@ export function BreadcrumbItem(_props: BreadcrumbItemProps): ReactElement | null
   return null;
 }
 
-function Separator({ type }: { type: BreadcrumbsSeparator }) {
+function Separator({ type, part }: { type: BreadcrumbsSeparator; part: ReturnType<typeof parts<BreadcrumbsPart>> }) {
   return (
-    <li className={styles.separator} aria-hidden="true">
+    <li {...part('separator', styles.separator)} aria-hidden="true">
       {type === 'caret' ? (
         <svg viewBox="0 0 256 256" fill="currentColor"><path d={CARET_RIGHT} /></svg>
       ) : (
@@ -47,9 +52,10 @@ function Separator({ type }: { type: BreadcrumbsSeparator }) {
 
 /** A trail of links that shows where a page sits, ending with the current page. */
 export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(function Breadcrumbs(
-  { size = 'md', separator = 'slash', maxItems = 4, className, children, 'aria-label': ariaLabel = 'Breadcrumb', ...rest },
+  { size = 'md', separator = 'slash', maxItems = 4, className, classNames, styles: partStyles, children, 'aria-label': ariaLabel = 'Breadcrumb', ...rest },
   ref,
 ) {
+  const part = parts<BreadcrumbsPart>('breadcrumbs', { classNames, styles: partStyles });
   const items = Children.toArray(children).filter(isValidElement) as ReactElement<BreadcrumbItemProps>[];
   const [expanded, setExpanded] = useState(false);
   const firstRevealed = useRef<HTMLAnchorElement | null>(null);
@@ -69,20 +75,20 @@ export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(function Br
     const current = index === items.length - 1;
     const content = (
       <>
-        {icon && <span className={styles.icon} aria-hidden="true">{icon}</span>}
+        {icon && <span {...part('icon', styles.icon)} aria-hidden="true">{icon}</span>}
         <span>{label}</span>
       </>
     );
     return (
-      <li key={item.key ?? index} className={styles.item}>
+      <li key={item.key ?? index} {...part('item', styles.item)}>
         {current ? (
-          <span className={[styles.current, itemClass].filter(Boolean).join(' ')} aria-current="page">{content}</span>
+          <span {...part('current', [styles.current, itemClass])} aria-current="page">{content}</span>
         ) : (
           <a
             ref={expanded && index === 1 ? firstRevealed : undefined}
             href={href}
-            className={[styles.link, itemClass].filter(Boolean).join(' ')}
             {...linkProps}
+            {...part('link', [styles.link, itemClass], linkProps.style)}
           >
             {content}
           </a>
@@ -91,13 +97,13 @@ export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(function Br
     );
   };
 
-  const parts: ReactNode[] = [];
+  const crumbs: ReactNode[] = [];
   items.forEach((item, index) => {
     if (collapse && index > 0 && index <= hiddenCount) {
       if (index === 1) {
-        parts.push(<Separator key="sep-overflow" type={separator} />);
-        parts.push(
-          <li key="overflow" className={styles.item}>
+        crumbs.push(<Separator key="sep-overflow" type={separator} part={part} />);
+        crumbs.push(
+          <li key="overflow" {...part('more', styles.item)}>
             <CompactButton
               variant="ghost"
               size={size === 'sm' ? 'md' : 'lg'}
@@ -111,13 +117,13 @@ export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(function Br
       }
       return;
     }
-    if (index > 0) parts.push(<Separator key={`sep-${index}`} type={separator} />);
-    parts.push(renderItem(item, index));
+    if (index > 0) crumbs.push(<Separator key={`sep-${index}`} type={separator} part={part} />);
+    crumbs.push(renderItem(item, index));
   });
 
   return (
-    <nav ref={ref} aria-label={ariaLabel} className={[styles.breadcrumbs, styles[size], className].filter(Boolean).join(' ')} {...rest}>
-      <ol className={styles.list}>{parts}</ol>
+    <nav ref={ref} aria-label={ariaLabel} {...rest} {...part('root', [styles.breadcrumbs, styles[size], className], rest.style)}>
+      <ol {...part('list', styles.list)}>{crumbs}</ol>
     </nav>
   );
 });

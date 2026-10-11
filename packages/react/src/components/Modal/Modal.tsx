@@ -1,14 +1,18 @@
 import { useId, useRef } from 'react';
 import type { ReactNode } from 'react';
-import { cx } from '../../internal/cx';
 import { useModal } from '../../internal/dialog';
 import { Portal } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
+import { parts } from '../../internal/parts';
+import type { PartsProps } from '../../internal/parts';
 import { CompactButton } from '../CompactButton';
 import { Overlay } from '../Overlay';
 import styles from './Modal.module.css';
 
-export interface ModalProps {
+/** Parts you can style with `classNames` and `styles`. */
+export type ModalPart = 'overlay' | 'root' | 'header' | 'icon' | 'title' | 'close' | 'description' | 'content' | 'actions';
+
+export interface ModalProps extends PartsProps<ModalPart> {
   open: boolean;
   /** Called on Escape, the close button, or a click on the overlay. */
   onClose: () => void;
@@ -54,7 +58,10 @@ export function Modal({
   overlay = 'dim',
   children,
   className,
+  classNames,
+  styles: partStyles,
 }: ModalProps) {
+  const part = parts<ModalPart>('modal', { classNames, styles: partStyles });
   const id = useId();
   const panel = useRef<HTMLDivElement | null>(null);
   useModal(open, panel, onClose);
@@ -64,6 +71,7 @@ export function Modal({
   return (
     <Portal>
       <Overlay
+        {...part('overlay')}
         variant={overlay}
         onPointerDown={(e) => {
           if (closeOnOverlayClick && e.target === e.currentTarget) onClose();
@@ -76,20 +84,20 @@ export function Modal({
           aria-labelledby={`${id}-title`}
           aria-describedby={description ? `${id}-desc` : undefined}
           tabIndex={-1}
-          className={cx(styles.modal, styles[type], styles[layout], className)}
+          {...part('root', [styles.modal, styles[type], styles[layout], className])}
         >
-          <div className={styles.header}>
-            {shownIcon && <span className={styles.icon} aria-hidden="true">{shownIcon}</span>}
-            <h2 id={`${id}-title`} className={styles.title}>{title}</h2>
+          <div {...part('header', styles.header)}>
+            {shownIcon && <span {...part('icon', styles.icon)} aria-hidden="true">{shownIcon}</span>}
+            <h2 id={`${id}-title`} {...part('title', styles.title)}>{title}</h2>
             {showClose && (
-              <CompactButton variant="ghost" aria-label="Close" className={styles.close} onClick={onClose}>
+              <CompactButton variant="ghost" aria-label="Close" {...part('close', styles.close)} onClick={onClose}>
                 <Icon name="X" />
               </CompactButton>
             )}
           </div>
-          {description && <p id={`${id}-desc`} className={styles.description}>{description}</p>}
-          {children && <div className={styles.content}>{children}</div>}
-          {actions && <div className={styles.actions}>{actions}</div>}
+          {description && <p id={`${id}-desc`} {...part('description', styles.description)}>{description}</p>}
+          {children && <div {...part('content', styles.content)}>{children}</div>}
+          {actions && <div {...part('actions', styles.actions)}>{actions}</div>}
         </div>
       </Overlay>
     </Portal>

@@ -9,3 +9,5 @@ export type {
   MultiDatePickerFieldProps,
   MultiDatePickerProps,
 } from './DatePicker';
+export type { CalendarPart } from './Calendar';
+export type { DatePickerPart } from './DatePicker';

@@ -1,7 +1,7 @@
 import { forwardRef, useMemo } from 'react';
 import { Icon } from '../../internal/Icon';
 import { Field } from '../Field';
-import type { FieldProps } from '../Field';
+import type { FieldProps, FieldWrapperProps } from '../Field';
 import { Select } from '../Select';
 import type { SelectOption, SelectProps } from '../Select';
 
@@ -53,15 +53,17 @@ export interface TimePickerFieldProps
   extends Omit<TimePickerProps, 'aria-describedby' | 'aria-invalid'>,
     Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> {
   fieldClassName?: string;
+  fieldClassNames?: FieldWrapperProps['fieldClassNames'];
+  fieldStyles?: FieldWrapperProps['fieldStyles'];
 }
 
 /** A Time picker with a label and hint. Figma: Time field. */
 export const TimePickerField = forwardRef<HTMLButtonElement, TimePickerFieldProps>(function TimePickerField(
-  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, fieldClassNames, fieldStyles, ...rest },
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <TimePicker ref={ref} {...rest} {...c} />}
     </Field>
   );

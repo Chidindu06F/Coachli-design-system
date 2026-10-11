@@ -88,7 +88,7 @@ export const AvatarStatus = forwardRef<HTMLSpanElement, AvatarStatusProps>(funct
   const name = label ?? (type === 'notification' && count !== undefined ? `${count} notifications` : LABELS[type]);
   const classes = [styles.status, styles[size], styles[`status-${type}`], className].filter(Boolean).join(' ');
   return (
-    <span ref={ref} role="img" aria-label={name} className={classes} {...rest}>
+    <span ref={ref} role="img" aria-label={name} data-halo="avatar-status" className={classes} {...rest}>
       {content(type, count, logo)}
     </span>
   );
