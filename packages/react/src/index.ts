@@ -108,5 +108,7 @@ export { formatTime, TimePicker, TimePickerField } from './components/TimePicker
 export type { TimePickerFieldProps, TimePickerProps } from './components/TimePicker';
 export { Tooltip } from './components/Tooltip';
 export type { TooltipProps, TooltipSide } from './components/Tooltip';
+export { Tour } from './components/Tour';
+export type { TourLabels, TourProps, TourStep } from './components/Tour';
 
 export type Theme = 'light' | 'dark' | 'system';

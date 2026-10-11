@@ -45,6 +45,8 @@ export function useFloating(
     } else {
       left = s === 'left' ? r.left - w - gap : r.right + gap;
       top = align === 'start' ? r.top : align === 'end' ? r.bottom - h : r.top + r.height / 2 - h / 2;
+      // Keep it on screen when the anchor is near the top or bottom edge.
+      top = Math.max(8, Math.min(top, window.innerHeight - h - 8));
     }
     setState({
       side: s,
