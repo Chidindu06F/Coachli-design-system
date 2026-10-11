@@ -147,17 +147,17 @@ export interface TopBarProps extends HTMLAttributes<HTMLElement>, PartsProps<Top
   logo?: ReactNode;
   /** Search, notifications and the account menu on the right. */
   actions?: ReactNode;
-  /** Shows a menu button on small screens, where the links are hidden. Figma: Layout=Mobile. */
+  /** Shows a menu button on small screens, where the links and the logo are hidden. Open a Drawer from it with the logo and the links. Figma: Layout=Mobile. */
   onMenuClick?: () => void;
   'aria-label'?: string;
 }
 
-/** A bar across the top of the app. Children are NavItems; they hide on small screens. */
+/** A bar across the top of the app. Children are NavItems; on small screens they and the logo move into the menu. */
 export function TopBar({ logo, actions, onMenuClick, className, classNames, styles: partStyles, children, 'aria-label': label = 'Main', ...rest }: TopBarProps) {
   const part = parts<TopBarPart>('top-bar', { classNames, styles: partStyles });
   return (
     <NavCtx.Provider value="top">
-      <header {...rest} {...part('root', [styles.topBar, className], rest.style)}>
+      <header {...rest} {...part('root', [styles.topBar, onMenuClick && styles.hasMenu, className], rest.style)}>
         {onMenuClick && (
           <CompactButton variant="ghost" aria-label="Open menu" {...part('menu', styles.menuButton)} onClick={onMenuClick}>
             <Icon name="List" />

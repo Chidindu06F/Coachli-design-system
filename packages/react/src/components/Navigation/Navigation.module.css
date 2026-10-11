@@ -102,6 +102,8 @@
   .topBar { padding: 0 var(--halo-spacing-7); }
   .links { display: none; }
   .menuButton { display: inline-flex; }
+  /* With a menu button, the logo moves into the menu that opens from it. */
+  .hasMenu .brand { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Bell, CalendarBlank, ChartBar, CheckSquare, DotsThree, FolderSimple, Gear, House, MagnifyingGlass, Question, Users } from '@phosphor-icons/react';
 import { Avatar } from '../Avatar';
 import { CompactButton } from '../CompactButton';
+import { Drawer } from '../Drawer';
 import { Input } from '../Input';
 import { Text } from '../Text';
 import { NavItem, Sidebar, TopBar } from './Navigation';
@@ -87,33 +88,66 @@ export const SidebarStory: Story = {
 
 export const TopBarStory: Story = {
   name: 'Top bar',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'On small screens the links and the logo leave the bar, so it only holds the menu button and the actions. The menu button opens a Drawer with the logo at the top and the links below. Narrow the window to see it.',
+      },
+    },
+  },
   render: function Render() {
     const [page, setPage] = useState('overview');
+    const [menuOpen, setMenuOpen] = useState(false);
+    const pages = ['overview', 'projects', 'reports', 'team'];
+    const logo = (
+      <>
+        <Avatar size="sm" initials="ST" color="purple" />
+        <Text weight="semibold" as="span">Studio</Text>
+      </>
+    );
+    const links = (onPick?: () => void) =>
+      pages.map((p) => (
+        <NavItem
+          key={p}
+          selected={page === p}
+          onClick={() => {
+            setPage(p);
+            onPick?.();
+          }}
+        >
+          {p[0]!.toUpperCase() + p.slice(1)}
+        </NavItem>
+      ));
     return (
-      <TopBar
-        onMenuClick={() => {}}
-        logo={
-          <>
-            <Avatar size="sm" initials="ST" color="purple" />
-            <Text weight="semibold" as="span">Studio</Text>
-          </>
-        }
-        actions={
-          <>
-            <Input size="sm" aria-label="Search" placeholder="Search" iconLeft={<MagnifyingGlass />} style={{ width: 240 }} />
-            <CompactButton variant="ghost" aria-label="Notifications">
-              <Bell />
-            </CompactButton>
-            <Avatar size="sm" name="Ada Obi" />
-          </>
-        }
-      >
-        {['overview', 'projects', 'reports', 'team'].map((p) => (
-          <NavItem key={p} selected={page === p} onClick={() => setPage(p)}>
-            {p[0]!.toUpperCase() + p.slice(1)}
-          </NavItem>
-        ))}
-      </TopBar>
+      <>
+        <TopBar
+          onMenuClick={() => setMenuOpen(true)}
+          logo={logo}
+          actions={
+            <>
+              <Input size="sm" aria-label="Search" placeholder="Search" iconLeft={<MagnifyingGlass />} style={{ width: 240 }} />
+              <CompactButton variant="ghost" aria-label="Notifications">
+                <Bell />
+              </CompactButton>
+              <Avatar size="sm" name="Ada Obi" />
+            </>
+          }
+        >
+          {links()}
+        </TopBar>
+        <Drawer
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          side="left"
+          size="sm"
+          title={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>{logo}</span>}
+        >
+          <nav aria-label="Main" style={{ display: 'grid', gap: 4 }}>
+            {links(() => setMenuOpen(false))}
+          </nav>
+        </Drawer>
+      </>
     );
   },
 };

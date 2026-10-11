@@ -6,6 +6,10 @@ New work collects under **Unreleased** and goes live in Storybook straight away.
 
 ## Unreleased
 
+### Changes
+
+- **Top bar on phones**: with a menu button, the logo now leaves the bar too, so it only holds the menu button and the actions. Open a Drawer from the menu button with the logo at the top and the links below; the Top bar story shows how.
+
 ## 0.2.0
 
 **Breaking:** the date range picker's `placeholder` prop is now `startPlaceholder` and `endPlaceholder`. Everything else is new or backwards compatible.
