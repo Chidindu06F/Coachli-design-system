@@ -1,0 +1,188 @@
+/* Values mirror the Event calendar set in Figma (Date picker page). Event colours reuse the Tag tokens. */
+
+.root {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--halo-spacing-7);
+  color: var(--halo-text-primary);
+  font-family: var(--halo-font-family-body);
+}
+
+/* ---------- Header ---------- */
+.header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--halo-spacing-6); }
+.lead { display: flex; align-items: center; gap: var(--halo-spacing-4); }
+.title {
+  min-width: 10ch;
+  margin: 0;
+  font-size: var(--halo-font-size-xl);
+  font-weight: var(--halo-font-weight-semibold);
+  line-height: var(--halo-line-height-xl);
+}
+.nav { display: flex; gap: var(--halo-spacing-1); }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--halo-spacing-4); }
+.select { width: auto; min-width: 96px; }
+
+/* ---------- Month ---------- */
+.month { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--halo-border-secondary); border-radius: var(--halo-radius-6); }
+.weekdays { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-bottom: 1px solid var(--halo-border-secondary); }
+.weekday {
+  padding: var(--halo-spacing-4) var(--halo-spacing-5);
+  color: var(--halo-text-secondary);
+  font-size: var(--halo-font-size-xs);
+  font-weight: var(--halo-font-weight-semibold);
+  line-height: var(--halo-line-height-xs);
+  text-transform: uppercase;
+}
+.weekday abbr { text-decoration: none; }
+
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: 40px repeat(var(--rows, 0), 26px) minmax(var(--halo-spacing-4), 1fr);
+  min-height: 128px;
+  row-gap: 2px;
+}
+.week + .week { border-top: 1px solid var(--halo-border-secondary); }
+
+.day {
+  grid-row: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--halo-spacing-3);
+}
+.day + .day { border-left: 1px solid var(--halo-border-secondary); }
+.outside { background: var(--halo-surface-minimal); }
+.outside .date { color: var(--halo-text-secondary); }
+.selected { background: var(--halo-surface-secondary); }
+
+.date {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--halo-radius-10);
+  background: transparent;
+  color: var(--halo-text-primary);
+  font: inherit;
+  font-size: var(--halo-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.date:hover { background: var(--halo-button-secondary-hover); }
+.date:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
+/* Today: the number in a filled circle. */
+.today,
+.today:hover { background: var(--halo-text-primary); color: var(--halo-surface-primary); font-weight: var(--halo-font-weight-semibold); }
+
+.extra { margin-top: auto; min-width: 0; font-size: var(--halo-font-size-xs); line-height: var(--halo-line-height-xs); }
+
+/* Events: one bar per event, across the days it covers. */
+.event {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0 var(--halo-spacing-4);
+  border: 0;
+  border-radius: var(--halo-radius-3);
+  background: var(--event-fill);
+  color: var(--event-text);
+  font: inherit;
+  font-size: var(--halo-font-size-xs);
+  font-weight: var(--halo-font-weight-semibold);
+  line-height: var(--halo-line-height-xs);
+  text-align: left;
+  cursor: pointer;
+}
+.event:hover { filter: brightness(0.96); }
+.event:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
+.eventTitle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar { z-index: 1; margin: 0 var(--halo-spacing-2); }
+.continuesBefore { margin-left: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.continuesAfter { margin-right: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; }
+
+.moreWrap { z-index: 1; display: flex; padding: 0 var(--halo-spacing-2); }
+.more {
+  padding: 0 var(--halo-spacing-3);
+  border: 0;
+  border-radius: var(--halo-radius-3);
+  background: transparent;
+  color: var(--halo-text-secondary);
+  font: inherit;
+  font-size: var(--halo-font-size-xs);
+  font-weight: var(--halo-font-weight-semibold);
+  cursor: pointer;
+}
+.more:hover { background: var(--halo-button-secondary-hover); color: var(--halo-text-primary); }
+.popList { display: flex; flex-direction: column; gap: var(--halo-spacing-2); }
+.listEvent { min-height: 32px; }
+
+/* Colours, from the Tag tokens */
+.neutral { --event-fill: var(--halo-surface-secondary); --event-text: var(--halo-text-primary); }
+.blue { --event-fill: var(--halo-tag-blue-surface); --event-text: var(--halo-tag-blue-text); }
+.green { --event-fill: var(--halo-tag-green-surface); --event-text: var(--halo-tag-green-text); }
+.yellow { --event-fill: var(--halo-tag-yellow-surface); --event-text: var(--halo-tag-yellow-text); }
+.orange { --event-fill: var(--halo-tag-orange-surface); --event-text: var(--halo-tag-orange-text); }
+.red { --event-fill: var(--halo-tag-red-surface); --event-text: var(--halo-tag-red-text); }
+.pink { --event-fill: var(--halo-tag-pink-surface); --event-text: var(--halo-tag-pink-text); }
+.purple { --event-fill: var(--halo-tag-purple-surface); --event-text: var(--halo-tag-purple-text); }
+.custom {
+  --event-fill: color-mix(in srgb, var(--event-custom) 18%, var(--halo-surface-primary));
+  --event-text: color-mix(in srgb, var(--event-custom) 55%, var(--halo-text-primary));
+}
+
+/* Dots and the day list are for narrow screens */
+.dots { display: none; gap: 3px; justify-content: center; margin-top: var(--halo-spacing-1); }
+.dot { width: 6px; height: 6px; border-radius: var(--halo-radius-10); background: var(--event-text); }
+.agenda { display: none; }
+
+/* ---------- Year ---------- */
+.year { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--halo-spacing-6); }
+.monthCellWrap { display: flex; flex-direction: column; gap: var(--halo-spacing-3); }
+.monthCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--halo-spacing-2);
+  min-height: 112px;
+  padding: var(--halo-spacing-7);
+  border: 0;
+  border-radius: var(--halo-radius-6);
+  background: var(--halo-surface-primary);
+  box-shadow: inset 0 0 0 1px var(--halo-border-secondary);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.monthCell:hover { box-shadow: inset 0 0 0 1px var(--halo-border-contrast); }
+.monthCell:focus-visible { outline: none; box-shadow: inset 0 0 0 1px var(--halo-border-contrast), 0 0 0 2px var(--halo-border-focus); }
+.current { box-shadow: inset 0 0 0 2px var(--halo-text-primary); }
+.monthName { font-size: var(--halo-font-size-md); font-weight: var(--halo-font-weight-semibold); line-height: var(--halo-line-height-md); }
+.monthCount { color: var(--halo-text-secondary); font-size: var(--halo-font-size-sm); line-height: var(--halo-line-height-sm); }
+.monthDots { display: flex; gap: 3px; margin-top: auto; }
+
+/* ---------- Narrow screens: dots in days, the chosen day's events below ---------- */
+@container (max-width: 599px) {
+  .header { flex-direction: column; align-items: stretch; }
+  .lead { justify-content: space-between; }
+  .title { font-size: var(--halo-font-size-lg); line-height: var(--halo-line-height-lg); }
+  .controls > :last-child { margin-left: auto; }
+  .weekday { padding: var(--halo-spacing-3) 0; text-align: center; }
+  .week { grid-template-rows: auto; min-height: 56px; }
+  .day { grid-row: 1; align-items: center; padding: var(--halo-spacing-2) 0; }
+  .day + .day { border-left: 0; }
+  .bar, .moreWrap { display: none; }
+  .dots { display: flex; }
+  .extra { display: none; }
+  .agenda { display: flex; flex-direction: column; gap: var(--halo-spacing-4); }
+  .agendaTitle { margin: 0; font-size: var(--halo-font-size-md); font-weight: var(--halo-font-weight-semibold); line-height: var(--halo-line-height-md); }
+  .empty { margin: 0; color: var(--halo-text-secondary); font-size: var(--halo-font-size-sm); }
+  .listEvent { min-height: 40px; font-size: var(--halo-font-size-sm); }
+  .year { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--halo-spacing-4); }
+  .monthCell { min-height: 88px; padding: var(--halo-spacing-6); }
+}

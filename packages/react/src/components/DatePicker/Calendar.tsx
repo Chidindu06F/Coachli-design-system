@@ -3,6 +3,7 @@ import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
 import { CompactButton } from '../CompactButton';
+import { Select } from '../Select';
 import styles from './DatePicker.module.css';
 import { addDays, addMonths, before, between, formatDate, monthGrid, sameDay, sameMonth, startOfDay } from './dates';
 
@@ -30,6 +31,13 @@ interface CalendarBase extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' |
   months?: 1 | 2;
   /** Something under the months, like Cancel and Apply buttons. */
   footer?: ReactNode;
+  /**
+   * Arrows: the month name with back and forward arrows. Select: month and year menus too, to jump
+   * straight to any month, like a birthday years ago. Select needs one month on show. Figma: Header.
+   */
+  header?: 'arrows' | 'select';
+  /** Years in the year menu. Defaults to the min and max years, or 100 years back and 10 ahead. */
+  yearRange?: [number, number];
 }
 
 export interface SingleCalendarProps extends CalendarBase {
@@ -64,6 +72,8 @@ export function Calendar(props: CalendarProps) {
     defaultMonth,
     months = props.mode === 'range' ? 2 : 1,
     footer,
+    header = 'arrows',
+    yearRange,
     className,
     mode: _mode,
     value: _value,
@@ -208,6 +218,9 @@ export function Calendar(props: CalendarProps) {
 
 
   const presets = range ? props.presets : undefined;
+  const [fromYear, toYear] = yearRange ?? [min?.getFullYear() ?? today.getFullYear() - 100, max?.getFullYear() ?? today.getFullYear() + 10];
+  const years: number[] = [];
+  for (let y = Math.max(toYear, month.getFullYear()); y >= Math.min(fromYear, month.getFullYear()); y--) years.push(y);
   const rangeValue = range ? props.value : null;
 
   return (
@@ -240,11 +253,30 @@ export function Calendar(props: CalendarProps) {
             <CompactButton variant="ghost" aria-label="Previous month" onClick={() => setMonth(addMonths(month, -1))}>
               <Icon name="CaretLeft" />
             </CompactButton>
-            <div className={styles.titles} aria-live="polite">
-              {shown.map((m) => (
-                <span key={m.toISOString()} className={styles.monthTitle}>{formatDate(m, locale, { month: 'long', year: 'numeric' })}</span>
-              ))}
-            </div>
+            {header === 'select' && months === 1 ? (
+              <div className={styles.selects}>
+                <Select
+                  aria-label="Month"
+                  size="sm"
+                  value={String(month.getMonth())}
+                  onValueChange={(v) => setMonth(new Date(month.getFullYear(), Number(v), 1))}
+                  options={Array.from({ length: 12 }, (_, i) => ({ value: String(i), label: formatDate(new Date(2024, i, 1), locale, { month: 'long' }) }))}
+                />
+                <Select
+                  aria-label="Year"
+                  size="sm"
+                  value={String(month.getFullYear())}
+                  onValueChange={(v) => setMonth(new Date(Number(v), month.getMonth(), 1))}
+                  options={years.map((y) => ({ value: String(y), label: String(y) }))}
+                />
+              </div>
+            ) : (
+              <div className={styles.titles} aria-live="polite">
+                {shown.map((m) => (
+                  <span key={m.toISOString()} className={styles.monthTitle}>{formatDate(m, locale, { month: 'long', year: 'numeric' })}</span>
+                ))}
+              </div>
+            )}
             <CompactButton variant="ghost" aria-label="Next month" onClick={() => setMonth(addMonths(month, 1))}>
               <Icon name="CaretRight" />
             </CompactButton>

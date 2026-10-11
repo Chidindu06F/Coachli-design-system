@@ -36,6 +36,19 @@ export const Limits: Story = {
 };
 
 
+/** Month and year menus to jump straight to a date years away, like a date of birth. */
+export const MonthAndYearMenus: Story = {
+  args: { label: 'Date of birth', calendarHeader: 'select', max: today, defaultValue: new Date(1994, 4, 12) },
+};
+
+/** The calendar on its own with month and year menus. */
+export const CalendarWithMenus: Story = {
+  render: function Render() {
+    const [d, setD] = useState<Date | null>(today);
+    return <Calendar value={d} onChange={setD} header="select" style={{ width: 320 }} />;
+  },
+};
+
 /** Two months, presets and Apply. */
 export const Range: Story = {
   decorators: [(Story) => <div style={{ minHeight: 480 }}><Story /></div>],

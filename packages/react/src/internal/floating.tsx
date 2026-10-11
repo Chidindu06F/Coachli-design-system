@@ -77,21 +77,30 @@ export function useFloating(
 }
 
 /** Closes on Escape and on a click outside both the anchor and the panel. */
+// Open panels, oldest first. A panel opened from inside another, like a Select in a date picker,
+// sits on top: Escape closes only the top one, and clicks in it do not close the ones below.
+const layers: RefObject<HTMLElement | null>[][] = [];
+
 export function useDismiss(open: boolean, onClose: () => void, refs: RefObject<HTMLElement | null>[]) {
   const latest = useRef(onClose);
   latest.current = onClose;
   useEffect(() => {
     if (!open) return;
+    layers.push(refs);
+    const inside = (rs: RefObject<HTMLElement | null>[], t: Node) => rs.some((r) => r.current?.contains(t));
     const onDown = (e: PointerEvent) => {
-      if (refs.some((r) => r.current?.contains(e.target as Node))) return;
+      const t = e.target as Node;
+      const above = layers.slice(layers.indexOf(refs) + 1);
+      if (inside(refs, t) || above.some((rs) => inside(rs, t))) return;
       latest.current();
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') latest.current();
+      if (e.key === 'Escape' && layers[layers.length - 1] === refs) latest.current();
     };
     document.addEventListener('pointerdown', onDown);
     document.addEventListener('keydown', onKey);
     return () => {
+      layers.splice(layers.indexOf(refs), 1);
       document.removeEventListener('pointerdown', onDown);
       document.removeEventListener('keydown', onKey);
     };

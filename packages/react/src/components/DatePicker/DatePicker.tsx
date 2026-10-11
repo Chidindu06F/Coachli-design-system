@@ -118,11 +118,15 @@ export interface DatePickerProps extends PickerBase {
   value?: Date | null;
   defaultValue?: Date | null;
   onValueChange?: (date: Date | null) => void;
+  /** Select adds month and year menus to the calendar, for dates far away like a date of birth. Figma: Header. */
+  calendarHeader?: 'arrows' | 'select';
+  /** Years in the year menu. */
+  yearRange?: [number, number];
 }
 
 /** A box that opens a Calendar to pick one day. */
 export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(function DatePicker(
-  { value, defaultValue = null, onValueChange, placeholder = 'Pick a date', locale, format, min, max, isDateDisabled, weekStartsOn, ...rest },
+  { value, defaultValue = null, onValueChange, placeholder = 'Pick a date', locale, format, min, max, isDateDisabled, weekStartsOn, calendarHeader, yearRange, ...rest },
   ref,
 ) {
   const dialogId = useId();
@@ -146,6 +150,8 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(functio
               isDateDisabled={isDateDisabled}
               weekStartsOn={weekStartsOn}
               locale={locale}
+              header={calendarHeader}
+              yearRange={yearRange}
             />
           </div>
         </Portal>

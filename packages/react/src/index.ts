@@ -76,6 +76,8 @@ export { Drawer } from './components/Drawer';
 export type { DrawerProps } from './components/Drawer';
 export { EmptyState } from './components/EmptyState';
 export type { EmptyStateProps } from './components/EmptyState';
+export { EventCalendar } from './components/EventCalendar';
+export type { CalendarEvent, EventCalendarProps, EventCalendarView } from './components/EventCalendar';
 export { Modal } from './components/Modal';
 export type { ModalProps } from './components/Modal';
 export { Toast, ToastProvider, useToast } from './components/Toast';

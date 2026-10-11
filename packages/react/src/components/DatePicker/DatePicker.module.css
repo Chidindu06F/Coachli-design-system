@@ -20,6 +20,9 @@
 
 .header { display: flex; align-items: center; gap: var(--halo-spacing-4); }
 .titles { display: flex; flex: 1; justify-content: space-around; gap: var(--halo-spacing-9); }
+.selects { display: flex; flex: 1; gap: var(--halo-spacing-3); }
+.selects > :first-child { flex: 1.4; }
+.selects > * { flex: 1; min-width: 0; }
 .monthTitle {
   font-size: var(--halo-font-size-md);
   font-weight: var(--halo-font-weight-semibold);
