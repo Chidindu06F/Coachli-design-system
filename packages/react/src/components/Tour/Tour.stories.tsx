@@ -11,7 +11,7 @@ const steps: TourStep[] = [
   {
     title: 'Welcome to your workspace',
     description: 'A quick look around. It takes under a minute, and you can skip it at any time.',
-    media: <img src="https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=680&h=300&fit=crop" alt="" width={340} height={150} />,
+    media: <img src="cards/waves.jpg" alt="" width={340} height={150} style={{ objectFit: 'cover' }} />,
   },
   { target: '#tour-search', title: 'Find anything', description: 'Search projects, people and files from here. Press / to jump to it.', side: 'bottom' },
   { target: '#tour-new', title: 'Start something new', description: 'Create a project, a task or a document.', side: 'bottom', align: 'end' },
