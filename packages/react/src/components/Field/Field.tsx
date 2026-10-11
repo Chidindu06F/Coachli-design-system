@@ -43,7 +43,7 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   info?: ReactNode;
   /** Help text under the control. Figma: Hint. */
   hint?: ReactNode;
-  /** An error message. Replaces the hint, turns red and marks the control invalid. Figma: State=Error. */
+  /** An error message. Replaces the hint, turns red and marks the control invalid. The control shows the warning icon, so the message has none. Figma: State=Error. */
   error?: ReactNode;
   /** Shown at the end of the hint row, like "86 / 2,000". */
   count?: ReactNode;
@@ -71,7 +71,6 @@ export function Field({ label, required, optional, info, hint, error, count, chi
         <div className={styles.hintRow}>
           {message && (
             <span id={hintId} className={cx(styles.hint, error != null && styles.error)}>
-              {error != null && <Icon name="WarningCircle" className={styles.hintIcon} />}
               {message}
             </span>
           )}
