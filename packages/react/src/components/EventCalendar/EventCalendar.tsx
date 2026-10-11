@@ -311,6 +311,7 @@ export function EventCalendar({
             )}
             {views.length > 1 && (
               <SegmentedControl
+                className={styles.viewSwitch}
                 aria-label="View"
                 size="sm"
                 value={mode}

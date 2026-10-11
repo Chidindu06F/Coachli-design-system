@@ -287,7 +287,11 @@ button.tgDay:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--ha
   .header { flex-direction: column; align-items: stretch; }
   .lead { justify-content: space-between; }
   .title { font-size: var(--halo-font-size-lg); line-height: var(--halo-line-height-lg); }
-  .controls > :last-child { margin-left: auto; }
+  /* Menus side by side, then the view switch on its own row, full width. */
+  .controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .select { width: 100%; min-width: 0; }
+  .viewSwitch { box-sizing: border-box; display: flex; grid-column: 1 / -1; width: 100%; }
+  .viewSwitch > * { flex: 1; }
   .weekday { padding: var(--halo-spacing-3) 0; text-align: center; }
   .week { grid-template-rows: auto; min-height: 56px; }
   .day { grid-row: 1; align-items: center; padding: var(--halo-spacing-2) 0; }
