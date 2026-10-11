@@ -20,6 +20,7 @@
   line-height: var(--halo-line-height-xl);
 }
 .nav { display: flex; gap: var(--halo-spacing-1); }
+.actions { display: flex; align-items: center; gap: var(--halo-spacing-4); }
 .controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--halo-spacing-4); }
 .select { width: auto; min-width: 96px; }
 
@@ -135,6 +136,121 @@
   --event-text: color-mix(in srgb, var(--event-custom) 55%, var(--halo-text-primary));
 }
 
+.eventTime { font-weight: var(--halo-font-weight-regular); }
+/* A timed event in the month: a dot of its colour, the time and the title, no fill. */
+.timedBar { background: transparent; color: var(--halo-text-primary); gap: var(--halo-spacing-2); }
+.timedBar::before { content: ''; flex-shrink: 0; width: 6px; height: 6px; margin-right: var(--halo-spacing-2); border-radius: var(--halo-radius-10); background: var(--event-text); }
+.timedBar:hover { background: var(--halo-button-secondary-hover); filter: none; }
+
+/* ---------- Day and week ---------- */
+.timeGrid {
+  --gutter: 56px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--halo-border-secondary);
+  border-radius: var(--halo-radius-6);
+}
+.tgHead,
+.allDay { display: grid; grid-template-columns: var(--gutter) repeat(var(--cols), minmax(0, 1fr)); }
+.tgHead { border-bottom: 1px solid var(--halo-border-secondary); }
+.gutter { border-right: 1px solid var(--halo-border-secondary); }
+.tgDay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--halo-spacing-1);
+  padding: var(--halo-spacing-4) 0;
+  border: 0;
+  border-left: 1px solid var(--halo-border-secondary);
+  background: transparent;
+  color: var(--halo-text-primary);
+  font: inherit;
+}
+.gutter + .tgDay { border-left: 0; }
+button.tgDay { cursor: pointer; }
+button.tgDay:hover { background: var(--halo-surface-minimal); }
+button.tgDay:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--halo-border-focus); }
+.tgWeekday {
+  color: var(--halo-text-secondary);
+  font-size: var(--halo-font-size-xs);
+  font-weight: var(--halo-font-weight-semibold);
+  line-height: var(--halo-line-height-xs);
+  text-transform: uppercase;
+}
+.tgDate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--halo-radius-10);
+  font-size: var(--halo-font-size-lg);
+  line-height: var(--halo-line-height-lg);
+  font-variant-numeric: tabular-nums;
+}
+
+.allDay {
+  grid-template-rows: repeat(var(--rows, 1), 26px);
+  row-gap: 2px;
+  padding: var(--halo-spacing-2) 0;
+  border-bottom: 1px solid var(--halo-border-secondary);
+}
+.allDayLabel {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  padding-right: var(--halo-spacing-3);
+  color: var(--halo-text-secondary);
+  font-size: var(--halo-font-size-xs);
+  line-height: var(--halo-line-height-xs);
+  text-align: right;
+}
+
+.tgScroll { max-height: 640px; overflow-y: auto; }
+.tgSticky { position: sticky; top: 0; z-index: 3; background: var(--halo-surface-primary); }
+.tgBody {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--gutter) repeat(var(--cols), minmax(0, 1fr));
+  /* An hour line every hour. */
+  background-image: linear-gradient(to bottom, var(--halo-border-secondary) 1px, transparent 1px);
+  background-size: 100% var(--hour);
+  background-position: var(--gutter) 0;
+  background-repeat: repeat-y;
+}
+.hours { position: relative; border-right: 1px solid var(--halo-border-secondary); background: var(--halo-surface-primary); }
+.hour {
+  position: absolute;
+  right: var(--halo-spacing-3);
+  color: var(--halo-text-secondary);
+  font-size: var(--halo-font-size-xs);
+  line-height: var(--halo-line-height-xs);
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+.tgCol { position: relative; border-left: 1px solid var(--halo-border-secondary); }
+.hours + .tgCol { border-left: 0; }
+.tgCol[data-clickable] { cursor: pointer; }
+
+.block {
+  position: absolute;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0;
+  overflow: hidden;
+  padding: var(--halo-spacing-2) var(--halo-spacing-3);
+  border-left: 3px solid var(--event-text);
+  border-radius: var(--halo-radius-3);
+  box-shadow: 0 0 0 1px var(--halo-surface-primary);
+}
+.blockTime { overflow: hidden; font-weight: var(--halo-font-weight-regular); text-overflow: ellipsis; white-space: nowrap; }
+
+/* The current time, across today's column. */
+.now { position: absolute; left: 0; right: 0; z-index: 2; height: 2px; background: var(--halo-text-primary); pointer-events: none; }
+.now::before { content: ''; position: absolute; top: -4px; left: -5px; width: 10px; height: 10px; border-radius: var(--halo-radius-10); background: var(--halo-text-primary); }
+
 /* Dots and the day list are for narrow screens */
 .dots { display: none; gap: 3px; justify-content: center; margin-top: var(--halo-spacing-1); }
 .dot { width: 6px; height: 6px; border-radius: var(--halo-radius-10); background: var(--event-text); }
@@ -184,5 +300,11 @@
   .empty { margin: 0; color: var(--halo-text-secondary); font-size: var(--halo-font-size-sm); }
   .listEvent { min-height: 40px; font-size: var(--halo-font-size-sm); }
   .year { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--halo-spacing-4); }
+  .timeGrid { --gutter: 40px; }
+  .tgWeekday { font-size: 10px; }
+  .tgDate { width: 28px; height: 28px; font-size: var(--halo-font-size-md); }
+  .block { padding: var(--halo-spacing-1) var(--halo-spacing-2); border-left-width: 2px; }
+  .blockTime { display: none; }
+  .tgScroll { max-height: 480px; }
   .monthCell { min-height: 88px; padding: var(--halo-spacing-6); }
 }

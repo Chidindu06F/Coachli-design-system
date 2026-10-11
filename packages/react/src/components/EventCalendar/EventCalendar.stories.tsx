@@ -5,6 +5,8 @@ import type { CalendarEvent } from './EventCalendar';
 
 const now = new Date();
 const day = (d: number) => new Date(now.getFullYear(), now.getMonth(), d);
+const at = (d: number, h: number, m = 0) => new Date(now.getFullYear(), now.getMonth(), d, h, m);
+const td = now.getDate();
 
 const events: CalendarEvent[] = [
   { id: '1', title: 'Release window', start: day(8), end: day(12), color: 'blue' },
@@ -16,6 +18,15 @@ const events: CalendarEvent[] = [
   { id: '7', title: 'Board update', start: day(14), color: 'red' },
   { id: '8', title: 'Launch party', start: day(3), color: '#0EA5E9' },
   { id: '9', title: 'Holiday', start: day(28), end: day(29) },
+  // Timed events this week, for the day and week views.
+  { id: '10', title: 'Standup', start: at(td, 9, 0), end: at(td, 9, 30), color: 'blue' },
+  { id: '11', title: 'Customer call', start: at(td, 10, 0), end: at(td, 11, 0), color: 'green' },
+  { id: '12', title: 'Pairing', start: at(td, 10, 30), end: at(td, 12, 0), color: 'purple' },
+  { id: '13', title: 'Lunch with Ada', start: at(td, 12, 30), end: at(td, 13, 30), color: 'orange' },
+  { id: '14', title: 'Roadmap review', start: at(td + 1, 14, 0), end: at(td + 1, 15, 30), color: 'yellow' },
+  { id: '15', title: 'Standup', start: at(td + 1, 9, 0), end: at(td + 1, 9, 30), color: 'blue' },
+  { id: '16', title: '1:1 with Sam', start: at(td - 1, 16, 0), end: at(td - 1, 16, 45), color: 'pink' },
+  { id: '17', title: 'Hiring panel', start: at(td + 2, 11, 0), end: at(td + 2, 12, 30), color: 'red' },
 ];
 
 const meta = {
@@ -38,6 +49,22 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+/** Hours down the side and the week across, like a planner. Overlapping events sit side by side, events over several days sit in the all-day row, and a line marks the time now. Click a date to open that day. */
+export const Week: Story = { args: { defaultView: 'week' } };
+
+/** One day of hours. Click an empty slot to get its time, for example to add an event there. */
+export const Day: Story = {
+  render: function Render(args) {
+    const [slot, setSlot] = useState<Date | null>(null);
+    return (
+      <div style={{ display: 'grid', gap: 12 }}>
+        <EventCalendar {...args} defaultView="day" onSlotClick={setSlot} />
+        <span style={{ fontFamily: 'var(--halo-font-family-body)', fontSize: 14 }}>{slot ? `Add an event at ${slot.toLocaleString()}` : 'Click an empty slot.'}</span>
+      </div>
+    );
+  },
+};
 
 /** Just the title, arrows and Today. */
 export const SimpleHeader: Story = { args: { header: 'simple' } };
