@@ -1,4 +1,4 @@
-/* Values mirror the Event calendar set in Figma (Date picker page). Event colours reuse the Tag tokens. */
+/* Values mirror the Event calendar and Calendar event sets in Figma (Event calendar page). Event colours reuse the Tag tokens. */
 
 .root {
   container-type: inline-size;
