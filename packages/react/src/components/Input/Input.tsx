@@ -38,8 +38,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       {prefix && <span className={cx(styles.affix, styles.prefix)}>{prefix}</span>}
       <input ref={ref} className={styles.input} disabled={disabled} aria-invalid={invalid || rest['aria-invalid'] || undefined} {...rest} />
       {suffix && <span className={cx(styles.affix, styles.suffix)}>{suffix}</span>}
-      {iconRight && <span className={styles.end}>{iconRight}</span>}
       <StatusIcon invalid={invalid || !!rest['aria-invalid']} valid={valid} disabled={disabled} />
+      {iconRight && <span className={styles.end}>{iconRight}</span>}
     </div>
   );
 });
