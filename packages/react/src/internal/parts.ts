@@ -16,6 +16,17 @@ export interface PartsProps<P extends string> {
 
 type Falsy = false | null | undefined;
 
+/** What `part()` spreads onto an element. */
+export interface PartAttributes {
+  'data-part': string;
+  'data-halo'?: string;
+  className: string | undefined;
+  style: CSSProperties | undefined;
+}
+
+/** Gives an element its part name, classes and styles. */
+export type PartFn<P extends string> = (part: P, className?: string | Falsy | (string | Falsy)[], style?: CSSProperties) => PartAttributes;
+
 /**
  * Returns a function that gives an element its part name, its classes and its styles.
  * `root` is the outer element: it also gets `data-halo` with the component's name.
@@ -25,8 +36,8 @@ type Falsy = false | null | undefined;
  * <div {...part('root', styles.modal, className)} />
  * ```
  */
-export function parts<P extends string>(component: string, { classNames, styles }: PartsProps<P>) {
-  return (part: P, className?: string | Falsy | (string | Falsy)[], style?: CSSProperties) => {
+export function parts<P extends string>(component: string, { classNames, styles }: PartsProps<P>): PartFn<P> {
+  return (part, className, style) => {
     const own = styles?.[part];
     const classes = Array.isArray(className) ? className : [className];
     return {

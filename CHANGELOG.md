@@ -6,6 +6,10 @@ New work collects under **Unreleased** and goes live in Storybook straight away.
 
 ## Unreleased
 
+## 0.2.0
+
+**Breaking:** the date range picker's `placeholder` prop is now `startPlaceholder` and `endPlaceholder`. Everything else is new or backwards compatible.
+
 ### New components
 
 - **Time picker**: `TimePicker` and `TimePickerField`. A list of times at a set step, in 12 or 24 hours, with `min` and `max`.
