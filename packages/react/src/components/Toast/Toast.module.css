@@ -1,4 +1,4 @@
-/* Values mirror the Toast set in Figma (Toast page). No shadow: a border keeps it clear. */
+/* Values mirror the Toast set in Figma (Toast page). A soft shadow shows it floats over the page. */
 
 .toast {
   box-sizing: border-box;
@@ -10,7 +10,9 @@
   padding: var(--halo-spacing-7);
   border-radius: var(--halo-radius-5);
   background: var(--bg);
-  box-shadow: inset 0 0 0 1px var(--line);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    0 8px 24px -4px var(--halo-shadow-soft);
 }
 
 .default { --bg: var(--halo-surface-primary); --line: var(--halo-border-secondary); --title-color: var(--halo-text-primary); --desc-color: var(--halo-text-secondary); --tone: var(--halo-icon-primary); }

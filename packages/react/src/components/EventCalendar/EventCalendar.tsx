@@ -238,7 +238,7 @@ export function EventCalendar({
       : mode === 'month'
         ? formatDate(first, locale, { month: 'long', year: 'numeric' })
         : mode === 'day'
-          ? formatDate(focus, locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+          ? formatDate(focus, locale, { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' })
           : weekTitle(days[0]!, days[6]!, locale);
   const navLabel = { day: 'day', week: 'week', month: 'month', year: 'year' }[mode];
   const tabbable = sameMonth(focus, first) ? focus : first;
@@ -281,20 +281,19 @@ export function EventCalendar({
     <div className={cx(styles.root, className)} {...rest}>
       <div className={styles.header}>
         <div className={styles.lead}>
-          <h2 className={styles.title} aria-live="polite">{title}</h2>
-          <span className={styles.actions}>
-            <span className={styles.nav}>
-              <CompactButton variant="ghost" aria-label={`Previous ${navLabel}`} onClick={() => step(-1)}>
-                <Icon name="CaretLeft" />
-              </CompactButton>
-              <CompactButton variant="ghost" aria-label={`Next ${navLabel}`} onClick={() => step(1)}>
-                <Icon name="CaretRight" />
-              </CompactButton>
-            </span>
-            <Button variant="secondary" size="sm" onClick={() => choose(today)}>
-              Today
-            </Button>
+          {/* The arrows sit either side of the period they move, so it is clear what they change. */}
+          <span className={styles.nav}>
+            <CompactButton variant="ghost" aria-label={`Previous ${navLabel}`} title={`Previous ${navLabel}`} onClick={() => step(-1)}>
+              <Icon name="CaretLeft" />
+            </CompactButton>
+            <h2 className={cx(styles.title, styles[`title-${mode}`])} aria-live="polite">{title}</h2>
+            <CompactButton variant="ghost" aria-label={`Next ${navLabel}`} title={`Next ${navLabel}`} onClick={() => step(1)}>
+              <Icon name="CaretRight" />
+            </CompactButton>
           </span>
+          <Button variant="secondary" size="sm" onClick={() => choose(today)}>
+            Today
+          </Button>
         </div>
         {header === 'full' && (
           <div className={styles.controls}>

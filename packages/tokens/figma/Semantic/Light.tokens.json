@@ -2143,5 +2143,21 @@
         }
       }
     }
+  },
+  "shadow": {
+    "soft": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.047058823529411764,
+          0.047058823529411764,
+          0.047058823529411764
+        ],
+        "alpha": 0.12,
+        "hex": "#0C0C0C"
+      },
+      "$description": "Soft shadow under things that float over the page, like Toast."
+    }
   }
 }
