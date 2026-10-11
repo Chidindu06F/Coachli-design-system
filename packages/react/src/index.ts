@@ -42,6 +42,8 @@ export { Overlay } from './components/Overlay';
 export type { OverlayProps } from './components/Overlay';
 export { ProgressBar, ProgressCircle } from './components/Progress';
 export type { ProgressBarProps, ProgressCircleProps, ProgressStatus } from './components/Progress';
+export { QRCode } from './components/QRCode';
+export type { QRCodeProps, QRErrorLevel } from './components/QRCode';
 export { Rating } from './components/Rating';
 export type { RatingProps, RatingSize } from './components/Rating';
 export { Skeleton } from './components/Skeleton';
