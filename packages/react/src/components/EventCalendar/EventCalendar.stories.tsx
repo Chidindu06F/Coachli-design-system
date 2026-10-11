@@ -80,7 +80,7 @@ export const Appointments: Story = {
   },
 };
 
-/** Just the title, arrows and Today. */
+/** Just the title and arrows, with no view switch. */
 export const SimpleHeader: Story = { args: { header: 'simple' } };
 
 /** The twelve months, each with how many events it holds. Pick one to open it. */

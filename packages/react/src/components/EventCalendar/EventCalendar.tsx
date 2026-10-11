@@ -5,7 +5,6 @@ import { Icon } from '../../internal/Icon';
 import { Portal, useDismiss, useFloating } from '../../internal/floating';
 import { MonthYearPanel } from '../../internal/MonthYearPanel';
 import { useControllable } from '../../internal/useControllable';
-import { Button } from '../Button';
 import { CompactButton } from '../CompactButton';
 import { Calendar } from '../DatePicker/Calendar';
 import { addDays, addMonths, before, formatDate, monthGrid, sameDay, sameMonth, startOfDay } from '../DatePicker/dates';
@@ -55,7 +54,7 @@ export interface EventCalendarProps extends Omit<HTMLAttributes<HTMLDivElement>,
   views?: EventCalendarView[];
   /**
    * Full: the title can be clicked to open a calendar and jump to any date, and the view switch shows.
-   * Simple: a plain title with the arrows and Today. Figma: Header.
+   * Simple: a plain title with the arrows. Figma: Header.
    */
   header?: 'full' | 'simple';
   /** Years people can jump to from the title. Defaults to ten years either side of today. */
@@ -316,9 +315,6 @@ export function EventCalendar({
               <Icon name="CaretRight" />
             </CompactButton>
           </span>
-          <Button variant="secondary" size="sm" onClick={() => choose(today)}>
-            Today
-          </Button>
         </div>
         {header === 'full' && views.length > 1 && (
           <div className={styles.controls}>
