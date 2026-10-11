@@ -4,7 +4,7 @@ import { Button } from '@halo-ds/react';
 figma.connect(Button, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=9697-2459', {
   props: {
     label: figma.string('Label'),
-    variant: figma.enum('Type', { Primary: 'primary', Secondary: 'secondary', Ghost: 'ghost', Destructive: 'destructive' }),
+    variant: figma.enum('Type', { Primary: 'primary', Secondary: 'secondary', Ghost: 'ghost', Destructive: 'destructive', Premium: 'premium' }),
     size: figma.enum('Size', { 'X small': 'xs', Small: 'sm', Medium: 'md', Large: 'lg' }),
     loading: figma.enum('State', { Loading: true }),
     disabled: figma.enum('State', { Disabled: true }),
@@ -17,7 +17,7 @@ figma.connect(Button, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?
 
 figma.connect(Button, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=9697-2459', {
   props: {
-    variant: figma.enum('Type', { Primary: 'primary', Secondary: 'secondary', Ghost: 'ghost', Destructive: 'destructive' }),
+    variant: figma.enum('Type', { Primary: 'primary', Secondary: 'secondary', Ghost: 'ghost', Destructive: 'destructive', Premium: 'premium' }),
     size: figma.enum('Size', { 'X small': 'xs', Small: 'sm', Medium: 'md', Large: 'lg' }),
     icon: figma.instance('Change L icon'),
   },

@@ -107,6 +107,16 @@
   --outline: var(--halo-border-secondary);
 }
 
+/* For upgrades and paid features only: at most one per screen, never next to a Primary */
+.premium {
+  --premium: linear-gradient(90deg, var(--halo-button-premium-start), var(--halo-button-premium-middle), var(--halo-button-premium-end));
+  --bg: var(--premium);
+  /* Hover and Pressed lighten the gradient with a thin white wash */
+  --bg-hover: linear-gradient(rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.14)), var(--premium);
+  --fg: var(--halo-text-on-brand);
+  --icon: var(--halo-icon-on-brand);
+}
+
 .ghost {
   --bg-hover: var(--halo-button-secondary-hover);
 }

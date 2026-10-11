@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ArrowRight, CaretLeft, CaretRight, DownloadSimple, Gear, Plus, Trash, X } from '@phosphor-icons/react';
+import { ArrowRight, CaretLeft, CaretRight, DownloadSimple, Gear, Plus, Sparkle, Trash, X } from '@phosphor-icons/react';
 import { Button } from './Button';
 import type { ButtonSize, ButtonVariant } from './Button';
 
@@ -14,10 +14,11 @@ const icons = {
   Download: <DownloadSimple />,
   Trash: <Trash />,
   Gear: <Gear />,
+  Sparkle: <Sparkle />,
   X: <X />,
 };
 
-const variants: ButtonVariant[] = ['primary', 'secondary', 'ghost', 'destructive'];
+const variants: ButtonVariant[] = ['primary', 'secondary', 'ghost', 'destructive', 'premium'];
 const sizes: ButtonSize[] = ['xs', 'sm', 'md', 'lg'];
 const sizeLabel: Record<ButtonSize, string> = { xs: 'XS', sm: 'S', md: 'M', lg: 'L' };
 const title = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -69,7 +70,7 @@ type Story = StoryObj<typeof meta>;
 /** Try every option with the controls below. */
 export const Playground: Story = {};
 
-/** Four types, from most to least emphasis. Destructive is for actions that delete data. */
+/** Four everyday types, from most to least emphasis. Destructive is for actions that delete data. Premium is a special type, shown below. */
 export const Types: Story = {
   render: () => (
     <div style={row}>
@@ -77,6 +78,23 @@ export const Types: Story = {
       <Button variant="secondary">Cancel</Button>
       <Button variant="ghost" iconRight={<ArrowRight />}>Learn more</Button>
       <Button variant="destructive" iconLeft={<Trash />}>Delete</Button>
+    </div>
+  ),
+};
+
+/**
+ * A gradient button for upgrades and paid features, like upgrading a plan or starting a trial.
+ * Use at most one per screen and never next to a Primary button, so it keeps its pull.
+ * Everyday actions such as saving or sending stay Primary. The gradient comes from the
+ * `--halo-button-premium-start`, `-middle` and `-end` tokens.
+ */
+export const Premium: Story = {
+  render: () => (
+    <div style={row}>
+      <Button variant="premium" size="lg" iconLeft={<Sparkle weight="fill" />}>Upgrade to Pro</Button>
+      <Button variant="premium" iconLeft={<Sparkle weight="fill" />}>Start free trial</Button>
+      <Button variant="premium" size="sm">Upgrade</Button>
+      <Button variant="premium" size="sm" iconOnly aria-label="Upgrade"><Sparkle weight="fill" /></Button>
     </div>
   ),
 };

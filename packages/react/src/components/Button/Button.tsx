@@ -5,14 +5,14 @@ import { parts } from '../../internal/parts';
 import type { PartsProps } from '../../internal/parts';
 import styles from './Button.module.css';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'premium';
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
 /** Parts you can style with `classNames` and `styles`. */
 export type ButtonPart = 'root' | 'spinner' | 'icon' | 'label';
 
 interface ButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElement>, PartsProps<ButtonPart> {
-  /** Emphasis of the button. Figma: Type. */
+  /** Emphasis of the button. `premium` is a gradient for upgrades and paid features: one per screen at most. Figma: Type. */
   variant?: ButtonVariant;
   /** Height, padding, label and icon size. Figma: Size. */
   size?: ButtonSize;
@@ -51,7 +51,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   ref,
 ) {
   const part = parts<ButtonPart>('button', { classNames, styles: partStyles });
-  const spinnerColor = variant === 'primary' || variant === 'destructive' ? 'onBrand' : 'neutral';
+  const spinnerColor = variant === 'primary' || variant === 'destructive' || variant === 'premium' ? 'onBrand' : 'neutral';
 
   return (
     <button

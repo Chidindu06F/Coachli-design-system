@@ -6,6 +6,14 @@ New work collects under **Unreleased** and goes live in Storybook straight away.
 
 ## Unreleased
 
+### Changes
+
+- **Premium button**: `variant="premium"` is a violet, purple and rose gradient for upgrades and paid features, like Upgrade to Pro or Start free trial. Use at most one per screen and never next to a Primary button. It comes in every size, with icons, icon-only and loading. In Figma it's Type=Premium.
+
+### Tokens
+
+- `button/premium-start`, `button/premium-middle` and `button/premium-end` set the Premium gradient (`--halo-button-premium-*`).
+
 ## 0.2.0
 
 **Breaking:** the date range picker's `placeholder` prop is now `startPlaceholder` and `endPlaceholder`. Everything else is new or backwards compatible.
