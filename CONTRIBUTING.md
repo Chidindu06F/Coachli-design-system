@@ -58,7 +58,7 @@ One-time setup:
 
 1. Create an npm account at [npmjs.com](https://www.npmjs.com) and turn on two-factor authentication.
 2. Create a free organisation named `halo-ds` (Add Organization in your npm profile). The `@halo-ds/` names only work once you own it.
-3. Sign in from the terminal: `npm login`.
+3. Sign in from the terminal: `npm login`. Run it from your home folder, not inside this repository: the repository asks for Node 24, so `npm` commands run inside it stop with `EBADDEVENGINES` on older Node versions (pnpm downloads Node 24 for you, so `pnpm` commands are fine). The sign-in is saved for your whole computer. Check it worked with `npm whoami`.
 
 Releases are batched. Pushing to `main` only updates Storybook; nothing goes to npm until someone runs `pnpm release`. Add each change to the **Unreleased** section of [CHANGELOG.md](CHANGELOG.md) as you make it, and release when there is a worthwhile batch, such as a few new components, a breaking change, or a fix people are waiting for.
 
