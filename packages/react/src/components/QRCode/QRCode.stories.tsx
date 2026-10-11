@@ -47,7 +47,7 @@ export const WithLogo: Story = {
   },
 };
 
-/** While a sign-in code is being made, and after it runs out. */
+/** Loading while a code is made, Expired once it runs out, and Scanned when a phone has read it and people need to finish there. */
 export const States: Story = {
   render: function Render(args) {
     const [status, setStatus] = useState<'loading' | 'expired'>('expired');
@@ -60,6 +60,7 @@ export const States: Story = {
       <div style={{ display: 'flex', gap: 24 }}>
         <QRCode {...args} status="loading" />
         <QRCode {...args} status={status} onRefresh={() => setStatus('loading')} />
+        <QRCode {...args} status="scanned" />
       </div>
     );
   },
@@ -74,6 +75,16 @@ export const SignInOnPhone: Story = {
         <Text size="lg" weight="semibold">Sign in on your phone</Text>
         <Text color="secondary">Open the camera and point it at the code. Or go to example.com/device and enter WDJB-MJHT.</Text>
       </div>
+    </div>
+  ),
+};
+
+/** Brand colours. Keep the squares dark and the background light, with strong contrast, so every phone can read it. */
+export const CustomColors: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', gap: 24 }}>
+      <QRCode {...args} color="#3B0764" bgColor="#FAF5FF" />
+      <QRCode {...args} color="#14532D" bgColor="#F0FDF4" />
     </div>
   ),
 };

@@ -47,6 +47,15 @@ export const WithField: Story = {
 };
 
 /** Only the basic formatting tools. */
+/** Small, for phones: tighter padding, and the toolbar scrolls sideways in one row. */
+export const Small: Story = {
+  render: () => (
+    <div style={{ width: 343 }}>
+      <RichTextEditorField label="Notes" size="sm" defaultValue={sample} maxLength={2000} />
+    </div>
+  ),
+};
+
 export const Minimal: Story = { args: { defaultValue: '', tools: { textStyle: false, blocks: false, insert: false }, minHeight: 96 } };
 
 /** Error and disabled. */

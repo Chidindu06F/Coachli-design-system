@@ -29,6 +29,8 @@ export interface RichTextEditorProps {
   placeholder?: string;
   invalid?: boolean;
   disabled?: boolean;
+  /** Small for phones and narrow panels: tighter padding, and the toolbar scrolls sideways in one row. Text and buttons keep their size so they stay easy to read and tap. Figma: Size. */
+  size?: 'sm' | 'md';
   /** Toolbar groups to show. Figma: Text style, Format, Blocks, Insert, History. */
   tools?: Partial<Record<'textStyle' | 'format' | 'blocks' | 'insert' | 'history', boolean>>;
   /** Minimum height of the writing area in px. */
@@ -67,7 +69,7 @@ const TEXT_STYLES = [
  * editing, use a dedicated editor library styled with Halo tokens.
  */
 export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorProps>(function RichTextEditor(
-  { defaultValue = '', onChange, placeholder = 'Start writing…', invalid, disabled, tools = {}, minHeight = 160, id, className, ...aria },
+  { defaultValue = '', onChange, placeholder = 'Start writing…', invalid, disabled, size = 'md', tools = {}, minHeight = size === 'sm' ? 120 : 160, id, className, ...aria },
   ref,
 ) {
   const area = useRef<HTMLDivElement | null>(null);
@@ -157,7 +159,7 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
   const divider = (key: string) => <span key={key} className={styles.divider} aria-hidden="true" />;
 
   return (
-    <div className={cx(styles.editor, invalid || aria['aria-invalid'] ? styles.invalid : undefined, disabled && styles.disabled, className)}>
+    <div className={cx(styles.editor, size === 'sm' && styles.sm, invalid || aria['aria-invalid'] ? styles.invalid : undefined, disabled && styles.disabled, className)}>
       <div role="toolbar" aria-label="Formatting" aria-controls={id} className={styles.toolbar}>
         {show.textStyle && (
           <>

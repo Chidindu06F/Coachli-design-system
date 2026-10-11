@@ -1,6 +1,7 @@
 import { forwardRef, useMemo } from 'react';
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
+import { Icon } from '../../internal/Icon';
 import { Button } from '../Button';
 import { Spinner } from '../Spinner';
 import { encodeQR } from './qr';
@@ -8,6 +9,15 @@ import type { QRErrorLevel } from './qr';
 import styles from './QRCode.module.css';
 
 export type { QRErrorLevel };
+
+export interface QRCodeLabels {
+  expired: string;
+  refresh: string;
+  scanned: string;
+  scannedHint: string;
+}
+
+const LABELS: QRCodeLabels = { expired: 'Code expired', refresh: 'Refresh', scanned: 'Scanned', scannedHint: 'Confirm on your phone' };
 
 export interface QRCodeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** The text or link to encode. Up to about 2,900 characters at level L. */
@@ -23,20 +33,34 @@ export interface QRCodeProps extends Omit<HTMLAttributes<HTMLDivElement>, 'child
   margin?: number;
   /** A small logo or icon in the middle, like an app icon. Keep it under a fifth of the width. Figma: Logo. */
   logo?: ReactNode;
-  /** Covers the code while it is being made, or when it has run out (for sign-in codes that expire). Figma: State. */
-  status?: 'active' | 'loading' | 'expired';
+  /**
+   * Covers the code while it is being made, when it has run out (for sign-in codes that expire),
+   * or once a phone has scanned it and people need to finish on their phone. Figma: State.
+   */
+  status?: 'active' | 'loading' | 'expired' | 'scanned';
   /** Shows a Refresh button on an expired code. */
   onRefresh?: () => void;
+  /**
+   * Colour of the dark squares. Any CSS colour. Keep it dark and the background light,
+   * with strong contrast between them, or some phones will not read the code.
+   */
+  color?: string;
+  /** Colour behind the code, including the light border. Any CSS colour. */
+  bgColor?: string;
+  /** Text on the expired and scanned covers, for other languages. */
+  labels?: Partial<QRCodeLabels>;
   /** What the code is for, read by screen readers, like "Scan to sign in on your phone". */
   label: string;
 }
 
 /** A scannable QR code drawn as SVG, with no dependencies. It always stays dark on light, in dark mode too, so every phone can read it. Figma: QR code. */
 export const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(function QRCode(
-  { value, size = 160, level, margin = 4, logo, status = 'active', onRefresh, label, className, style, ...rest },
+  { value, size = 160, level, margin = 4, logo, status = 'active', onRefresh, color, bgColor, labels, label, className, style, ...rest },
   ref,
 ) {
   const ecl = level ?? (logo ? 'H' : 'M');
+  const text = { ...LABELS, ...labels };
+  const colours = { ...(color && { '--qr-dark': color }), ...(bgColor && { '--qr-light': bgColor }) } as CSSProperties;
   const path = useMemo(() => {
     const modules = encodeQR(value, ecl);
     let d = '';
@@ -57,9 +81,9 @@ export const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(function QRCode(
     <div
       ref={ref}
       className={cx(styles.qr, status !== 'active' && styles.covered, className)}
-      style={{ width: size, height: size, ...style }}
+      style={{ width: size, height: size, ...colours, ...style }}
       role="img"
-      aria-label={status === 'expired' ? `${label}. This code has expired.` : label}
+      aria-label={status === 'expired' ? `${label}. ${text.expired}.` : status === 'scanned' ? `${label}. ${text.scanned}. ${text.scannedHint}.` : label}
       aria-busy={status === 'loading' || undefined}
       {...rest}
     >
@@ -79,12 +103,19 @@ export const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(function QRCode(
       )}
       {status === 'expired' && (
         <span className={styles.overlay}>
-          <span className={styles.message}>Code expired</span>
+          <span className={styles.message}>{text.expired}</span>
           {onRefresh && (
             <Button size={size < 140 ? 'xs' : 'sm'} variant="secondary" onClick={onRefresh}>
-              Refresh
+              {text.refresh}
             </Button>
           )}
+        </span>
+      )}
+      {status === 'scanned' && (
+        <span className={cx(styles.overlay, styles.scanned)} aria-live="polite">
+          <Icon name="CheckCircle" className={styles.check} />
+          <span className={styles.message}>{text.scanned}</span>
+          {size >= 140 && <span className={styles.hint}>{text.scannedHint}</span>}
         </span>
       )}
     </div>

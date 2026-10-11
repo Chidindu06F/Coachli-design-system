@@ -8,13 +8,13 @@
   border: 1px solid var(--halo-border-secondary);
   border-radius: var(--halo-radius-6);
   /* Scanners read dark on light, so the code keeps these colours in dark mode. */
-  background: var(--halo-color-neutrals-0);
+  background: var(--qr-light, var(--halo-color-neutrals-0));
   box-sizing: content-box;
 }
 
 .code { display: block; }
-.light { fill: var(--halo-color-neutrals-0); }
-.dark { fill: var(--halo-color-black-900); }
+.light { fill: var(--qr-light, var(--halo-color-neutrals-0)); }
+.dark { fill: var(--qr-dark, var(--halo-color-black-900)); }
 
 .logo {
   position: absolute;
@@ -26,7 +26,7 @@
   overflow: hidden;
   padding: 4px;
   border-radius: var(--halo-radius-4);
-  background: var(--halo-color-neutrals-0);
+  background: var(--qr-light, var(--halo-color-neutrals-0));
   transform: translate(-50%, -50%);
   box-sizing: border-box;
 }
@@ -53,4 +53,13 @@
   font-size: var(--halo-font-size-sm);
   font-weight: var(--halo-font-weight-semibold);
   line-height: var(--halo-line-height-sm);
+}
+
+.scanned { gap: var(--halo-spacing-2); }
+.check { width: 32px; height: 32px; color: var(--halo-icon-positive); }
+.hint {
+  color: var(--halo-color-neutrals-900);
+  font-family: var(--halo-font-family-body);
+  font-size: var(--halo-font-size-xs);
+  line-height: var(--halo-line-height-xs);
 }

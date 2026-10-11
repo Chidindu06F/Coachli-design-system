@@ -78,6 +78,25 @@
 .content a { color: var(--halo-text-brand); }
 .content img { max-width: 100%; height: auto; border-radius: var(--halo-radius-4); }
 
+/* Small: for phones and narrow panels. The toolbar stays one row and scrolls sideways. */
+.sm { border-radius: var(--halo-radius-6); }
+.sm .toolbar {
+  flex-wrap: nowrap;
+  gap: var(--halo-spacing-2);
+  overflow-x: auto;
+  padding: var(--halo-spacing-2) var(--halo-spacing-3);
+  scrollbar-width: none;
+}
+.sm .toolbar::-webkit-scrollbar { display: none; }
+.sm .toolbar > * { flex-shrink: 0; }
+.sm .group { gap: 0; }
+.sm .divider { height: 14px; }
+.sm .content { padding: var(--halo-spacing-6); }
+.sm .placeholder { inset: var(--halo-spacing-6) var(--halo-spacing-6) auto; }
+.sm .status { top: calc(var(--halo-spacing-6) + 2px); right: var(--halo-spacing-6); }
+.sm .contentWrap:has(.status) .content { padding-right: calc(var(--halo-spacing-6) * 2 + 20px); }
+.sm .content h2 { font-size: var(--halo-font-size-lg); line-height: var(--halo-line-height-lg); }
+
 @media (prefers-reduced-motion: reduce) {
   .editor { transition: none; }
 }
