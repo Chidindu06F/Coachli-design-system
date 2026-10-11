@@ -27,6 +27,10 @@ export interface CalendarEvent {
   allDay?: boolean;
   /** A preset colour like "blue", or any CSS colour. Defaults to neutral. Uses the Tag colours. */
   color?: TagColor | (string & {});
+  /** A small Avatar or image before the title, like the patient or the person you are meeting. Figma: Avatar. */
+  avatar?: ReactNode;
+  /** A second line under the title in the day and week views, like the reason for an appointment. Shown instead of the time. */
+  detail?: ReactNode;
 }
 
 export type EventCalendarView = 'day' | 'week' | 'month' | 'year';
@@ -259,10 +263,13 @@ export function EventCalendar({
         onClick={() => onEventClick?.(e)}
       >
         {children ?? (
-          <span className={styles.eventTitle}>
-            {isTimed(e) && <span className={styles.eventTime}>{time(e.start)} </span>}
-            {e.title}
-          </span>
+          <>
+            {e.avatar && <span className={styles.eventAvatar} aria-hidden="true">{e.avatar}</span>}
+            <span className={styles.eventTitle}>
+              {isTimed(e) && <span className={styles.eventTime}>{time(e.start)} </span>}
+              {e.title}
+            </span>
+          </>
         )}
       </button>
     );
@@ -582,13 +589,20 @@ function TimeGrid({ days, events, today, locale, hourHeight, startHour, maxEvent
                     styles.block,
                     { top, height, left: `calc(${(col / cols) * 100}% + 2px)`, width: `calc(${100 / cols}% - 4px)` },
                     <>
-                      <span className={styles.eventTitle}>{e.title}</span>
-                      {height >= 36 && (
-                        <span className={styles.blockTime}>
-                          {time(e.start)}
-                          {e.end ? ` – ${time(e.end)}` : ''}
-                        </span>
-                      )}
+                      {e.avatar && <span className={styles.eventAvatar} aria-hidden="true">{e.avatar}</span>}
+                      <span className={styles.blockText}>
+                        <span className={styles.eventTitle}>{e.title}</span>
+                        {height >= 36 && (
+                          <span className={styles.blockTime}>
+                            {e.detail ?? (
+                              <>
+                                {time(e.start)}
+                                {e.end ? ` – ${time(e.end)}` : ''}
+                              </>
+                            )}
+                          </span>
+                        )}
+                      </span>
                     </>,
                   );
                 })}

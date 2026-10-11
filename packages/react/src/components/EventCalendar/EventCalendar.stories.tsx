@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Avatar } from '../Avatar';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EventCalendar } from './EventCalendar';
 import type { CalendarEvent } from './EventCalendar';
@@ -63,6 +64,19 @@ export const Day: Story = {
         <span style={{ fontFamily: 'var(--halo-font-family-body)', fontSize: 14 }}>{slot ? `Add an event at ${slot.toLocaleString()}` : 'Click an empty slot.'}</span>
       </div>
     );
+  },
+};
+
+/** Appointments: an Avatar for each person and the reason under their name, in a clinic's week. */
+export const Appointments: Story = {
+  args: {
+    defaultView: 'week',
+    events: [
+      { id: 'a1', title: 'Sade', detail: 'Check-up', start: at(td, 10), end: at(td, 11), avatar: <Avatar size="xs" name="Sade Bello" /> },
+      { id: 'a2', title: 'Halima', detail: 'Antenatal', start: at(td, 11), end: at(td, 12), color: 'blue', avatar: <Avatar size="xs" name="Halima Yusuf" /> },
+      { id: 'a3', title: 'Kemi', detail: 'Vaccination', start: at(td - 1, 12), end: at(td - 1, 13), avatar: <Avatar size="xs" name="Kemi Ade" /> },
+      { id: 'a4', title: 'Obinna', detail: 'Back pain', start: at(td - 2, 9), end: at(td - 2, 10), avatar: <Avatar size="xs" name="Obinna Eze" /> },
+    ],
   },
 };
 
