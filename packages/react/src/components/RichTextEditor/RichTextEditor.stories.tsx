@@ -54,7 +54,6 @@ export const States: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 16 }}>
       <RichTextEditor aria-label="Notes" defaultValue="<p>Too short.</p>" invalid minHeight={64} />
-      <RichTextEditorField label="Notes" defaultValue="<p>Ready to share with the team.</p>" valid minHeight={64} />
       <RichTextEditor aria-label="Notes" defaultValue="<p>Read only for now.</p>" disabled minHeight={64} />
     </div>
   ),

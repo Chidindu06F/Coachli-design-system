@@ -18,8 +18,6 @@ interface PickerBase {
   placeholder?: string;
   size?: 'sm' | 'md' | 'lg';
   invalid?: boolean;
-  /** A green check at the end once the value checks out. Figma: State=Success. */
-  valid?: boolean;
   disabled?: boolean;
   min?: Date;
   max?: Date;
@@ -69,7 +67,6 @@ const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(function Trigger(
     placeholder,
     size = 'md',
     invalid,
-    valid,
     disabled,
     className,
     onToggle,
@@ -110,7 +107,7 @@ const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(function Trigger(
       ) : (
         <span className={cx(selectStyles.value, !text && selectStyles.placeholder)}>{text ?? placeholder}</span>
       )}
-      <StatusIcon invalid={invalid || !!aria['aria-invalid']} valid={valid} disabled={disabled} />
+      <StatusIcon invalid={invalid || !!aria['aria-invalid']} disabled={disabled} />
     </button>
   );
 });
@@ -241,12 +238,12 @@ type FieldBits = Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'inf
 export type DatePickerFieldProps = Omit<DatePickerProps, 'aria-describedby' | 'aria-invalid'> & FieldBits;
 /** A DatePicker with a label and hint. */
 export const DatePickerField = forwardRef<HTMLButtonElement, DatePickerFieldProps>(function DatePickerField(
-  { label, hint, error, optional, info, required, id, fieldClassName, valid, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
   ref,
 ) {
   return (
     <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
-      {(c) => <DatePicker ref={ref} {...rest} {...c} valid={valid} />}
+      {(c) => <DatePicker ref={ref} {...rest} {...c} />}
     </Field>
   );
 });
@@ -254,12 +251,12 @@ export const DatePickerField = forwardRef<HTMLButtonElement, DatePickerFieldProp
 export type DateRangePickerFieldProps = Omit<DateRangePickerProps, 'aria-describedby' | 'aria-invalid'> & FieldBits;
 /** A DateRangePicker with a label and hint. */
 export const DateRangePickerField = forwardRef<HTMLButtonElement, DateRangePickerFieldProps>(function DateRangePickerField(
-  { label, hint, error, optional, info, required, id, fieldClassName, valid, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
   ref,
 ) {
   return (
     <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
-      {(c) => <DateRangePicker ref={ref} {...rest} {...c} valid={valid} />}
+      {(c) => <DateRangePicker ref={ref} {...rest} {...c} />}
     </Field>
   );
 });

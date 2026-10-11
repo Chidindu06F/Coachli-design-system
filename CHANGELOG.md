@@ -17,7 +17,7 @@ New work collects under **Unreleased** and goes live in Storybook straight away.
 
 - **Button**: new `loading` prop shows a Spinner and ignores clicks while an action runs.
 - **Select**: new `icon` prop for an icon at the start of the box.
-- **Field states**: every text, select, combobox, date, time, colour, textarea and rich text field now shows a status icon inside the box. `invalid` (or `error` on a field) adds a red warning icon next to the red border and the message. New `valid` prop shows a green check, with no green border and no message.
+- **Field states**: every text, select, combobox, date, time, colour, textarea and rich text field shows a red warning icon inside the box when it has an error, next to the red border and the message. **Input** also takes a new `valid` prop that shows a green check, with no green border and no message.
 - **Date range picker**: the box now reads "Start date – End date". **Breaking:** `placeholder` is replaced by `startPlaceholder` and `endPlaceholder`.
 
 ### Tokens

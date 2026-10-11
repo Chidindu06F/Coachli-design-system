@@ -277,8 +277,6 @@ export interface ColorFieldProps extends Omit<ColorPickerProps, 'id'> {
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   invalid?: boolean;
-  /** A green check at the end once the value checks out. Figma: State=Success. */
-  valid?: boolean;
   id?: string;
   'aria-label'?: string;
   'aria-describedby'?: string;
@@ -287,7 +285,7 @@ export interface ColorFieldProps extends Omit<ColorPickerProps, 'id'> {
 
 /** A box showing a colour and its hex. The swatch opens a ColorPicker. Figma: Color field. */
 export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function ColorInput(
-  { value, defaultValue = '#CC1DD0', onValueChange, size = 'md', disabled, invalid, valid, id, showOpacity, showEyedropper, swatches, defaultFormat, className, ...aria },
+  { value, defaultValue = '#CC1DD0', onValueChange, size = 'md', disabled, invalid, id, showOpacity, showEyedropper, swatches, defaultFormat, className, ...aria },
   ref,
 ) {
   const [hex, setHex] = useControllable(value, defaultValue, onValueChange);
@@ -334,7 +332,7 @@ export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function
           }}
           onBlur={() => setText(hex)}
         />
-        <StatusIcon invalid={invalid || !!aria['aria-invalid']} valid={valid} disabled={disabled} />
+        <StatusIcon invalid={invalid || !!aria['aria-invalid']} disabled={disabled} />
       </div>
       {open && (
         <Portal>
@@ -362,12 +360,12 @@ export type ColorFieldWithLabelProps = Omit<ColorFieldProps, 'aria-describedby' 
 
 /** A ColorInput with a label and hint. */
 export const ColorField = forwardRef<HTMLInputElement, ColorFieldWithLabelProps>(function ColorField(
-  { label, hint, error, optional, info, required, id, fieldClassName, valid, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
   ref,
 ) {
   return (
     <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
-      {(c) => <ColorInput ref={ref} {...rest} {...c} valid={valid} />}
+      {(c) => <ColorInput ref={ref} {...rest} {...c} />}
     </Field>
   );
 });

@@ -30,8 +30,6 @@ export interface SelectProps {
   /** 32, 40 or 48px. Figma: Size. */
   size?: 'sm' | 'md' | 'lg';
   invalid?: boolean;
-  /** A green check at the end once the value checks out. Figma: State=Success. */
-  valid?: boolean;
   disabled?: boolean;
   /** Form field name. A hidden input carries the value. */
   name?: string;
@@ -45,7 +43,7 @@ export interface SelectProps {
 
 /** Picks one option from a known list. Typing jumps to a match. Figma: Select. */
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select(
-  { options, value, defaultValue, onValueChange, placeholder = 'Select an option', icon, size = 'md', invalid, valid, disabled, name, id, className, required, ...aria },
+  { options, value, defaultValue, onValueChange, placeholder = 'Select an option', icon, size = 'md', invalid, disabled, name, id, className, required, ...aria },
   ref,
 ) {
   const listId = useId();
@@ -130,7 +128,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
       >
         {(selected?.icon ?? icon) && <span className={inputStyles.icon} aria-hidden="true">{selected?.icon ?? icon}</span>}
         <span className={cx(styles.value, !selected && styles.placeholder)}>{selected?.label ?? placeholder}</span>
-        <StatusIcon invalid={invalid || !!aria['aria-invalid']} valid={valid} disabled={disabled} />
+        <StatusIcon invalid={invalid || !!aria['aria-invalid']} disabled={disabled} />
         <Icon name="CaretDown" className={cx(styles.caret, open && styles.caretOpen)} />
       </button>
       {name && <input type="hidden" name={name} value={v ?? ''} />}
@@ -169,12 +167,12 @@ export interface SelectFieldProps extends Omit<SelectProps, 'aria-describedby' |
 
 /** A Select with a label and hint. Figma: Select field. */
 export const SelectField = forwardRef<HTMLButtonElement, SelectFieldProps>(function SelectField(
-  { label, hint, error, optional, info, required, id, fieldClassName, valid, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
   ref,
 ) {
   return (
     <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
-      {(c) => <Select ref={ref} {...rest} {...c} valid={valid} />}
+      {(c) => <Select ref={ref} {...rest} {...c} />}
     </Field>
   );
 });

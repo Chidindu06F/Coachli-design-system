@@ -57,12 +57,12 @@ export interface TimePickerFieldProps
 
 /** A Time picker with a label and hint. Figma: Time field. */
 export const TimePickerField = forwardRef<HTMLButtonElement, TimePickerFieldProps>(function TimePickerField(
-  { label, hint, error, optional, info, required, id, fieldClassName, valid, ...rest },
+  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
   ref,
 ) {
   return (
     <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
-      {(c) => <TimePicker ref={ref} {...rest} {...c} valid={valid} />}
+      {(c) => <TimePicker ref={ref} {...rest} {...c} />}
     </Field>
   );
 });

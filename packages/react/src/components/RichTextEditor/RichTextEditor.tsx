@@ -28,8 +28,6 @@ export interface RichTextEditorProps {
   onChange?: (html: string) => void;
   placeholder?: string;
   invalid?: boolean;
-  /** A green check at the end once the value checks out. Figma: State=Success. */
-  valid?: boolean;
   disabled?: boolean;
   /** Toolbar groups to show. Figma: Text style, Format, Blocks, Insert, History. */
   tools?: Partial<Record<'textStyle' | 'format' | 'blocks' | 'insert' | 'history', boolean>>;
@@ -69,7 +67,7 @@ const TEXT_STYLES = [
  * editing, use a dedicated editor library styled with Halo tokens.
  */
 export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorProps>(function RichTextEditor(
-  { defaultValue = '', onChange, placeholder = 'Start writing…', invalid, valid, disabled, tools = {}, minHeight = 160, id, className, ...aria },
+  { defaultValue = '', onChange, placeholder = 'Start writing…', invalid, disabled, tools = {}, minHeight = 160, id, className, ...aria },
   ref,
 ) {
   const area = useRef<HTMLDivElement | null>(null);
@@ -195,7 +193,7 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
       </div>
       <div className={styles.contentWrap}>
         {empty && <div className={styles.placeholder} aria-hidden="true">{placeholder}</div>}
-        <StatusIcon className={styles.status} invalid={invalid || !!aria['aria-invalid']} valid={valid} disabled={disabled} />
+        <StatusIcon className={styles.status} invalid={invalid || !!aria['aria-invalid']} disabled={disabled} />
         <div
           ref={area}
           id={id}
@@ -276,7 +274,7 @@ export interface RichTextEditorFieldProps extends Omit<RichTextEditorProps, 'ari
 
 /** A RichTextEditor with a label, hint and optional character count. */
 export const RichTextEditorField = forwardRef<RichTextEditorHandle, RichTextEditorFieldProps>(function RichTextEditorField(
-  { label, hint, error, optional, info, required, id, maxLength, fieldClassName, onChange, defaultValue, valid, ...rest },
+  { label, hint, error, optional, info, required, id, maxLength, fieldClassName, onChange, defaultValue, ...rest },
   ref,
 ) {
   const textOf = (html: string) => {
@@ -305,7 +303,6 @@ export const RichTextEditorField = forwardRef<RichTextEditorHandle, RichTextEdit
           ref={ref}
           {...rest}
           {...c}
-          valid={valid && !tooLong}
           defaultValue={defaultValue}
           onChange={(html) => {
             setLength(textOf(html).length);
