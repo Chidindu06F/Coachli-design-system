@@ -1,4 +1,5 @@
 import { forwardRef, useEffect, useId, useRef, useState } from 'react';
+import type { RefObject } from 'react';
 import { cx } from '../../internal/cx';
 import { mergeRefs, Portal, useDismiss, useFloating } from '../../internal/floating';
 import { Icon } from '../../internal/Icon';
@@ -9,6 +10,7 @@ import { Field } from '../Field';
 import type { FieldProps } from '../Field';
 import inputStyles from '../Input/Input.module.css';
 import selectStyles from '../Select/Select.module.css';
+import { Tag } from '../Tag';
 import { Calendar } from './Calendar';
 import type { CalendarPreset, DateRange } from './Calendar';
 import styles from './DatePicker.module.css';
@@ -237,6 +239,144 @@ export const DateRangePicker = forwardRef<HTMLButtonElement, DateRangePickerProp
   );
 });
 
+/* ---------- Several dates ---------- */
+
+export interface MultiDatePickerProps extends PickerBase {
+  value?: Date[];
+  defaultValue?: Date[];
+  onValueChange?: (dates: Date[]) => void;
+  /** The most days people can pick. */
+  maxCount?: number;
+  /** Select adds month and year menus to the calendar. Figma: Header. */
+  calendarHeader?: 'arrows' | 'select';
+  yearRange?: [number, number];
+}
+
+/**
+ * A box that opens a Calendar to pick several separate days, like days off or delivery days.
+ * Each picked day shows as a Tag in the box, with a button to remove it. Figma: Multiple date input.
+ */
+export const MultiDatePicker = forwardRef<HTMLButtonElement, MultiDatePickerProps>(function MultiDatePicker(
+  {
+    value,
+    defaultValue = [],
+    onValueChange,
+    placeholder = 'Pick dates',
+    locale,
+    format,
+    min,
+    max,
+    isDateDisabled,
+    weekStartsOn,
+    maxCount,
+    calendarHeader,
+    yearRange,
+    size = 'md',
+    invalid,
+    disabled,
+    className,
+    ...aria
+  },
+  ref,
+) {
+  const dialogId = useId();
+  const [dates, setDates] = useControllable<Date[]>(value, defaultValue, onValueChange);
+  const p = usePicker();
+  const button = useRef<HTMLButtonElement | null>(null);
+  const show = format ?? ((d: Date) => formatDate(d, locale, { day: 'numeric', month: 'short' }));
+  const full = (d: Date) => formatDate(d, locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const close = () => {
+    p.setOpen(false);
+    button.current?.focus();
+  };
+  const remove = (d: Date) => setDates(dates.filter((x) => x.getTime() !== d.getTime()));
+  const isInvalid = invalid || !!aria['aria-invalid'];
+  const count = dates.length === 1 ? '1 date' : `${dates.length} dates`;
+  return (
+    <>
+      <div
+        ref={p.anchor as unknown as RefObject<HTMLDivElement>}
+        className={cx(inputStyles.box, inputStyles[size], selectStyles.combobox, selectStyles.multiple, styles.multi, isInvalid && inputStyles.invalid, disabled && inputStyles.disabled, className)}
+        onClick={(e) => {
+          if (disabled || (e.target as HTMLElement).closest('button')) return;
+          p.setOpen(true);
+        }}
+      >
+        <Icon name="CalendarBlank" className={cx(inputStyles.icon, styles.multiIcon)} />
+        <div className={selectStyles.values}>
+          {dates.map((d) => (
+            <Tag key={d.getTime()} size={size === 'sm' ? 'sm' : 'md'} disabled={disabled} removeLabel={`Remove ${full(d)}`} onRemove={() => remove(d)}>
+              {show(d)}
+            </Tag>
+          ))}
+          <button
+            ref={mergeRefs(ref, button)}
+            type="button"
+            id={aria.id}
+            aria-haspopup="dialog"
+            aria-expanded={p.open}
+            aria-controls={p.open ? dialogId : undefined}
+            aria-label={aria['aria-label'] ? `${aria['aria-label']}, ${dates.length ? count : 'none picked'}` : undefined}
+            aria-describedby={aria['aria-describedby']}
+            aria-invalid={isInvalid || undefined}
+            aria-required={aria.required || undefined}
+            disabled={disabled}
+            className={cx(styles.multiButton, !dates.length && selectStyles.placeholder)}
+            onClick={() => p.setOpen(!p.open)}
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowDown' && !p.open) {
+                e.preventDefault();
+                p.setOpen(true);
+              } else if (e.key === 'Backspace' && dates.length) {
+                e.preventDefault();
+                remove(dates[dates.length - 1]!);
+              }
+            }}
+          >
+            {dates.length ? <span className={styles.srOnly}>{placeholder}</span> : placeholder}
+          </button>
+        </div>
+        <StatusIcon invalid={isInvalid} disabled={disabled} />
+      </div>
+      {p.open && (
+        <Portal>
+          <div ref={p.floating} id={dialogId} role="dialog" aria-label="Choose dates" className={styles.popover} style={p.style}>
+            <Calendar
+              mode="multiple"
+              value={dates}
+              onChange={setDates}
+              maxCount={maxCount}
+              min={min}
+              max={max}
+              isDateDisabled={isDateDisabled}
+              weekStartsOn={weekStartsOn}
+              locale={locale}
+              header={calendarHeader}
+              yearRange={yearRange}
+              footer={
+                <>
+                  <span className={styles.rangeText} aria-live="polite">
+                    {dates.length ? `${count} picked` : 'Pick one or more days'}
+                    {maxCount !== undefined && dates.length ? ` of ${maxCount}` : ''}
+                  </span>
+                  <div className={styles.footerActions}>
+                    <Button variant="ghost" size="sm" disabled={!dates.length} onClick={() => setDates([])}>
+                      Clear
+                    </Button>
+                    <Button size="sm" onClick={close}>
+                      Done
+                    </Button>
+                  </div>
+                </>
+              }
+            />
+          </div>
+        </Portal>
+      )}
+    </>
+  );
+});
+
 /* ---------- Fields ---------- */
 
 type FieldBits = Pick<FieldProps, 'label' | 'hint' | 'error' | 'optional' | 'info'> & { fieldClassName?: string };
@@ -263,6 +403,19 @@ export const DateRangePickerField = forwardRef<HTMLButtonElement, DateRangePicke
   return (
     <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
       {(c) => <DateRangePicker ref={ref} {...rest} {...c} />}
+    </Field>
+  );
+});
+
+export type MultiDatePickerFieldProps = Omit<MultiDatePickerProps, 'aria-describedby' | 'aria-invalid'> & FieldBits;
+/** A MultiDatePicker with a label and hint. Figma: Multiple date field. */
+export const MultiDatePickerField = forwardRef<HTMLButtonElement, MultiDatePickerFieldProps>(function MultiDatePickerField(
+  { label, hint, error, optional, info, required, id, fieldClassName, ...rest },
+  ref,
+) {
+  return (
+    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName}>
+      {(c) => <MultiDatePicker ref={ref} {...rest} {...c} />}
     </Field>
   );
 });

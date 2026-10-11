@@ -21,6 +21,7 @@ New work collects under **Unreleased** and goes live in Storybook straight away.
 - **Button**: new `loading` prop shows a Spinner and ignores clicks while an action runs.
 - **Select**: new `icon` prop for an icon at the start of the box.
 - **Calendar and DatePicker**: new month and year menus (`header="select"` on Calendar, `calendarHeader="select"` on DatePicker) to jump straight to a date years away.
+- **Several dates**: new `MultiDatePicker` and `MultiDatePickerField` pick separate days, like days off, and show each as a Tag in the box. Calendar has a matching `mode="multiple"`, with `maxCount` to set a limit.
 - **Popovers and menus**: a menu opened inside another panel, like a Select in a date picker, no longer closes the panel when you pick from it, and Escape closes only the top one.
 - **Rich text editor**: new `size="sm"` for phones and narrow panels: tighter padding and a toolbar that scrolls sideways in one row.
 - **Popover**: stays on screen when it opens to the left or right of something near the top or bottom edge.

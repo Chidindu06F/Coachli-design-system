@@ -113,6 +113,27 @@
 .rangeText { color: var(--halo-text-secondary); font-size: var(--halo-font-size-md); line-height: var(--halo-line-height-md); }
 .footerActions { display: flex; gap: var(--halo-spacing-2); }
 
+/* Several dates: tags in the box, then a button that opens the calendar. */
+.multi { cursor: pointer; }
+.multiIcon { flex-shrink: 0; align-self: flex-start; width: var(--icon); height: var(--icon); margin-top: calc((var(--height) - 10px - var(--icon)) / 2); }
+.multiButton {
+  flex: 1;
+  min-width: 48px;
+  height: calc(var(--height) - 10px);
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font-family: var(--halo-font-family-body);
+  font-size: var(--text-size);
+  line-height: var(--text-height);
+  text-align: left;
+  cursor: pointer;
+}
+.multi:focus-within { --line: var(--halo-surface-brand-contrast); }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
 @keyframes in { from { opacity: 0; transform: translateY(-2px); } }
 
 @media (max-width: 860px) {

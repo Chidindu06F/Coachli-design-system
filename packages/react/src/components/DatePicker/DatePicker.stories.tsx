@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Calendar } from './Calendar';
-import type { DateRange } from './Calendar';
-import { DatePickerField, DateRangePickerField } from './DatePicker';
+import { DatePickerField, DateRangePickerField, MultiDatePickerField } from './DatePicker';
 import { addDays, startOfDay } from './dates';
 
 const today = startOfDay(new Date());
@@ -10,14 +8,14 @@ const today = startOfDay(new Date());
 const meta = {
   title: 'Components/Date picker',
   component: DatePickerField,
-  subcomponents: { Calendar, DateRangePickerField },
+  subcomponents: { DateRangePickerField, MultiDatePickerField },
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
     docs: {
       description: {
         component:
-          'A box that opens a Calendar. In the grid, arrow keys move by day and week, Page Up and Page Down by month (with Shift, by year), and Home and End to the ends of the week. Use `min`, `max` or `isDateDisabled` to block days. The range picker shows two months and applies on Apply.',
+          'Boxes for picking dates in a form. Each opens a Calendar (see Calendar). Pick one day, a range from a start to an end day, or several separate days that show as tags. Use `min`, `max` or `isDateDisabled` to block days, and `calendarHeader="select"` for month and year menus.',
       },
     },
   },
@@ -35,18 +33,9 @@ export const Limits: Story = {
   args: { label: 'Delivery day', min: today, isDateDisabled: (d: Date) => d.getDay() === 0 || d.getDay() === 6, hint: 'Weekdays only' },
 };
 
-
 /** Month and year menus to jump straight to a date years away, like a date of birth. */
 export const MonthAndYearMenus: Story = {
   args: { label: 'Date of birth', calendarHeader: 'select', max: today, defaultValue: new Date(1994, 4, 12) },
-};
-
-/** The calendar on its own with month and year menus. */
-export const CalendarWithMenus: Story = {
-  render: function Render() {
-    const [d, setD] = useState<Date | null>(today);
-    return <Calendar value={d} onChange={setD} header="select" style={{ width: 320 }} />;
-  },
 };
 
 /** Two months, presets and Apply. */
@@ -66,15 +55,13 @@ export const Range: Story = {
   ),
 };
 
-/** The calendar on its own. */
-export const CalendarOnly: Story = {
+/** Several separate days, shown as tags. Each click in the calendar adds or removes a day; the ✕ on a tag removes it, and so does Backspace. */
+export const MultipleDates: Story = {
   render: function Render() {
-    const [date, setDate] = useState<Date | null>(addDays(today, 3));
-    const [range, setRange] = useState<DateRange | null>([addDays(today, 2), addDays(today, 9)]);
+    const [dates, setDates] = useState<Date[]>([addDays(today, 2), addDays(today, 5), addDays(today, 9)]);
     return (
-      <div style={{ display: 'grid', gap: 24, justifyItems: 'start' }}>
-        <Calendar value={date} onChange={setDate} />
-        <Calendar mode="range" months={1} value={range} onChange={setRange} />
+      <div style={{ maxWidth: 360 }}>
+        <MultiDatePickerField label="Days off" hint="Pick up to 5 days." maxCount={5} min={today} value={dates} onValueChange={setDates} />
       </div>
     );
   },

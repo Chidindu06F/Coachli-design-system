@@ -30,7 +30,7 @@ const events: CalendarEvent[] = [
 ];
 
 const meta = {
-  title: 'Components/Event calendar',
+  title: 'Components/Calendar/Event calendar',
   component: EventCalendar,
   tags: ['autodocs'],
   parameters: {

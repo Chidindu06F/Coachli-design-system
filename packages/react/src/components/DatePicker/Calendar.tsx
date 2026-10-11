@@ -56,7 +56,17 @@ export interface RangeCalendarProps extends CalendarBase {
   presets?: CalendarPreset[];
 }
 
-export type CalendarProps = SingleCalendarProps | RangeCalendarProps;
+export interface MultipleCalendarProps extends CalendarBase {
+  /** Pick any number of separate days. Each click adds or removes one. Figma: Type=Multiple. */
+  mode: 'multiple';
+  value: Date[];
+  onChange: (dates: Date[]) => void;
+  /** The most days people can pick. Other days stop responding once it is reached. */
+  maxCount?: number;
+  presets?: never;
+}
+
+export type CalendarProps = SingleCalendarProps | RangeCalendarProps | MultipleCalendarProps;
 
 /**
  * A month grid for picking a day or a range. Arrow keys move by day and week,
@@ -79,11 +89,13 @@ export function Calendar(props: CalendarProps) {
     value: _value,
     onChange: _onChange,
     presets: _presets,
+    maxCount: _maxCount,
     ...rest
-  } = props as CalendarBase & { mode?: unknown; value?: unknown; onChange?: unknown; presets?: unknown };
+  } = props as CalendarBase & { mode?: unknown; value?: unknown; onChange?: unknown; presets?: unknown; maxCount?: unknown };
 
   const range = props.mode === 'range';
-  const selectedStart = range ? props.value?.[0] : props.value;
+  const multiple = props.mode === 'multiple';
+  const selectedStart = props.mode === 'range' ? props.value?.[0] : props.mode === 'multiple' ? props.value[0] : props.value;
   const today = startOfDay(new Date());
   const [month, setMonth] = useState(() => startOfDay(defaultMonth ?? selectedStart ?? today));
   const [focus, setFocus] = useState(() => startOfDay(selectedStart ?? today));
@@ -93,7 +105,9 @@ export function Calendar(props: CalendarProps) {
   const grid = useRef<HTMLDivElement | null>(null);
   const moved = useRef(false);
 
-  const disabled = (d: Date) => (min && before(d, min)) || (max && before(max, d)) || !!isDateDisabled?.(d);
+  const picked = (d: Date) => props.mode === 'multiple' && props.value.some((v) => sameDay(v, d));
+  const full = props.mode === 'multiple' && props.maxCount !== undefined && props.value.length >= props.maxCount;
+  const disabled = (d: Date) => (min && before(d, min)) || (max && before(max, d)) || !!isDateDisabled?.(d) || (full && !picked(d));
 
   useEffect(() => {
     if (!moved.current) return;
@@ -112,7 +126,11 @@ export function Calendar(props: CalendarProps) {
   const choose = (d: Date) => {
     if (disabled(d)) return;
     setFocus(d);
-    if (!range) return props.onChange(d);
+    if (props.mode === 'multiple') {
+      const next = picked(d) ? props.value.filter((v) => !sameDay(v, d)) : [...props.value, d];
+      return props.onChange(next.sort((a, b) => a.getTime() - b.getTime()));
+    }
+    if (props.mode !== 'range') return props.onChange(d);
     if (!anchor) {
       setAnchor(d);
       return;
@@ -120,7 +138,7 @@ export function Calendar(props: CalendarProps) {
     const pair: DateRange = before(d, anchor) ? [d, anchor] : [anchor, d];
     setAnchor(null);
     setHovered(null);
-    props.onChange(pair);
+    (props as RangeCalendarProps).onChange(pair);
   };
 
   const onKey = (e: KeyboardEvent) => {
@@ -162,7 +180,7 @@ export function Calendar(props: CalendarProps) {
 
   const renderMonth = (m: Date) => (
     <div key={m.toISOString()} className={styles.month}>
-      <table role="grid" className={styles.grid} aria-label={formatDate(m, locale, { month: 'long', year: 'numeric' })}>
+      <table role="grid" aria-multiselectable={multiple || undefined} className={styles.grid} aria-label={formatDate(m, locale, { month: 'long', year: 'numeric' })}>
         <thead>
           <tr>
             {weekdays.map((w) => (
@@ -180,7 +198,7 @@ export function Calendar(props: CalendarProps) {
                 const isStart = painted ? sameDay(d, painted[0]) : false;
                 const isEnd = painted ? sameDay(d, painted[1]) : false;
                 const inRange = painted ? between(d, painted[0], painted[1]) : false;
-                const selected = range ? isStart || isEnd : sameDay(d, props.value);
+                const selected = range ? isStart || isEnd : multiple ? picked(d) : sameDay(d, props.value as Date | null);
                 return (
                   <td
                     key={d.toISOString()}
