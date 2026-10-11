@@ -1,4 +1,4 @@
-/* Values mirror the Calendar day and Calendar sets in Figma (Date picker page). */
+/* Values mirror Figma: the Calendar day and Calendar sets (Calendar page), and the Date, Date range and Multiple date inputs and fields (Date picker page). */
 
 .popover { z-index: 1000; animation: in 120ms ease-out; }
 
