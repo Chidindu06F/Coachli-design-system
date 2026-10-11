@@ -33,11 +33,11 @@ export const Single: Story = {
   },
 };
 
-/** Month and year menus to jump straight to any month. */
-export const WithMenus: Story = {
+/** The month name is a button: click it to pick a month, or click the year to pick a year. */
+export const MonthAndYearPicker: Story = {
   render: function Render() {
     const [d, setD] = useState<Date | null>(today);
-    return <Calendar value={d} onChange={setD} header="select" style={{ width: 320 }} />;
+    return <Calendar value={d} onChange={setD} header="picker" style={{ width: 320 }} />;
   },
 };
 

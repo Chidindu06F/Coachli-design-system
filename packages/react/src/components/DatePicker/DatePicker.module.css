@@ -20,9 +20,26 @@
 
 .header { display: flex; align-items: center; gap: var(--halo-spacing-4); }
 .titles { display: flex; flex: 1; justify-content: space-around; gap: var(--halo-spacing-9); }
-.selects { display: flex; flex: 1; gap: var(--halo-spacing-3); }
-.selects > :first-child { flex: 1.4; }
-.selects > * { flex: 1; min-width: 0; }
+.titleButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--halo-spacing-2);
+  padding: var(--halo-spacing-1) var(--halo-spacing-3);
+  border: 0;
+  border-radius: var(--halo-radius-4);
+  background: transparent;
+  color: var(--halo-text-primary);
+  font-family: inherit;
+  font-size: var(--halo-font-size-md);
+  font-weight: var(--halo-font-weight-semibold);
+  line-height: var(--halo-line-height-md);
+  cursor: pointer;
+}
+.titleButton:hover { background: var(--halo-button-secondary-hover); }
+.titleButton:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
+.titleCaret { width: 16px; height: 16px; transition: transform 120ms ease; }
+.titleCaretOpen { transform: rotate(180deg); }
+.picker { min-height: 280px; }
 .monthTitle {
   font-size: var(--halo-font-size-md);
   font-weight: var(--halo-font-weight-semibold);

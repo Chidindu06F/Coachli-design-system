@@ -3,7 +3,7 @@ import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
 import { CompactButton } from '../CompactButton';
-import { Select } from '../Select';
+import { MonthYearPanel } from '../../internal/MonthYearPanel';
 import styles from './DatePicker.module.css';
 import { addDays, addMonths, before, between, formatDate, monthGrid, sameDay, sameMonth, startOfDay } from './dates';
 
@@ -32,11 +32,12 @@ interface CalendarBase extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' |
   /** Something under the months, like Cancel and Apply buttons. */
   footer?: ReactNode;
   /**
-   * Arrows: the month name with back and forward arrows. Select: month and year menus too, to jump
-   * straight to any month, like a birthday years ago. Select needs one month on show. Figma: Header.
+   * Arrows: the month name with back and forward arrows. Picker: the month name is also a button
+   * that swaps the days for months and years, to jump straight to a date far away, like a birthday.
+   * Picker needs one month on show. Figma: Header.
    */
-  header?: 'arrows' | 'select';
-  /** Years in the year menu. Defaults to the min and max years, or 100 years back and 10 ahead. */
+  header?: 'arrows' | 'picker';
+  /** Years people can jump to with the picker. Defaults to the min and max years, or 100 years back and 10 ahead. */
   yearRange?: [number, number];
 }
 
@@ -102,6 +103,8 @@ export function Calendar(props: CalendarProps) {
   // While picking a range, the first click is held here until the second.
   const [anchor, setAnchor] = useState<Date | null>(null);
   const [hovered, setHovered] = useState<Date | null>(null);
+  // The month and year picker replaces the days while it is open.
+  const [picking, setPicking] = useState(false);
   const grid = useRef<HTMLDivElement | null>(null);
   const moved = useRef(false);
 
@@ -237,8 +240,6 @@ export function Calendar(props: CalendarProps) {
 
   const presets = range ? props.presets : undefined;
   const [fromYear, toYear] = yearRange ?? [min?.getFullYear() ?? today.getFullYear() - 100, max?.getFullYear() ?? today.getFullYear() + 10];
-  const years: number[] = [];
-  for (let y = Math.max(toYear, month.getFullYear()); y >= Math.min(fromYear, month.getFullYear()); y--) years.push(y);
   const rangeValue = range ? props.value : null;
 
   return (
@@ -267,41 +268,54 @@ export function Calendar(props: CalendarProps) {
           </div>
         )}
         <div className={styles.months}>
-          <div className={styles.header}>
-            <CompactButton variant="ghost" aria-label="Previous month" onClick={() => setMonth(addMonths(month, -1))}>
-              <Icon name="CaretLeft" />
-            </CompactButton>
-            {header === 'select' && months === 1 ? (
-              <div className={styles.selects}>
-                <Select
-                  aria-label="Month"
-                  size="sm"
-                  value={String(month.getMonth())}
-                  onValueChange={(v) => setMonth(new Date(month.getFullYear(), Number(v), 1))}
-                  options={Array.from({ length: 12 }, (_, i) => ({ value: String(i), label: formatDate(new Date(2024, i, 1), locale, { month: 'long' }) }))}
-                />
-                <Select
-                  aria-label="Year"
-                  size="sm"
-                  value={String(month.getFullYear())}
-                  onValueChange={(v) => setMonth(new Date(Number(v), month.getMonth(), 1))}
-                  options={years.map((y) => ({ value: String(y), label: String(y) }))}
-                />
-              </div>
-            ) : (
-              <div className={styles.titles} aria-live="polite">
-                {shown.map((m) => (
-                  <span key={m.toISOString()} className={styles.monthTitle}>{formatDate(m, locale, { month: 'long', year: 'numeric' })}</span>
-                ))}
-              </div>
-            )}
-            <CompactButton variant="ghost" aria-label="Next month" onClick={() => setMonth(addMonths(month, 1))}>
-              <Icon name="CaretRight" />
-            </CompactButton>
-          </div>
-          <div ref={grid} className={styles.monthRow} onKeyDown={onKey} onPointerLeave={() => setHovered(null)}>
-            {shown.map(renderMonth)}
-          </div>
+          {/* While the month and year picker is open, its own header replaces this one. */}
+          {!picking && (
+            <div className={styles.header}>
+              <CompactButton variant="ghost" aria-label="Previous month" onClick={() => setMonth(addMonths(month, -1))}>
+                <Icon name="CaretLeft" />
+              </CompactButton>
+              {header === 'picker' && months === 1 ? (
+                <div className={styles.titles}>
+                  <button type="button" className={styles.titleButton} aria-expanded={picking} aria-label={`${formatDate(month, locale, { month: 'long', year: 'numeric' })}, choose a month and year`} onClick={() => setPicking(!picking)}>
+                    {formatDate(month, locale, { month: 'long', year: 'numeric' })}
+                    <Icon name="CaretDown" className={cx(styles.titleCaret, picking && styles.titleCaretOpen)} />
+                  </button>
+                </div>
+              ) : (
+                <div className={styles.titles} aria-live="polite">
+                  {shown.map((m) => (
+                    <span key={m.toISOString()} className={styles.monthTitle}>{formatDate(m, locale, { month: 'long', year: 'numeric' })}</span>
+                  ))}
+                </div>
+              )}
+              <CompactButton variant="ghost" aria-label="Next month" onClick={() => setMonth(addMonths(month, 1))}>
+                <Icon name="CaretRight" />
+              </CompactButton>
+            </div>
+          )}
+          {picking ? (
+            <MonthYearPanel
+              onKeyDown={(e) => {
+                // Escape goes back to the days instead of closing a date picker around the calendar.
+                if (e.key !== 'Escape') return;
+                e.stopPropagation();
+                setPicking(false);
+              }}
+              className={styles.picker}
+              value={month}
+              fromYear={fromYear}
+              toYear={toYear}
+              locale={locale}
+              onSelect={(d) => {
+                setMonth(d);
+                setPicking(false);
+              }}
+            />
+          ) : (
+            <div ref={grid} className={styles.monthRow} onKeyDown={onKey} onPointerLeave={() => setHovered(null)}>
+              {shown.map(renderMonth)}
+            </div>
+          )}
         </div>
       </div>
       {footer && <div className={styles.footer}>{footer}</div>}

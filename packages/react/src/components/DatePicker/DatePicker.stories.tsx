@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Boxes for picking dates in a form. Each opens a Calendar (see Calendar). Pick one day, a range from a start to an end day, or several separate days that show as tags. Use `min`, `max` or `isDateDisabled` to block days, and `calendarHeader="select"` for month and year menus.',
+          'Boxes for picking dates in a form. Each opens a Calendar (see Calendar). Pick one day, a range from a start to an end day, or several separate days that show as tags. Use `min`, `max` or `isDateDisabled` to block days, and `calendarHeader="picker"` to jump to any month and year from the calendar title.',
       },
     },
   },
@@ -33,9 +33,9 @@ export const Limits: Story = {
   args: { label: 'Delivery day', min: today, isDateDisabled: (d: Date) => d.getDay() === 0 || d.getDay() === 6, hint: 'Weekdays only' },
 };
 
-/** Month and year menus to jump straight to a date years away, like a date of birth. */
-export const MonthAndYearMenus: Story = {
-  args: { label: 'Date of birth', calendarHeader: 'select', max: today, defaultValue: new Date(1994, 4, 12) },
+/** Click the month name in the calendar to jump straight to a month and year far away, like a date of birth. */
+export const JumpToMonthAndYear: Story = {
+  args: { label: 'Date of birth', calendarHeader: 'picker', max: today, defaultValue: new Date(1994, 4, 12) },
 };
 
 /** Two months, presets and Apply. */

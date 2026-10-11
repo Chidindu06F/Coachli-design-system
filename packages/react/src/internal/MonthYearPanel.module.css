@@ -1,0 +1,45 @@
+/* Values mirror the Month and year picker set in Figma (Calendar page). */
+
+.panel { display: flex; flex-direction: column; gap: var(--halo-spacing-4); min-width: 248px; }
+
+.head { display: flex; align-items: center; justify-content: space-between; gap: var(--halo-spacing-2); }
+.headButton,
+.headLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--halo-spacing-2);
+  padding: var(--halo-spacing-1) var(--halo-spacing-3);
+  border: 0;
+  border-radius: var(--halo-radius-4);
+  background: transparent;
+  color: var(--halo-text-primary);
+  font-family: var(--halo-font-family-body);
+  font-size: var(--halo-font-size-md);
+  font-weight: var(--halo-font-weight-semibold);
+  line-height: var(--halo-line-height-md);
+  font-variant-numeric: tabular-nums;
+}
+.headButton { cursor: pointer; }
+.headButton:hover { background: var(--halo-button-secondary-hover); }
+.headButton:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
+.caret { width: 16px; height: 16px; }
+
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--halo-spacing-2); }
+.cell {
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--halo-radius-10);
+  background: transparent;
+  color: var(--halo-text-primary);
+  font-family: var(--halo-font-family-body);
+  font-size: var(--halo-font-size-sm);
+  line-height: var(--halo-line-height-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.cell:hover:not(:disabled) { background: var(--halo-button-secondary-hover); }
+.cell:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
+.cell:disabled { color: var(--halo-text-disabled); cursor: not-allowed; }
+.selected,
+.selected:hover:not(:disabled) { background: var(--halo-surface-brand-contrast); color: var(--halo-text-on-brand); font-weight: var(--halo-font-weight-semibold); }

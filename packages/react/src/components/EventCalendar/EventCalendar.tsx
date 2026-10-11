@@ -2,13 +2,14 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
+import { Portal, useDismiss, useFloating } from '../../internal/floating';
+import { MonthYearPanel } from '../../internal/MonthYearPanel';
 import { useControllable } from '../../internal/useControllable';
 import { Button } from '../Button';
 import { CompactButton } from '../CompactButton';
 import { addDays, addMonths, before, formatDate, monthGrid, sameDay, sameMonth, startOfDay } from '../DatePicker/dates';
 import { Popover } from '../Popover';
 import { SegmentedControl } from '../SegmentedControl';
-import { Select } from '../Select';
 import { TAG_COLORS } from '../Tag';
 import type { TagColor } from '../Tag';
 import styles from './EventCalendar.module.css';
@@ -52,11 +53,11 @@ export interface EventCalendarProps extends Omit<HTMLAttributes<HTMLDivElement>,
   /** Which views the switch offers. */
   views?: EventCalendarView[];
   /**
-   * Full: year and month menus and the view switch, to jump anywhere.
-   * Simple: the title with Today and arrows. Figma: Menus.
+   * Full: the title is a button that jumps to any month or year, and the view switch shows.
+   * Simple: a plain title with the arrows and Today. Figma: Header.
    */
   header?: 'full' | 'simple';
-  /** Years in the year menu. Defaults to ten years either side of today. */
+  /** Years people can jump to from the title. Defaults to ten years either side of today. */
   yearRange?: [number, number];
   /** Event rows shown in a day before "+2 more". */
   maxEvents?: number;
@@ -180,6 +181,15 @@ export function EventCalendar({
   const [focus, setFocus] = useState(() => startOfDay(selected ?? defaultMonth ?? today));
   const grid = useRef<HTMLDivElement | null>(null);
   const moved = useRef(false);
+  // The month and year picker that opens from the title.
+  const [jumping, setJumping] = useState(false);
+  const jumpAnchor = useRef<HTMLButtonElement | null>(null);
+  const { floating: jumpPanel, style: jumpStyle } = useFloating(jumpAnchor, jumping, { align: 'start', gap: 6 });
+  const closeJump = () => {
+    setJumping(false);
+    jumpAnchor.current?.focus();
+  };
+  useDismiss(jumping, closeJump, [jumpAnchor, jumpPanel]);
 
   const first = new Date(shown.getFullYear(), shown.getMonth(), 1);
   const weeks = useMemo(() => {
@@ -189,8 +199,6 @@ export function EventCalendar({
   }, [first.getTime(), weekStartsOn]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [fromYear, toYear] = yearRange ?? [today.getFullYear() - 10, today.getFullYear() + 10];
-  const years = [];
-  for (let y = Math.min(fromYear, shown.getFullYear()); y <= Math.max(toYear, shown.getFullYear()); y++) years.push(y);
   const monthNames = Array.from({ length: 12 }, (_, m) => formatDate(new Date(2024, m, 1), locale, { month: 'short' }));
   const weekdays = weeks[0]!.map((d) => ({ short: formatDate(d, locale, { weekday: 'short' }), long: formatDate(d, locale, { weekday: 'long' }) }));
   const time = (d: Date) => formatDate(d, locale, { hour: '2-digit', minute: '2-digit' });
@@ -286,7 +294,24 @@ export function EventCalendar({
             <CompactButton variant="ghost" aria-label={`Previous ${navLabel}`} title={`Previous ${navLabel}`} onClick={() => step(-1)}>
               <Icon name="CaretLeft" />
             </CompactButton>
-            <h2 className={cx(styles.title, styles[`title-${mode}`])} aria-live="polite">{title}</h2>
+            {header === 'full' ? (
+              <h2 className={cx(styles.title, styles[`title-${mode}`])}>
+                <button
+                  ref={jumpAnchor}
+                  type="button"
+                  className={styles.titleButton}
+                  aria-haspopup="dialog"
+                  aria-expanded={jumping}
+                  aria-label={`${title}, choose ${mode === 'year' ? 'a year' : 'a month and year'}`}
+                  onClick={() => setJumping(!jumping)}
+                >
+                  <span aria-live="polite">{title}</span>
+                  <Icon name="CaretDown" className={cx(styles.titleCaret, jumping && styles.titleCaretOpen)} />
+                </button>
+              </h2>
+            ) : (
+              <h2 className={cx(styles.title, styles[`title-${mode}`])} aria-live="polite">{title}</h2>
+            )}
             <CompactButton variant="ghost" aria-label={`Next ${navLabel}`} title={`Next ${navLabel}`} onClick={() => step(1)}>
               <Icon name="CaretRight" />
             </CompactButton>
@@ -295,27 +320,9 @@ export function EventCalendar({
             Today
           </Button>
         </div>
-        {header === 'full' && (
+        {header === 'full' && views.length > 1 && (
           <div className={styles.controls}>
-            <Select
-              aria-label="Year"
-              size="sm"
-              className={styles.select}
-              value={String(first.getFullYear())}
-              onValueChange={(y) => goMonth(Number(y), first.getMonth())}
-              options={years.map((y) => ({ value: String(y), label: String(y) }))}
-            />
-            {mode !== 'year' && (
-              <Select
-                aria-label="Month"
-                size="sm"
-                className={styles.select}
-                value={String(first.getMonth())}
-                onValueChange={(m) => goMonth(first.getFullYear(), Number(m))}
-                options={monthNames.map((n, m) => ({ value: String(m), label: n }))}
-              />
-            )}
-            {views.length > 1 && (
+            {(
               <SegmentedControl
                 className={styles.viewSwitch}
                 aria-label="View"
@@ -328,6 +335,24 @@ export function EventCalendar({
           </div>
         )}
       </div>
+
+      {jumping && (
+        <Portal>
+          <div ref={jumpPanel} role="dialog" aria-label={mode === 'year' ? 'Choose a year' : 'Choose a month and year'} className={styles.jumpPanel} style={jumpStyle}>
+            <MonthYearPanel
+              value={mode === 'month' || mode === 'year' ? first : focus}
+              unit={mode === 'year' ? 'year' : 'month'}
+              fromYear={fromYear}
+              toYear={toYear}
+              locale={locale}
+              onSelect={(d) => {
+                goMonth(d.getFullYear(), d.getMonth());
+                closeJump();
+              }}
+            />
+          </div>
+        </Portal>
+      )}
 
       {mode === 'year' && (
         <div className={styles.year} role="list" aria-label={title}>
