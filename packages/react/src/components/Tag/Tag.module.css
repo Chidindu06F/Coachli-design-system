@@ -40,6 +40,22 @@
 .remove:hover:not(:disabled) { background: var(--halo-button-secondary-hover); }
 .remove:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
 
+/* Colours. Icons and the remove button take the label colour. */
+.blue { --tag-fill: var(--halo-tag-blue-surface); --tag-text: var(--halo-tag-blue-text); }
+.green { --tag-fill: var(--halo-tag-green-surface); --tag-text: var(--halo-tag-green-text); }
+.yellow { --tag-fill: var(--halo-tag-yellow-surface); --tag-text: var(--halo-tag-yellow-text); }
+.orange { --tag-fill: var(--halo-tag-orange-surface); --tag-text: var(--halo-tag-orange-text); }
+.red { --tag-fill: var(--halo-tag-red-surface); --tag-text: var(--halo-tag-red-text); }
+.pink { --tag-fill: var(--halo-tag-pink-surface); --tag-text: var(--halo-tag-pink-text); }
+.purple { --tag-fill: var(--halo-tag-purple-surface); --tag-text: var(--halo-tag-purple-text); }
+/* A colour someone picked: a light tint of it, with the label mixed toward the main text colour so it stays readable in both modes. */
+.custom {
+  --tag-fill: color-mix(in srgb, var(--tag-custom) 18%, var(--halo-surface-primary));
+  --tag-text: color-mix(in srgb, var(--tag-custom) 55%, var(--halo-text-primary));
+}
+.blue, .green, .yellow, .orange, .red, .pink, .purple, .custom { background: var(--tag-fill); color: var(--tag-text); }
+:is(.blue, .green, .yellow, .orange, .red, .pink, .purple, .custom) :is(.icon, .remove) { color: var(--tag-text); }
+
 .disabled { background: var(--halo-surface-minimal); color: var(--halo-text-disabled); }
 .disabled .icon,
 .disabled .remove { color: var(--halo-icon-disabled); cursor: not-allowed; }

@@ -2,7 +2,8 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Hash } from '@phosphor-icons/react';
 import { Avatar } from '../Avatar';
-import { Tag } from './Tag';
+import { ColorSwatch } from '../ColorPicker';
+import { Tag, TAG_COLORS } from './Tag';
 
 const meta = {
   title: 'Components/Tag',
@@ -40,6 +41,35 @@ export const Variants: Story = {
       </div>
     </div>
   ),
+};
+
+/** The preset colours. Neutral is the default. */
+export const Colors: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, maxWidth: 420 }}>
+      {TAG_COLORS.map((c) => (
+        <Tag key={c} color={c} onRemove={() => {}}>{c[0]!.toUpperCase() + c.slice(1)}</Tag>
+      ))}
+    </div>
+  ),
+};
+
+/** Any CSS colour works, so people can pick their own tag colours. */
+export const CustomColor: Story = {
+  render: function Render() {
+    const swatches = ['#7C3AED', '#0EA5E9', '#14B8A6', '#84CC16', '#F59E0B', '#EF4444', '#EC4899', '#64748B'];
+    const [color, setColor] = useState(swatches[0]!);
+    return (
+      <div style={{ display: 'grid', gap: 16, justifyItems: 'start' }}>
+        <Tag color={color} icon={<Hash />}>launch-week</Tag>
+        <div role="radiogroup" aria-label="Tag colour" style={{ display: 'flex', gap: 8 }}>
+          {swatches.map((s) => (
+            <ColorSwatch key={s} color={s} shape="circle" role="radio" aria-checked={s === color} aria-label={s} selected={s === color} onClick={() => setColor(s)} />
+          ))}
+        </div>
+      </div>
+    );
+  },
 };
 
 /** Remove tags one by one. */

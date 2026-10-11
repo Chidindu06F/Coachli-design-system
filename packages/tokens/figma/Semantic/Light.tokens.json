@@ -1847,5 +1847,301 @@
         }
       }
     }
+  },
+  "tag": {
+    "blue": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8901960784313725,
+            0.9647058823529412,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#E3F6FF"
+        },
+        "$description": "Background of a blue tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/skyblue/100",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.12549019607843137,
+            0.3411764705882353,
+            0.45098039215686275
+          ],
+          "alpha": 1,
+          "hex": "#205773"
+        },
+        "$description": "Label and icons on a blue tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/skyblue/800",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    },
+    "green": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8666666666666667,
+            0.9529411764705882,
+            0.9058823529411765
+          ],
+          "alpha": 1,
+          "hex": "#DDF3E7"
+        },
+        "$description": "Background of a green tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/green/100",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.050980392156862744,
+            0.30980392156862746,
+            0.17254901960784313
+          ],
+          "alpha": 1,
+          "hex": "#0D4F2C"
+        },
+        "$description": "Label and icons on a green tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/green/800",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    },
+    "yellow": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.996078431372549,
+            0.9568627450980393,
+            0.8666666666666667
+          ],
+          "alpha": 1,
+          "hex": "#FEF4DD"
+        },
+        "$description": "Background of a yellow tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/yellow/100",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.43529411764705883,
+            0.3176470588235294,
+            0.050980392156862744
+          ],
+          "alpha": 1,
+          "hex": "#6F510D"
+        },
+        "$description": "Label and icons on a yellow tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/yellow/800",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    },
+    "orange": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.9372549019607843,
+            0.8901960784313725
+          ],
+          "alpha": 1,
+          "hex": "#FFEFE3"
+        },
+        "$description": "Background of a orange tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/orange/100",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.45098039215686275,
+            0.2549019607843137,
+            0.12549019607843137
+          ],
+          "alpha": 1,
+          "hex": "#734120"
+        },
+        "$description": "Label and icons on a orange tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/orange/800",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    },
+    "red": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9882352941176471,
+            0.8823529411764706,
+            0.8901960784313725
+          ],
+          "alpha": 1,
+          "hex": "#FCE1E3"
+        },
+        "$description": "Background of a red tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/red/100",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4117647058823529,
+            0.09411764705882353,
+            0.12156862745098039
+          ],
+          "alpha": 1,
+          "hex": "#69181F"
+        },
+        "$description": "Label and icons on a red tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/red/800",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    },
+    "pink": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.984313725490196,
+            0.8980392156862745,
+            0.9333333333333333
+          ],
+          "alpha": 1,
+          "hex": "#FBE5EE"
+        },
+        "$description": "Background of a pink tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/pink/100",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.403921568627451,
+            0.1411764705882353,
+            0.25098039215686274
+          ],
+          "alpha": 1,
+          "hex": "#672440"
+        },
+        "$description": "Label and icons on a pink tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/pink/800",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    },
+    "purple": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9764705882352941,
+            0.8941176470588236,
+            0.9803921568627451
+          ],
+          "alpha": 1,
+          "hex": "#F9E4FA"
+        },
+        "$description": "Background of a purple tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/purple/100",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3058823529411765,
+            0.09803921568627451,
+            0.30980392156862746
+          ],
+          "alpha": 1,
+          "hex": "#4E194F"
+        },
+        "$description": "Label and icons on a purple tag.",
+        "$extensions": {
+          "com.figma.aliasData": {
+            "targetVariableName": "colours/purple/800",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    }
   }
 }

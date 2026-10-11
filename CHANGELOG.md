@@ -17,6 +17,7 @@ New work collects under **Unreleased** and goes live in Storybook straight away.
 
 - **Button**: new `loading` prop shows a Spinner and ignores clicks while an action runs.
 - **Select**: new `icon` prop for an icon at the start of the box.
+- **Tag**: new `color` prop. Pick one of seven preset colours (`blue`, `green`, `yellow`, `orange`, `red`, `pink`, `purple`) or pass any CSS colour, like `"#7C3AED"`, for colours people choose themselves. Neutral stays the default.
 - **Field states**: every text, select, combobox, date, time, colour, textarea and rich text field shows a red warning icon inside the box when it has an error, next to the red border and the message. **Input** also takes a new `valid` prop that shows a green check, with no green border and no message.
 - **Date range picker**: the box now reads "Start date – End date". **Breaking:** `placeholder` is replaced by `startPlaceholder` and `endPlaceholder`.
 
@@ -24,6 +25,7 @@ New work collects under **Unreleased** and goes live in Storybook straight away.
 
 - New `icon/rating` and `icon/rating-empty` colours.
 - New `chart/series-1` to `chart/series-6` and `chart/grid` colours, with dark mode values.
+- New `tag/<colour>/surface` and `tag/<colour>/text` colours for blue, green, yellow, orange, red, pink and purple tags, with dark mode values.
 
 ## 0.1.0
 
