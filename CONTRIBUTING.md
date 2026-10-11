@@ -38,6 +38,18 @@ Then export it from `packages/react/src/index.ts`.
 
 See [packages/tokens/README.md](packages/tokens/README.md).
 
+## Figma Dev Mode and Code Connect
+
+Every component set in the Figma file has a link to its Storybook page and a line like `React: import { Button } from "@halo-ds/react";` in its description, so developers inspecting a design in Dev Mode can find the code on any Figma plan.
+
+[Code Connect](https://developers.figma.com/docs/code-connect/) goes further: Dev Mode shows a ready-to-paste React snippet with the props set from the selected variant. The mappings live in `packages/react/figma/*.figma.tsx`. Button, Compact button, Badge, Tag, Alert and Input field map their Figma properties to props; the rest link the component and show a basic example. Publishing needs a Dev or Full seat on a Figma Organization or Enterprise plan. With that, from `packages/react`:
+
+```bash
+npx @figma/code-connect connect publish --token <your Figma access token>
+```
+
+When you add a Figma property or a component, update its `.figma.tsx` file in the same change.
+
 ## Releasing to npm
 
 Halo publishes two packages, `@halo-ds/tokens` and `@halo-ds/react`, under the `halo-ds` npm organisation.

@@ -19,6 +19,7 @@ New work collects under **Unreleased** and goes live in Storybook straight away.
 ### Changes
 
 - **Style the parts inside any component**: every component takes `classNames` and `styles` keyed by part name, like `<Modal classNames={{ header: 'my-header' }} />` or `<Table styles={{ cell: { padding: 8 } }} />`. Your classes are added after Halo's and your styles are merged on top. Outer elements get `data-halo` with the component's name and parts get `data-part`, so you can also style them from your own CSS: `[data-halo='modal'] [data-part='header']`. Each component exports its part names as a type (like `ModalPart`). Fields with a label take `fieldClassNames` and `fieldStyles` for the label, hint and count. A new **Customising** docs page explains it all.
+- **Find the code from Figma**: every component set in Figma links to its Storybook page and shows its React import in Dev Mode. Code Connect files in `packages/react/figma` are ready to publish for teams on a Figma plan that supports it (see CONTRIBUTING).
 
 - **Button**: new `loading` prop shows a Spinner and ignores clicks while an action runs.
 - **Select**: new `icon` prop for an icon at the start of the box.
