@@ -102,6 +102,8 @@ export { Calendar, DatePicker, DatePickerField, DateRangePicker, DateRangePicker
 export type { CalendarPreset, CalendarProps, DatePickerFieldProps, DatePickerProps, DateRange, DateRangePickerFieldProps, DateRangePickerProps, MultiDatePickerFieldProps, MultiDatePickerProps, MultipleCalendarProps, RangeCalendarProps, SingleCalendarProps } from './components/DatePicker';
 export { FileItem, FileUpload, formatBytes } from './components/FileUpload';
 export type { FileItemProps, FileUploadProps } from './components/FileUpload';
+export { Result } from './components/Result';
+export type { ResultProps, ResultStatus } from './components/Result';
 export { RichTextEditor, RichTextEditorField } from './components/RichTextEditor';
 export type { RichTextEditorFieldProps, RichTextEditorHandle, RichTextEditorProps } from './components/RichTextEditor';
 export { Illustration, illustrationGroups, illustrationNames } from './components/Illustration';
@@ -150,6 +152,7 @@ export type { ProgressBarPart, ProgressCirclePart } from './components/Progress'
 export type { QRCodePart } from './components/QRCode';
 export type { RadioGroupPart, RadioPart } from './components/Radio';
 export type { RatingPart } from './components/Rating';
+export type { ResultPart } from './components/Result';
 export type { RichTextEditorPart } from './components/RichTextEditor';
 export type { SegmentedControlPart } from './components/SegmentedControl';
 export type { ComboboxPart, SelectPart } from './components/Select';

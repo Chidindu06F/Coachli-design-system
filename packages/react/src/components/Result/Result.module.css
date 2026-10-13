@@ -1,0 +1,93 @@
+/* Values mirror the Result component set in Figma (Result page). */
+
+.result {
+  --circle: 64px;
+  --glyph: 32px;
+  --title-size: var(--halo-font-size-3xl);
+  --title-height: var(--halo-line-height-3xl);
+  --desc-size: var(--halo-font-size-md);
+  --desc-height: var(--halo-line-height-md);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--halo-spacing-7);
+  max-width: 480px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.sm {
+  --circle: 48px;
+  --glyph: 24px;
+  --title-size: var(--halo-font-size-xl);
+  --title-height: var(--halo-line-height-xl);
+  --desc-size: var(--halo-font-size-sm);
+  --desc-height: var(--halo-line-height-sm);
+  gap: var(--halo-spacing-6);
+}
+
+/* ---------- Media ---------- */
+
+.circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--circle);
+  height: var(--circle);
+  border-radius: var(--halo-radius-xl);
+}
+
+.circle > svg {
+  width: var(--glyph);
+  height: var(--glyph);
+}
+
+.success { background: var(--halo-state-success-secondary); color: var(--halo-state-success-contrast); }
+.error { background: var(--halo-state-error-secondary); color: var(--halo-state-error-contrast); }
+.warning { background: var(--halo-state-warning-secondary); color: var(--halo-state-warning-contrast); }
+.information { background: var(--halo-state-information-secondary); color: var(--halo-state-information-contrast); }
+
+.art,
+.custom {
+  display: inline-flex;
+  justify-content: center;
+}
+
+/* ---------- Text ---------- */
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--halo-spacing-3);
+}
+
+.title {
+  margin: 0;
+  color: var(--halo-text-primary);
+  font-family: var(--halo-font-family-label);
+  font-size: var(--title-size);
+  line-height: var(--title-height);
+  font-weight: var(--halo-font-weight-semibold);
+}
+
+.description {
+  margin: 0;
+  color: var(--halo-text-secondary);
+  font-family: var(--halo-font-family-body);
+  font-size: var(--desc-size);
+  line-height: var(--desc-height);
+}
+
+/* Details like a receipt read left-aligned, full width */
+.content {
+  align-self: stretch;
+  text-align: start;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--halo-spacing-4);
+}
