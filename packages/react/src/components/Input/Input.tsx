@@ -59,7 +59,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(function
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} count={count} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
+    <Field name={(rest as { name?: string }).name} label={label} hint={hint} error={error} required={required} optional={optional} info={info} count={count} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <Input ref={ref} {...rest} {...c} invalid={invalid || c['aria-invalid']} valid={valid} />}
     </Field>
   );

@@ -63,7 +63,7 @@ export const TimePickerField = forwardRef<HTMLButtonElement, TimePickerFieldProp
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
+    <Field name={(rest as { name?: string }).name} label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <TimePicker ref={ref} {...rest} {...c} />}
     </Field>
   );

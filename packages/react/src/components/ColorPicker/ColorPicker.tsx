@@ -290,11 +290,14 @@ export interface ColorFieldProps extends Omit<ColorPickerProps, 'id' | 'classNam
   'aria-label'?: string;
   'aria-describedby'?: string;
   'aria-invalid'?: true;
+  /** Form field name. The text box carries the hex. */
+  name?: string;
+  required?: boolean;
 }
 
 /** A box showing a colour and its hex. The swatch opens a ColorPicker. Figma: Color field. */
 export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function ColorInput(
-  { value, defaultValue = '#CC1DD0', onValueChange, size = 'md', disabled, invalid, id, showOpacity, showEyedropper, swatches, defaultFormat, className, classNames, styles: partStyles, ...aria },
+  { value, defaultValue = '#CC1DD0', onValueChange, size = 'md', disabled, invalid, id, showOpacity, showEyedropper, swatches, defaultFormat, className, classNames, styles: partStyles, name, required, ...aria },
   ref,
 ) {
   const part = parts<ColorInputPart>('color-input', { classNames, styles: partStyles });
@@ -330,6 +333,8 @@ export const ColorInput = forwardRef<HTMLInputElement, ColorFieldProps>(function
         <input
           ref={mergeRefs(ref)}
           id={id}
+          name={name}
+          aria-required={required || undefined}
           {...part('input', inputStyles.input)}
           value={text}
           disabled={disabled}
@@ -374,7 +379,7 @@ export const ColorField = forwardRef<HTMLInputElement, ColorFieldWithLabelProps>
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
+    <Field name={(rest as { name?: string }).name} label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <ColorInput ref={ref} {...rest} {...c} />}
     </Field>
   );

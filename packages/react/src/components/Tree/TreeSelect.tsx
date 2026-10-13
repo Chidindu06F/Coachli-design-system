@@ -265,7 +265,7 @@ export const TreeSelectField = forwardRef<HTMLButtonElement, TreeSelectFieldProp
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
+    <Field name={(rest as { name?: string }).name} label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <TreeSelect ref={ref} {...(rest as TreeSelectProps)} {...c} />}
     </Field>
   );

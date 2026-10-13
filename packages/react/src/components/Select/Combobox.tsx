@@ -34,6 +34,8 @@ interface ComboboxBase extends PartsProps<ComboboxPart> {
   'aria-invalid'?: true;
   required?: boolean;
   className?: string;
+  /** Form field name. Hidden inputs carry the value, one per chosen option. */
+  name?: string;
 }
 
 export interface ComboboxProps extends ComboboxBase {
@@ -56,7 +58,7 @@ export interface MultiComboboxProps extends ComboboxBase {
  * Use a Select when people just pick from a short known list. Figma: Combobox.
  */
 export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiComboboxProps>(function Combobox(props, ref) {
-  const { options, placeholder = 'Search', size = 'md', invalid, disabled, onCreate, emptyText = 'No matches', id, className, required, classNames, styles: partStyles } = props;
+  const { options, placeholder = 'Search', size = 'md', invalid, disabled, onCreate, emptyText = 'No matches', id, className, required, name, classNames, styles: partStyles } = props;
   const part = parts<ComboboxPart>('combobox', { classNames, styles: partStyles });
   const listId = useId();
   const multiple = props.multiple === true;
@@ -173,6 +175,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
         <StatusIcon invalid={invalid || !!props['aria-invalid']} disabled={disabled} />
         <Icon name="CaretDown" {...part('caret', [styles.caret, open && styles.caretOpen])} />
       </div>
+      {name && (values.length ? values.map((v) => <input key={v} type="hidden" name={name} value={v} />) : <input type="hidden" name={name} value="" />)}
       {open && (
         <Portal>
           <div ref={floating} id={listId} role="listbox" aria-multiselectable={multiple || undefined} {...part('menu', menuStyles.menu, style)}>
@@ -231,7 +234,7 @@ export const ComboboxField = forwardRef<HTMLInputElement, ComboboxFieldProps>(fu
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
+    <Field name={(rest as { name?: string }).name} label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <Combobox ref={ref} {...(rest as ComboboxProps)} {...c} />}
     </Field>
   );

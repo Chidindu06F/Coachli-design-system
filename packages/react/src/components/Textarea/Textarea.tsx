@@ -56,7 +56,7 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>
   const [length, setLength] = useState(String(value ?? defaultValue ?? '').length);
   const count = maxLength && showCount ? `${(value != null ? String(value).length : length).toLocaleString()} / ${maxLength.toLocaleString()}` : undefined;
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} count={count} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
+    <Field name={(rest as { name?: string }).name} label={label} hint={hint} error={error} required={required} optional={optional} info={info} count={count} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => (
         <Textarea
           ref={ref}

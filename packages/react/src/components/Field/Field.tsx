@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useEffect, useId } from 'react';
 import type { HTMLAttributes, LabelHTMLAttributes, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
@@ -6,6 +6,7 @@ import { CompactButton } from '../CompactButton';
 import { Tooltip } from '../Tooltip';
 import { parts } from '../../internal/parts';
 import type { PartsProps } from '../../internal/parts';
+import { useFormContext } from '../Form/context';
 import styles from './Field.module.css';
 
 /** Parts of a Field you can style with `classNames` and `styles` (or `fieldClassNames` and `fieldStyles` on the *Field components). */
@@ -67,13 +68,22 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   children: (control: { id: string; 'aria-describedby'?: string; 'aria-invalid'?: true; required?: boolean }) => ReactNode;
   /** Id for the control. Generated when left out. */
   controlId?: string;
+  /** The control's form name. Inside a Form, the field shows the form's error for this name. */
+  name?: string;
 }
 
 /** Lays out a label, a control and a hint row. Used by the *Field components. */
-export function Field({ label, required, optional, info, hint, error, count, children, controlId, className, classNames, styles: partStyles, ...rest }: FieldProps) {
+export function Field({ label, required, optional, info, hint, error: own, count, children, controlId, name, className, classNames, styles: partStyles, ...rest }: FieldProps) {
   const part = parts<FieldPart>('field', { classNames, styles: partStyles });
   const autoId = useId();
   const id = controlId ?? autoId;
+  const form = useFormContext();
+  const error = own ?? (name && form ? form.errors[name] : undefined);
+  const labelText = typeof label === 'string' ? label : (name ?? 'This field');
+  useEffect(() => {
+    if (!form || !name) return;
+    return form.register(name, { label: labelText, required: !!required, id });
+  }, [form, name, labelText, required, id]);
   const message = error ?? hint;
   const hintId = message ? `${id}-hint` : undefined;
   return (

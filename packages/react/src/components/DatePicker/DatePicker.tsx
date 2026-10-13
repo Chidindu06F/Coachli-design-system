@@ -41,7 +41,12 @@ interface PickerBase extends PartsProps<DatePickerPart> {
   'aria-invalid'?: true;
   required?: boolean;
   className?: string;
+  /** Form field name. A hidden input carries the date as YYYY-MM-DD. */
+  name?: string;
 }
+
+/** A date as YYYY-MM-DD in local time, for forms. */
+const isoDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
 function usePicker() {
   const [open, setOpen] = useState(false);
@@ -141,7 +146,7 @@ export interface DatePickerProps extends PickerBase {
 
 /** A box that opens a Calendar to pick one day. */
 export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(function DatePicker(
-  { value, defaultValue = null, onValueChange, placeholder = 'Pick a date', locale, format, min, max, isDateDisabled, weekStartsOn, calendarHeader, yearRange, classNames, styles: partStyles, ...rest },
+  { value, defaultValue = null, onValueChange, placeholder = 'Pick a date', locale, format, min, max, isDateDisabled, weekStartsOn, calendarHeader, yearRange, name, classNames, styles: partStyles, ...rest },
   ref,
 ) {
   const part = parts<DatePickerPart>('date-picker', { classNames, styles: partStyles });
@@ -152,6 +157,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(functio
   return (
     <>
       <Trigger ref={mergeRefs(ref, p.anchor)} open={p.open} text={date ? show(date) : undefined} placeholder={placeholder} dialogId={dialogId} onToggle={() => p.setOpen(!p.open)} halo="date-picker" classNames={classNames} styles={partStyles} {...rest} />
+      {name && <input type="hidden" name={name} value={date ? isoDate(date) : ''} />}
       {p.open && (
         <Portal>
           <div ref={p.floating} id={dialogId} role="dialog" aria-label="Choose a date" {...part('popover', styles.popover, p.style)}>
@@ -193,7 +199,7 @@ export interface DateRangePickerProps extends Omit<PickerBase, 'placeholder'> {
 
 /** A box that opens a two-month Calendar to pick a start and end day, then Apply. */
 export const DateRangePicker = forwardRef<HTMLButtonElement, DateRangePickerProps>(function DateRangePicker(
-  { value, defaultValue = null, onValueChange, startPlaceholder = 'Start date', endPlaceholder = 'End date', locale, format, presets, min, max, isDateDisabled, weekStartsOn, classNames, styles: partStyles, ...rest },
+  { value, defaultValue = null, onValueChange, startPlaceholder = 'Start date', endPlaceholder = 'End date', locale, format, presets, min, max, isDateDisabled, weekStartsOn, name, classNames, styles: partStyles, ...rest },
   ref,
 ) {
   const part = parts<DatePickerPart>('date-range-picker', { classNames, styles: partStyles });
@@ -219,6 +225,12 @@ export const DateRangePicker = forwardRef<HTMLButtonElement, DateRangePickerProp
         styles={partStyles}
         {...rest}
       />
+      {name && (
+        <>
+          <input type="hidden" name={name} value={range ? isoDate(range[0]) : ''} />
+          <input type="hidden" name={name} value={range ? isoDate(range[1]) : ''} />
+        </>
+      )}
       {p.open && (
         <Portal>
           <div ref={p.floating} id={dialogId} role="dialog" aria-label="Choose dates" {...part('popover', styles.popover, p.style)}>
@@ -295,6 +307,7 @@ export const MultiDatePicker = forwardRef<HTMLButtonElement, MultiDatePickerProp
     invalid,
     disabled,
     className,
+    name,
     classNames,
     styles: partStyles,
     ...aria
@@ -361,6 +374,7 @@ export const MultiDatePicker = forwardRef<HTMLButtonElement, MultiDatePickerProp
         </div>
         <StatusIcon invalid={isInvalid} disabled={disabled} />
       </div>
+      {name && (dates.length ? dates.map((d) => <input key={d.getTime()} type="hidden" name={name} value={isoDate(d)} />) : <input type="hidden" name={name} value="" />)}
       {p.open && (
         <Portal>
           <div ref={p.floating} id={dialogId} role="dialog" aria-label="Choose dates" {...part('popover', styles.popover, p.style)}>
@@ -412,7 +426,7 @@ export const DatePickerField = forwardRef<HTMLButtonElement, DatePickerFieldProp
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
+    <Field name={(rest as { name?: string }).name} label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <DatePicker ref={ref} {...rest} {...c} />}
     </Field>
   );
@@ -425,7 +439,7 @@ export const DateRangePickerField = forwardRef<HTMLButtonElement, DateRangePicke
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
+    <Field name={(rest as { name?: string }).name} label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <DateRangePicker ref={ref} {...rest} {...c} />}
     </Field>
   );
@@ -438,7 +452,7 @@ export const MultiDatePickerField = forwardRef<HTMLButtonElement, MultiDatePicke
   ref,
 ) {
   return (
-    <Field label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
+    <Field name={(rest as { name?: string }).name} label={label} hint={hint} error={error} required={required} optional={optional} info={info} controlId={id} className={fieldClassName} classNames={fieldClassNames} styles={fieldStyles}>
       {(c) => <MultiDatePicker ref={ref} {...rest} {...c} />}
     </Field>
   );

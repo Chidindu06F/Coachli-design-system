@@ -1,0 +1,122 @@
+/* Values mirror the Form patterns in Figma (Form page). */
+
+.form {
+  --label-width: 200px;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--halo-spacing-9);
+  min-width: 0;
+}
+
+/* ---------- Horizontal: labels beside fields ---------- */
+
+.horizontal [data-halo='field'] {
+  display: grid;
+  grid-template-columns: var(--label-width) minmax(0, 1fr);
+  column-gap: var(--halo-spacing-9);
+  align-items: start;
+}
+
+.horizontal [data-halo='field'] > [data-part='label'] {
+  grid-row: 1 / span 2;
+  /* Lines the label up with the middle of a 40px control */
+  padding-top: var(--halo-spacing-5);
+}
+
+.horizontal [data-halo='field'] > :not([data-part='label']) {
+  grid-column: 2;
+}
+
+@media (max-width: 600px) {
+  .horizontal [data-halo='field'] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .horizontal [data-halo='field'] > [data-part='label'] {
+    padding-top: 0;
+  }
+}
+
+/* ---------- Section ---------- */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--halo-spacing-7);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.sectionHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--halo-spacing-2);
+}
+
+.sectionTitle {
+  margin: 0;
+  color: var(--halo-text-primary);
+  font-family: var(--halo-font-family-label);
+  font-size: var(--halo-font-size-lg);
+  line-height: var(--halo-line-height-lg);
+  font-weight: var(--halo-font-weight-semibold);
+}
+
+.sectionDescription {
+  margin: 0;
+  color: var(--halo-text-secondary);
+  font-family: var(--halo-font-family-body);
+  font-size: var(--halo-font-size-md);
+  line-height: var(--halo-line-height-md);
+}
+
+.sectionBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--halo-spacing-9);
+}
+
+/* ---------- Row ---------- */
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+  gap: var(--halo-spacing-9);
+  align-items: start;
+}
+
+@media (max-width: 600px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Actions ---------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--halo-spacing-4);
+}
+
+.start {
+  justify-content: flex-start;
+}
+
+.end {
+  justify-content: flex-end;
+}
+
+.between {
+  justify-content: space-between;
+}
+
+.divider {
+  padding-top: var(--halo-spacing-9);
+  border-top: 1px solid var(--halo-border-secondary);
+}
