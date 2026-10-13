@@ -1,10 +1,12 @@
-import { createContext, forwardRef, useContext, useMemo, useState } from 'react';
+import { createContext, forwardRef, Fragment, useContext, useMemo, useState } from 'react';
 import type { HTMLAttributes, Key, ReactNode, TdHTMLAttributes, ThHTMLAttributes } from 'react';
 import { cx } from '../../internal/cx';
 import { Icon } from '../../internal/Icon';
 import { useControllable } from '../../internal/useControllable';
 import { Button } from '../Button';
 import { Checkbox } from '../Checkbox';
+import { CompactButton } from '../CompactButton';
+import { Popover } from '../Popover';
 import { Pagination } from '../Pagination';
 import { Select } from '../Select';
 import { parts } from '../../internal/parts';
@@ -14,7 +16,7 @@ import styles from './Table.module.css';
 const SizeCtx = createContext<'md' | 'sm'>('md');
 
 /** Parts you can style with `classNames` and `styles` on Table or DataTable. Rows, cells, the toolbar and the footer pick them up too. */
-export type TablePart = 'root' | 'scroll' | 'table' | 'caption' | 'headerCell' | 'row' | 'cell' | 'toolbar' | 'footer' | 'empty';
+export type TablePart = 'root' | 'scroll' | 'table' | 'caption' | 'headerCell' | 'row' | 'cell' | 'toolbar' | 'footer' | 'empty' | 'filter' | 'expand' | 'expanded';
 const PartCtx = createContext(parts<TablePart>('table', {}));
 
 /* ---------- Building blocks ---------- */
@@ -30,20 +32,26 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement>, PartsProps
   bordered?: boolean;
   /** Visible or screen reader caption. */
   caption?: ReactNode;
+  /** Keeps the header row in view while the rows scroll. Pair it with `maxHeight`. */
+  stickyHeader?: boolean;
+  /** Height after which the rows scroll, like 400 or "60vh". */
+  maxHeight?: number | string;
+  /** Keeps the first column in view when a wide table scrolls sideways. */
+  stickyFirstColumn?: boolean;
 }
 
 /** A styled HTML table. Scrolls sideways when it is wider than its container. */
 export const Table = forwardRef<HTMLTableElement, TableProps>(function Table(
-  { size = 'md', toolbar, footer, bordered = true, caption, className, classNames, styles: partStyles, children, ...rest },
+  { size = 'md', toolbar, footer, bordered = true, caption, stickyHeader, maxHeight, stickyFirstColumn, className, classNames, styles: partStyles, children, ...rest },
   ref,
 ) {
   const part = useMemo(() => parts<TablePart>('table', { classNames, styles: partStyles }), [classNames, partStyles]);
   return (
     <SizeCtx.Provider value={size}>
       <PartCtx.Provider value={part}>
-        <div {...part('root', [styles.frame, bordered && styles.bordered, className])}>
+        <div {...part('root', [styles.frame, bordered && styles.bordered, stickyHeader && styles.stickyHeader, stickyFirstColumn && styles.stickyFirst, className])}>
           {toolbar}
-          <div {...part('scroll', styles.scroll)}>
+          <div {...part('scroll', styles.scroll, maxHeight !== undefined ? { maxHeight, overflowY: 'auto' } : undefined)}>
             <table ref={ref} {...rest} {...part('table', styles.table, rest.style)}>
               {caption && <caption {...part('caption', styles.caption)}>{caption}</caption>}
               {children}
@@ -78,9 +86,13 @@ export interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElem
   onSort?: () => void;
   /** A checkbox column. Figma: Type=Checkbox. */
   checkbox?: boolean;
+  /** What the filter button opens, like a list of checkboxes. Shows a funnel after the heading. Figma: Filter. */
+  filter?: ReactNode;
+  /** Marks the funnel when a filter is on. */
+  filtered?: boolean;
 }
 
-export function TableHeaderCell({ align = 'left', sort, onSort, checkbox, className, children, ...rest }: TableHeaderCellProps) {
+export function TableHeaderCell({ align = 'left', sort, onSort, checkbox, filter, filtered, className, children, ...rest }: TableHeaderCellProps) {
   const sortable = sort !== undefined;
   const icon = sort === 'ascending' ? 'ArrowUp' : sort === 'descending' ? 'ArrowDown' : 'CaretUpDown';
   const part = useContext(PartCtx);
@@ -91,14 +103,30 @@ export function TableHeaderCell({ align = 'left', sort, onSort, checkbox, classN
       {...rest}
       {...part('headerCell', [styles.th, align === 'right' && styles.right, checkbox && styles.checkboxCell, className], rest.style)}
     >
-      {sortable ? (
-        <button type="button" className={cx(styles.sort, sort !== 'none' && styles.sorted)} onClick={onSort}>
-          {children}
-          <Icon name={icon} className={styles.sortIcon} />
-        </button>
-      ) : (
-        children
-      )}
+      <span className={filter ? styles.headerRow : undefined}>
+        {sortable ? (
+          <button type="button" className={cx(styles.sort, sort !== 'none' && styles.sorted)} onClick={onSort}>
+            {children}
+            <Icon name={icon} className={styles.sortIcon} />
+          </button>
+        ) : (
+          children
+        )}
+        {filter && (
+          <Popover
+            side="bottom"
+            align={align === 'right' ? 'end' : 'start'}
+            arrow={false}
+            trigger={
+              <CompactButton {...part('filter', [styles.filterButton, filtered && styles.filtered])} variant="ghost" size="md" selected={filtered} aria-label={filtered ? 'Filter, on' : 'Filter'}>
+                <Icon name="Funnel" />
+              </CompactButton>
+            }
+          >
+            {filter}
+          </Popover>
+        )}
+      </span>
     </th>
   );
 }
@@ -127,6 +155,42 @@ export function TableCell({ align, numeric, description, checkbox, className, ch
         children
       )}
     </td>
+  );
+}
+
+/* ---------- Expandable rows ---------- */
+
+export interface TableExpandToggleProps {
+  expanded: boolean;
+  onToggle: () => void;
+  /** Screen reader name, like "Show details for Brand refresh". */
+  'aria-label'?: string;
+}
+
+/** The arrow button at the start of an expandable row. Put it in a `TableCell checkbox`. */
+export function TableExpandToggle({ expanded, onToggle, 'aria-label': label = 'Show details' }: TableExpandToggleProps) {
+  const part = useContext(PartCtx);
+  return (
+    <CompactButton {...part('expand', [styles.expand, expanded && styles.expandOpen])} variant="ghost" size="md" aria-expanded={expanded} aria-label={label} onClick={onToggle}>
+      <Icon name="CaretRight" />
+    </CompactButton>
+  );
+}
+
+export interface TableExpandedRowProps extends HTMLAttributes<HTMLTableRowElement> {
+  /** How many columns the details span. */
+  colSpan: number;
+}
+
+/** The details under an expanded row. */
+export function TableExpandedRow({ colSpan, className, children, ...rest }: TableExpandedRowProps) {
+  const part = useContext(PartCtx);
+  return (
+    <tr {...rest} {...part('expanded', [styles.expandedRow, className], rest.style)}>
+      <td colSpan={colSpan} className={styles.expandedCell}>
+        {children}
+      </td>
+    </tr>
   );
 }
 
@@ -244,6 +308,10 @@ export interface DataTableColumn<T> {
   align?: 'left' | 'right';
   numeric?: boolean;
   width?: number | string;
+  /** Choices for a filter on this column. Rows show when their value is one of the checked choices. */
+  filters?: { value: string; label: string }[];
+  /** Custom filter test. Defaults to the cell value matching a checked choice. */
+  onFilter?: (row: T, values: string[]) => boolean;
 }
 
 export interface DataTableProps<T> extends Omit<TableProps, 'children' | 'footer'> {
@@ -258,6 +326,8 @@ export interface DataTableProps<T> extends Omit<TableProps, 'children' | 'footer
   pageSize?: number;
   /** Shown when there are no rows, like an EmptyState. */
   empty?: ReactNode;
+  /** Rows open to show details underneath. `rowExpandable` turns it off for some rows. */
+  expandable?: { render: (row: T) => ReactNode; rowExpandable?: (row: T) => boolean };
 }
 
 function valueOf<T>(col: DataTableColumn<T>, row: T) {
@@ -274,25 +344,39 @@ export function DataTable<T>({
   onSelectedChange,
   pageSize: initialPageSize = 10,
   empty,
+  expandable,
   ...rest
 }: DataTableProps<T>) {
   const [sort, setSort] = useState<{ key: string; dir: SortDirection } | null>(null);
+  const [filters, setFilters] = useState<Record<string, string[]>>({});
+  const [open, setOpen] = useState<Key[]>([]);
   const [chosen, setChosen] = useControllable<Key[]>(selected, [], onSelectedChange);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(initialPageSize);
 
+  const filtered = useMemo(() => {
+    const active = columns.filter((c) => filters[c.key]?.length);
+    if (!active.length) return rows;
+    return rows.filter((row) =>
+      active.every((c) => {
+        const values = filters[c.key]!;
+        return c.onFilter ? c.onFilter(row, values) : values.includes(String((row as Record<string, unknown>)[c.key] ?? ''));
+      }),
+    );
+  }, [rows, columns, filters]);
+
   const sorted = useMemo(() => {
-    if (!sort) return rows;
+    if (!sort) return filtered;
     const col = columns.find((c) => c.key === sort.key);
-    if (!col) return rows;
+    if (!col) return filtered;
     const factor = sort.dir === 'ascending' ? 1 : -1;
-    return [...rows].sort((a, b) => {
+    return [...filtered].sort((a, b) => {
       const x = valueOf(col, a);
       const y = valueOf(col, b);
       if (typeof x === 'number' && typeof y === 'number') return (x - y) * factor;
       return String(x ?? '').localeCompare(String(y ?? ''), undefined, { numeric: true }) * factor;
     });
-  }, [rows, columns, sort]);
+  }, [filtered, columns, sort]);
 
   const pageCount = pageSize ? Math.max(1, Math.ceil(sorted.length / pageSize)) : 1;
   const current = Math.min(page, pageCount);
@@ -305,17 +389,42 @@ export function DataTable<T>({
     setSort((s) => (s?.key !== key ? { key, dir: 'ascending' } : s.dir === 'ascending' ? { key, dir: 'descending' } : null));
   const toggleRow = (id: Key) => setChosen(chosen.includes(id) ? chosen.filter((x) => x !== id) : [...chosen, id]);
   const togglePage = () => setChosen(allOnPage ? chosen.filter((id) => !visibleIds.includes(id)) : [...new Set([...chosen, ...visibleIds])]);
+  const toggleOpen = (id: Key) => setOpen(open.includes(id) ? open.filter((x) => x !== id) : [...open, id]);
+  const setFilter = (key: string, values: string[]) => {
+    setFilters({ ...filters, [key]: values });
+    setPage(1);
+  };
+  const span = columns.length + (selectable ? 1 : 0) + (expandable ? 1 : 0);
+  const filterMenu = (col: DataTableColumn<T>) => {
+    const on = filters[col.key] ?? [];
+    return (
+      <div className={styles.filterList}>
+        {col.filters!.map((f) => (
+          <Checkbox
+            key={f.value}
+            size="sm"
+            label={f.label}
+            checked={on.includes(f.value)}
+            onCheckedChange={(c) => setFilter(col.key, c ? [...on, f.value] : on.filter((v) => v !== f.value))}
+          />
+        ))}
+        <Button variant="ghost" size="xs" disabled={!on.length} onClick={() => setFilter(col.key, [])}>
+          Clear
+        </Button>
+      </div>
+    );
+  };
 
   return (
     <Table
       {...rest}
       footer={
-        pageSize > 0 && rows.length > 0 ? (
+        pageSize > 0 && sorted.length > 0 ? (
           <TableFooter
             page={current}
             pageCount={pageCount}
             onPageChange={setPage}
-            total={rows.length}
+            total={sorted.length}
             rowsPerPage={pageSize}
             onRowsPerPageChange={(n) => {
               setPageSize(n);
@@ -327,6 +436,7 @@ export function DataTable<T>({
     >
       <TableHead>
         <tr>
+          {expandable && <TableHeaderCell checkbox aria-label="Details" />}
           {selectable && (
             <TableHeaderCell checkbox>
               <Checkbox size="sm" aria-label="Select all rows on this page" checked={allOnPage} indeterminate={someOnPage && !allOnPage} onCheckedChange={togglePage} />
@@ -339,6 +449,8 @@ export function DataTable<T>({
               style={col.width !== undefined ? { width: col.width } : undefined}
               sort={col.sortable || col.sortValue ? (sort?.key === col.key ? sort.dir : 'none') : undefined}
               onSort={() => toggleSort(col.key)}
+              filter={col.filters?.length ? filterMenu(col) : undefined}
+              filtered={!!filters[col.key]?.length}
             >
               {col.header}
             </TableHeaderCell>
@@ -348,14 +460,18 @@ export function DataTable<T>({
       <TableBody>
         {visible.length === 0 && (
           <tr>
-            <EmptyCell colSpan={columns.length + (selectable ? 1 : 0)}>{empty ?? 'No rows'}</EmptyCell>
+            <EmptyCell colSpan={span}>{empty ?? 'No rows'}</EmptyCell>
           </tr>
         )}
         {visible.map((row) => {
           const id = getRowId(row);
           const on = chosen.includes(id);
+          const canOpen = !!expandable && (expandable.rowExpandable?.(row) ?? true);
+          const isOpen = canOpen && open.includes(id);
           return (
-            <TableRow key={id} selected={selectable ? on : undefined}>
+            <Fragment key={id}>
+            <TableRow selected={selectable ? on : undefined}>
+              {expandable && <TableCell checkbox>{canOpen && <TableExpandToggle expanded={isOpen} onToggle={() => toggleOpen(id)} />}</TableCell>}
               {selectable && (
                 <TableCell checkbox>
                   <Checkbox size="sm" aria-label="Select row" checked={on} onCheckedChange={() => toggleRow(id)} />
@@ -367,6 +483,8 @@ export function DataTable<T>({
                 </TableCell>
               ))}
             </TableRow>
+            {isOpen && <TableExpandedRow colSpan={span}>{expandable!.render(row)}</TableExpandedRow>}
+            </Fragment>
           );
         })}
       </TableBody>

@@ -137,3 +137,64 @@ export const Simple: Story = {
     </Table>
   ),
 };
+
+/** Filters in the Role and Status headers, and rows that open to show details. */
+export const FiltersAndExpandableRows: Story = {
+  render: () => (
+    <DataTable
+      columns={columns.map((c) =>
+        c.key === 'role'
+          ? { ...c, filters: [{ value: 'Admin', label: 'Admin' }, { value: 'Editor', label: 'Editor' }] }
+          : c.key === 'status'
+            ? { ...c, filters: [{ value: 'Active', label: 'Active' }, { value: 'Invited', label: 'Invited' }] }
+            : c,
+      )}
+      rows={members}
+      getRowId={(m) => m.id}
+      pageSize={5}
+      expandable={{
+        render: (m) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, auto)', justifyContent: 'start', gap: '4px 48px', font: '14px/22px var(--halo-font-family-body)' }}>
+            <span style={{ color: 'var(--halo-text-secondary)' }}>Email</span>
+            <span style={{ color: 'var(--halo-text-secondary)' }}>Projects</span>
+            <span style={{ color: 'var(--halo-text-secondary)' }}>Joined</span>
+            <span>{m.email}</span>
+            <span>{m.projects}</span>
+            <span>{`${(m.id % 28) + 1} Mar 2026`}</span>
+          </div>
+        ),
+        rowExpandable: (m) => m.status === 'Active',
+      }}
+    />
+  ),
+};
+
+/** The header stays while rows scroll, and the first column stays while the table scrolls sideways. */
+export const StickyHeaderAndColumn: Story = {
+  render: () => (
+    <div style={{ maxWidth: 560 }}>
+      <Table stickyHeader stickyFirstColumn maxHeight={280} style={{ minWidth: 820 }}>
+        <TableHead>
+          <tr>
+            <TableHeaderCell>Name</TableHeaderCell>
+            <TableHeaderCell>Email</TableHeaderCell>
+            <TableHeaderCell>Role</TableHeaderCell>
+            <TableHeaderCell>Status</TableHeaderCell>
+            <TableHeaderCell align="right">Projects</TableHeaderCell>
+          </tr>
+        </TableHead>
+        <TableBody>
+          {members.slice(0, 15).map((m) => (
+            <TableRow key={m.id}>
+              <TableCell style={{ whiteSpace: 'nowrap' }}>{m.name}</TableCell>
+              <TableCell>{m.email}</TableCell>
+              <TableCell>{m.role}</TableCell>
+              <TableCell>{m.status}</TableCell>
+              <TableCell numeric>{m.projects}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  ),
+};

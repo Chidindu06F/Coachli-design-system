@@ -1,4 +1,5 @@
-export { DataTable, Table, TableBody, TableCell, TableFooter, TableHead, TableHeaderCell, TableRow, TableToolbar } from './Table';
+export { DataTable, Table, TableBody, TableCell, TableExpandedRow, TableExpandToggle, TableFooter, TableHead, TableHeaderCell, TableRow, TableToolbar } from './Table';
+export type { TableExpandedRowProps, TableExpandToggleProps } from './Table';
 export type {
   DataTableColumn,
   DataTableProps,

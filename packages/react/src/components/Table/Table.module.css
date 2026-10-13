@@ -123,3 +123,75 @@ tbody .row:last-child .td { border-bottom: 0; }
 .footerGroup { display: flex; align-items: center; gap: var(--halo-spacing-6); }
 .footerPages { margin-left: auto; }
 .rowsSelect { width: 80px; }
+
+/* ---------- Sticky header and first column ---------- */
+
+.stickyHeader .th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.stickyFirst .th:first-child,
+.stickyFirst .td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  /* A line on the right edge, so the column reads as fixed while others slide under it */
+  box-shadow: inset -1px 0 0 var(--halo-border-secondary);
+}
+
+.stickyFirst.stickyHeader .th:first-child {
+  z-index: 3;
+}
+
+/* ---------- Filters ---------- */
+
+.headerRow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--halo-spacing-2);
+}
+
+.right .headerRow {
+  flex-direction: row-reverse;
+}
+
+.filterButton {
+  color: var(--halo-icon-disabled);
+}
+
+.filterButton:hover,
+.filtered {
+  color: var(--halo-icon-primary);
+}
+
+.filterList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--halo-spacing-4);
+  min-width: 160px;
+}
+
+/* ---------- Expandable rows ---------- */
+
+.expand > span > svg {
+  transition: transform 160ms ease;
+}
+
+.expandOpen > span > svg {
+  transform: rotate(90deg);
+}
+
+.expandedRow .expandedCell {
+  padding: var(--halo-spacing-7);
+  border-bottom: 1px solid var(--halo-border-secondary);
+  background: var(--halo-surface-minimal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .expand > span > svg {
+    transition: none;
+  }
+}
