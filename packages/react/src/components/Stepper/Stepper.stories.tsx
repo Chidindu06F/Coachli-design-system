@@ -37,3 +37,9 @@ export const WithError: Story = { args: { current: 2, steps: steps.map((s, i) =>
 
 /** A title and a segmented bar for small screens. */
 export const Compact: Story = { args: { orientation: 'compact' }, decorators: [(Story) => <div style={{ maxWidth: 360 }}><Story /></div>] };
+
+/**
+ * A horizontal stepper switches to compact by itself when it has less than 600px, like on a phone or in a narrow panel.
+ * This one sits in a 360px box. Set `compactBelow` to change the width, or `false` to turn it off.
+ */
+export const SwitchesOnSmallScreens: Story = { decorators: [(Story) => <div style={{ width: 360 }}><Story /></div>] };

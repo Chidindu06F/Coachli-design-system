@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { Icon } from '../../internal/Icon';
 import { parts } from '../../internal/parts';
@@ -22,6 +23,11 @@ export interface StepperProps extends Omit<HTMLAttributes<HTMLElement>, 'title'>
   current: number;
   /** horizontal, vertical, or compact (a title and a segmented bar for small screens). Figma: Orientation. */
   orientation?: 'horizontal' | 'vertical' | 'compact';
+  /**
+   * A horizontal stepper switches to compact when it has less room than this, in pixels, like on a phone.
+   * The default, 600, matches the Mobile layout breakpoint. Pass `false` to always stay horizontal.
+   */
+  compactBelow?: number | false;
   /** Compact only: shows "Next: …" with the next step's title. Figma: Next step. */
   showNext?: boolean;
   /** Screen reader name for the steps. */
@@ -31,15 +37,29 @@ export interface StepperProps extends Omit<HTMLAttributes<HTMLElement>, 'title'>
 type Status = 'complete' | 'current' | 'upcoming' | 'error';
 
 /** Shows progress through a task with several steps, like checkout or onboarding. */
-export function Stepper({ steps, current, orientation = 'horizontal', showNext = true, className, classNames, styles: partStyles, 'aria-label': label = 'Progress', ...rest }: StepperProps) {
+export function Stepper({ steps, current, orientation: chosen = 'horizontal', compactBelow = 600, showNext = true, className, classNames, styles: partStyles, 'aria-label': label = 'Progress', ...rest }: StepperProps) {
   const part = parts<StepperPart>('stepper', { classNames, styles: partStyles });
+  const [root, setRoot] = useState<HTMLElement | null>(null);
+  const [narrow, setNarrow] = useState(false);
+  const watch = chosen === 'horizontal' && compactBelow !== false;
+  useEffect(() => {
+    // Measure the space the stepper sits in, so it also switches inside narrow panels, not just on phones
+    const box = root?.parentElement;
+    if (!watch || !box || typeof ResizeObserver === 'undefined') return setNarrow(false);
+    const check = () => setNarrow(box.clientWidth < compactBelow);
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(box);
+    return () => ro.disconnect();
+  }, [root, watch, compactBelow]);
+  const orientation = watch && narrow ? 'compact' : chosen;
   const statusOf = (i: number): Status => (steps[i]?.error ? 'error' : i < current ? 'complete' : i === current ? 'current' : 'upcoming');
 
   if (orientation === 'compact') {
     const step = steps[current];
     const next = steps[current + 1];
     return (
-      <nav aria-label={label} {...rest} {...part('root', [styles.compact, className], rest.style)}>
+      <nav ref={setRoot} aria-label={label} {...rest} {...part('root', [styles.compact, className], rest.style)}>
         <div {...part('header', styles.compactHeader)}>
           <div {...part('current', styles.compactCurrent)}>
             <span {...part('count', styles.count)}>Step {current + 1} of {steps.length}</span>
@@ -57,7 +77,7 @@ export function Stepper({ steps, current, orientation = 'horizontal', showNext =
   }
 
   return (
-    <nav aria-label={label} {...rest} {...part('root', className, rest.style)}>
+    <nav ref={setRoot} aria-label={label} {...rest} {...part('root', className, rest.style)}>
       <ol {...part('list', [styles.stepper, styles[orientation]])}>
         {steps.map((step, i) => {
           const status = statusOf(i);

@@ -6,8 +6,13 @@ New work collects under **Unreleased** and goes live in Storybook straight away.
 
 ## Unreleased
 
+### New components
+
+- **Statistic**: a key number with its label, an optional prefix or suffix, and how it changed (a trend badge and "vs last month"). Small, Medium and Large, with a loading state. `sentiment` sets whether the change is good or bad, for numbers like churn where down is good.
+
 ### Changes
 
+- **Stepper on small screens**: a horizontal Stepper now switches to the compact version by itself when it has less than 600px, like on a phone. Change the width with `compactBelow`, or pass `false` to keep it horizontal.
 - **Premium button**: `variant="premium"` is a violet, purple and rose gradient for upgrades and paid features, like Upgrade to Pro or Start free trial. Use at most one per screen and never next to a Primary button. It comes in every size, with icons, icon-only and loading. In Figma it's Type=Premium.
 
 ### Tokens
