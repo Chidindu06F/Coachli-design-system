@@ -8,6 +8,7 @@ New work collects under **Unreleased** and goes live in Storybook straight away.
 
 ### New components
 
+- **Resizable**: `ResizablePanelGroup`, `ResizablePanel` and `ResizableHandle`. Panels people resize by dragging the line between them, side by side or stacked, and nested. Sizes are in percent with a minimum and maximum. Handles work with the arrow keys, Home and End, can show a grip, and `onLayout` reports the sizes so you can save them.
 - **Result**: the outcome of something people did, like a payment going through, or why a page can't show. Success, error, warning and information show an icon in a circle; not found, no access, server error, offline and maintenance show an illustration. Takes a title, description, actions and details like a receipt, in two sizes.
 - **Statistic**: a key number with its label, an optional prefix or suffix, and how it changed (a trend badge and "vs last month"). Small, Medium and Large, with a loading state. `sentiment` sets whether the change is good or bad, for numbers like churn where down is good.
 
