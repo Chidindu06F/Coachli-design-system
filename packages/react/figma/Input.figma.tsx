@@ -2,7 +2,25 @@ import figma from '@figma/code-connect';
 import { Input, InputField, NumberInput, VerificationCode } from '@halo-ds/react';
 
 figma.connect(Input, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10039-320', {
-  example: () => <Input />,
+  props: {
+    placeholder: figma.string('Placeholder'),
+    size: figma.enum('Size', { Small: 'sm', Medium: 'md', Large: 'lg' }),
+    invalid: figma.enum('State', { Error: true }),
+    disabled: figma.enum('State', { Disabled: true }),
+  },
+  variant: { Content: 'Placeholder' },
+  example: (props) => <Input {...props} />,
+});
+
+figma.connect(Input, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10039-320', {
+  props: {
+    value: figma.string('Value'),
+    size: figma.enum('Size', { Small: 'sm', Medium: 'md', Large: 'lg' }),
+    invalid: figma.enum('State', { Error: true }),
+    disabled: figma.enum('State', { Disabled: true }),
+  },
+  variant: { Content: 'Filled' },
+  example: (props) => <Input {...props} onChange={() => {}} />,
 });
 
 figma.connect(InputField, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10040-136', {

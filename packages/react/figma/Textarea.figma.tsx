@@ -2,7 +2,25 @@ import figma from '@figma/code-connect';
 import { Textarea, TextareaField } from '@halo-ds/react';
 
 figma.connect(Textarea, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10126-319', {
-  example: () => <Textarea />,
+  props: {
+    placeholder: figma.string('Placeholder'),
+    size: figma.enum('Size', { Small: 'sm', Medium: 'md', Large: 'lg' }),
+    invalid: figma.enum('State', { Error: true }),
+    disabled: figma.enum('State', { Disabled: true }),
+  },
+  variant: { Content: 'Placeholder' },
+  example: (props) => <Textarea {...props} />,
+});
+
+figma.connect(Textarea, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10126-319', {
+  props: {
+    defaultValue: figma.string('Value'),
+    size: figma.enum('Size', { Small: 'sm', Medium: 'md', Large: 'lg' }),
+    invalid: figma.enum('State', { Error: true }),
+    disabled: figma.enum('State', { Disabled: true }),
+  },
+  variant: { Content: 'Filled' },
+  example: (props) => <Textarea {...props} />,
 });
 
 figma.connect(TextareaField, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10126-470', {
