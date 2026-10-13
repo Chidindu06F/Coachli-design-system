@@ -39,7 +39,7 @@
   display: inline-flex;
   width: 16px;
   height: 16px;
-  color: var(--halo-icon-secondary);
+  color: var(--halo-text-secondary);
 }
 
 .icon > svg {

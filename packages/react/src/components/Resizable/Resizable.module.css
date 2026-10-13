@@ -81,7 +81,7 @@
   border: 1px solid var(--halo-border-secondary);
   border-radius: var(--halo-radius-sm);
   background: var(--halo-surface-primary);
-  color: var(--halo-icon-secondary);
+  color: var(--halo-text-secondary);
 }
 
 .horizontal > .handle .grip {
