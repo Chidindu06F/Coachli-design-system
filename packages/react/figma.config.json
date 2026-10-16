@@ -2,6 +2,14 @@
   "codeConnect": {
     "parser": "react",
     "include": ["figma/**/*.figma.tsx"],
+    "exclude": [
+      "figma/Form.figma.tsx",
+      "figma/Resizable.figma.tsx",
+      "figma/Result.figma.tsx",
+      "figma/Statistic.figma.tsx",
+      "figma/Tree.figma.tsx",
+      "figma/TableExpandedRow.figma.tsx"
+    ],
     "label": "React"
   }
 }

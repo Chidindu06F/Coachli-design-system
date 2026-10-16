@@ -1,6 +1,6 @@
 import figma from '@figma/code-connect';
-import { LinkButton } from '@halo-ds/react';
+import { LinkButton } from '@chidindu06f/coachli-react';
 
-figma.connect(LinkButton, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=9792-2301', {
+figma.connect(LinkButton, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=9792-2301', {
   example: () => <LinkButton />,
 });

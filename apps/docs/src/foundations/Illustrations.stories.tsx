@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Illustration, illustrationGroups } from '@halo-ds/react';
+import { Illustration, illustrationGroups } from '@chidindu06f/coachli-react';
 import { Code, Page, Section } from './shared';
 
 const label = (n: string) => n.charAt(0).toUpperCase() + n.slice(1).replace(/-/g, ' ');

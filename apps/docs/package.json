@@ -8,9 +8,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fontsource/geist": "^5.3.0",
-    "@halo-ds/react": "workspace:*",
-    "@halo-ds/tokens": "workspace:*",
+    "@chidindu06f/coachli-react": "workspace:*",
+    "@chidindu06f/coachli-tokens": "workspace:*",
+    "@fontsource/inter": "^5.3.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },

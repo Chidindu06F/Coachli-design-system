@@ -1,7 +1,7 @@
 import figma from '@figma/code-connect';
-import { Textarea, TextareaField } from '@halo-ds/react';
+import { Textarea, TextareaField } from '@chidindu06f/coachli-react';
 
-figma.connect(Textarea, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10126-319', {
+figma.connect(Textarea, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10126-319', {
   props: {
     placeholder: figma.string('Placeholder'),
     size: figma.enum('Size', { Small: 'sm', Medium: 'md', Large: 'lg' }),
@@ -12,7 +12,7 @@ figma.connect(Textarea, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Hal
   example: (props) => <Textarea {...props} />,
 });
 
-figma.connect(Textarea, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10126-319', {
+figma.connect(Textarea, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10126-319', {
   props: {
     defaultValue: figma.string('Value'),
     size: figma.enum('Size', { Small: 'sm', Medium: 'md', Large: 'lg' }),
@@ -23,6 +23,6 @@ figma.connect(Textarea, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Hal
   example: (props) => <Textarea {...props} />,
 });
 
-figma.connect(TextareaField, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10126-470', {
+figma.connect(TextareaField, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10126-470', {
   example: () => <TextareaField />,
 });

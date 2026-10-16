@@ -1,7 +1,7 @@
 import figma from '@figma/code-connect';
-import { Button } from '@halo-ds/react';
+import { Button } from '@chidindu06f/coachli-react';
 
-figma.connect(Button, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=9697-2459', {
+figma.connect(Button, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=9697-2459', {
   props: {
     label: figma.string('Label'),
     variant: figma.enum('Type', { Primary: 'primary', Secondary: 'secondary', Ghost: 'ghost', Destructive: 'destructive', Premium: 'premium' }),
@@ -15,7 +15,7 @@ figma.connect(Button, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?
   example: ({ label, ...props }) => <Button {...props}>{label}</Button>,
 });
 
-figma.connect(Button, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=9697-2459', {
+figma.connect(Button, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=9697-2459', {
   props: {
     variant: figma.enum('Type', { Primary: 'primary', Secondary: 'secondary', Ghost: 'ghost', Destructive: 'destructive', Premium: 'premium' }),
     size: figma.enum('Size', { 'X small': 'xs', Small: 'sm', Medium: 'md', Large: 'lg' }),

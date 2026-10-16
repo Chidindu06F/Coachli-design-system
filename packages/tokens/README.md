@@ -1,14 +1,14 @@
-# @halo-ds/tokens
+# @chidindu06f/coachli-tokens
 
 Halo's design tokens as CSS variables, JSON and JS, generated from the Halo Figma variables.
 
 ```bash
-npm install @halo-ds/tokens
+npm install @chidindu06f/coachli-tokens
 ```
 
 ```js
-import '@halo-ds/tokens/css';           // all CSS variables, light + dark
-import { vars, tokens } from '@halo-ds/tokens';
+import '@chidindu06f/coachli-tokens/css';           // all CSS variables, light + dark
+import { vars, tokens } from '@chidindu06f/coachli-tokens';
 
 vars['surface-primary'];                // "var(--halo-surface-primary)"
 ```

@@ -1,10 +1,43 @@
 # Changelog
 
-Changes to `@halo-ds/react` and `@halo-ds/tokens`. Both packages share one version number.
-
-New work collects under **Unreleased** and goes live in Storybook straight away. It only reaches npm when we choose to release a batch: then the Unreleased heading becomes the new version number (see Releasing in [CONTRIBUTING.md](CONTRIBUTING.md)).
+Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both packages share one version number. New work collects under **Unreleased**; see Releasing in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Unreleased
+
+## 0.1.0 (Coachli)
+
+The first Coachli release: Halo's components (as of "Add Form with built-in checks and layout helpers"), themed and adjusted to match the COACHLI DESIGN SYSTEM Figma library.
+
+### Brand
+
+- **Primary colour is aubergine.** `button/primary` is `#3B1240` with a lilac label (`text/on-brand` `#F3C8F4`). In dark mode it's a light purple (`#C98BD2`) with a dark label. Hover, pressed, brand surfaces, brand text, the focus ring (`#DDAFE2`) and illustration accents follow. Provisional: the colour may still change.
+- **New colour ramps:** `colours/aubergine/*`, plus `colours/raspberry/*` and `colours/lilac/*` (kept as alternatives, not used yet), `colours/teal/*` (the previous brand colour) and `colours/premium/*` (the Premium gradient: teal, blue, violet).
+- **Typography is Inter** for headings, body, captions and labels (`--halo-font-family-*`). `family/display` is New Spirit, for marketing only. Load Inter with `@fontsource/inter`.
+
+### Dark mode fixes
+
+Text and icons on coloured fills were using `text/on-brand`, which only suits the brand colour. In dark mode the X, LinkedIn and GitHub logos were nearly invisible. New tokens, with each component using the right one:
+
+- `text/on-color`, `icon/on-color`: white in both modes. Used by **Social button** (logo and label), the **Premium** button and **Avatar** status icons.
+- `text/on-status`, `icon/on-status`: white in light mode, near-black in dark mode. Used by **solid Badges** in information, success, warning and error.
+- `icon/on-contrast`: white in light mode, near-black in dark mode. Used by the **Switch** knob.
+
+### Components
+
+- **Sidebar:** new `beforeFooter` prop, for content between the main items and the footer, like the Coach / Customer role switch. It's hidden when the sidebar is collapsed. Figma: *Show footer* (Footer slot). Report a bug and Log out go in `footer` as NavItems (Figma: *Show report a bug*, *Show log out*).
+
+### Tooling
+
+- Packages renamed to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`, published to GitHub Packages by the *Publish packages* action.
+- `pnpm tokens:merge` applies the COACHLI Figma export (`packages/tokens/coachli/export.json`) to the token files and rebuilds them.
+- Code Connect points at the COACHLI library. Mappings for components the library doesn't have yet are excluded.
+- Storybook uses Inter and the Coachli logo.
+
+---
+
+The entries below are Halo's history, from before this copy was made.
+
+## Halo: Unreleased (at the time of the copy)
 
 ### New components
 

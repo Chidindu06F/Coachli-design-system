@@ -9,14 +9,14 @@ Halo is an open-source design system for designers and developers: a Figma libra
 ## Install
 
 ```bash
-npm install @halo-ds/react @halo-ds/tokens
+npm install @chidindu06f/coachli-react @chidindu06f/coachli-tokens
 ```
 
 Load the tokens and the component styles once, at the top of your app (for example `main.tsx` or your root layout):
 
 ```tsx
-import '@halo-ds/tokens/css';      // colours, spacing, type and radius as CSS variables
-import '@halo-ds/react/styles.css'; // styles for every component
+import '@chidindu06f/coachli-tokens/css';      // colours, spacing, type and radius as CSS variables
+import '@chidindu06f/coachli-react/styles.css'; // styles for every component
 ```
 
 Halo uses the **Geist** font. Load it yourself, for example with Fontsource:
@@ -34,7 +34,7 @@ import '@fontsource/geist/700.css';
 Then use the components:
 
 ```tsx
-import { Button } from '@halo-ds/react';
+import { Button } from '@chidindu06f/coachli-react';
 
 export function Save() {
   return <Button>Save changes</Button>;

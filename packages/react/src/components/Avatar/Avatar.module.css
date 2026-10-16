@@ -134,7 +134,7 @@
 }
 
 /* The tick, plus and cross are cut out of the icon, so a circle behind them sets their colour. */
-.cutout { fill: var(--cut, var(--halo-icon-on-brand)); }
+.cutout { fill: var(--cut, var(--halo-icon-on-color)); }
 
 .status-add,
 .status-remove,

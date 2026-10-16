@@ -1,96 +1,93 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="apps/docs/public/logo-dark.svg">
-  <img alt="Halo Design System" src="apps/docs/public/logo.svg" height="48">
+  <img alt="Coachli" src="apps/docs/public/logo.svg" height="40">
 </picture>
 
-# Halo Design System
+# Coachli Design System
 
-An open-source design system for designers and developers: a Figma library and a React component library built from the same design tokens, with light and dark mode.
+The components and design tokens for the Coachli dashboard. It's built on [Halo](https://github.com/Chidindu06F/Halo-design-system), themed with the Coachli brand: an aubergine primary colour, Inter, and light and dark mode.
 
-**📖 Docs & component playground: https://chidindu06f.github.io/Halo-design-system/**
+- **Figma library:** [COACHLI DESIGN SYSTEM](https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM), the source of truth for every token and component.
+- **Dashboard designs:** [Coachli](https://www.figma.com/design/toCoFh482t5Ho9OU7it9lA/Coachli).
+- **Storybook (live docs and playground):** https://chidindu06f.github.io/Coachli-design-system/
 
-> **Status:** early development. Foundations, 44 components, 40 illustrations and 20 awards are in place, in Figma and React. Not yet published to npm.
+> Building the dashboard? Start with **[DEVELOPERS.md](DEVELOPERS.md)**.
 
 ## Packages
 
-| Package | Description |
+Published to GitHub Packages:
+
+| Package | What it is |
 | --- | --- |
-| [`@halo-ds/tokens`](packages/tokens) | Design tokens as CSS variables (light + dark), JSON and JS, generated from Figma |
-| [`@halo-ds/react`](packages/react) | React components |
-| [`docs`](apps/docs) | Storybook: live documentation and component playground |
+| [`@chidindu06f/coachli-tokens`](packages/tokens) | Colours, type, spacing and radius as CSS variables for light and dark mode, generated from the Figma library |
+| [`@chidindu06f/coachli-react`](packages/react) | React components |
+| [`docs`](apps/docs) | Storybook |
 
-## Using Halo
+## Install
 
-> Halo is not on npm yet. The first release, 0.1.0, is being prepared; until then, clone this repository and run Storybook to explore it.
+GitHub Packages needs a one-time setup, even for public packages:
 
-```bash
-npm install @halo-ds/react @halo-ds/tokens @fontsource/geist
-```
+1. Create a GitHub [personal access token (classic)](https://github.com/settings/tokens) with the `read:packages` scope.
+2. Add a `.npmrc` next to your app's `package.json`:
+   ```
+   @chidindu06f:registry=https://npm.pkg.github.com
+   //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+   ```
+3. Set `GITHUB_TOKEN` to that token in your shell or CI, then install:
+   ```bash
+   npm install @chidindu06f/coachli-react @chidindu06f/coachli-tokens @fontsource/inter
+   ```
 
 Load the tokens, the component styles and the font once, at the top of your app:
 
 ```tsx
-import '@halo-ds/tokens/css';
-import '@halo-ds/react/styles.css';
-import '@fontsource/geist/400.css';
-import '@fontsource/geist/600.css';
-import '@fontsource/geist/700.css';
+import '@chidindu06f/coachli-tokens/css';
+import '@chidindu06f/coachli-react/styles.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
 
-import { Button } from '@halo-ds/react';
+import { Button } from '@chidindu06f/coachli-react';
+
+<Button>Create</Button>;
 ```
 
-Switch themes with the `data-theme` attribute on `<html>`: `light` (default), `dark`, or `system` (follows the OS).
+Switch themes with `data-theme` on `<html>`: `light` (default), `dark`, or `system` (follows the device).
 
-Every token is a CSS variable starting with `--halo-`, so your own styles can use them too:
+Every token is a CSS variable. They keep Halo's `--halo-` prefix so improvements from Halo can still be brought in:
 
 ```css
-.card {
+.panel {
   background: var(--halo-surface-primary);
   color: var(--halo-text-primary);
   padding: var(--halo-spacing-md);
-  border-radius: var(--halo-radius-sm);
+  border-radius: var(--halo-radius-md);
 }
 ```
 
-### Make it yours
+## Working on the design system
 
-- **Quick:** override a few brand variables in your own CSS, loaded after Halo's. No rebuild needed.
-- **Full:** change the variables in your copy of the Figma file, export them, and rebuild the tokens so design and code match.
-
-The **Theming** page in [Storybook](https://chidindu06f.github.io/Halo-design-system/) walks through both, with a live example.
-
-## Working on Halo
-
-Requirements: [Node.js](https://nodejs.org) 20+ and [pnpm](https://pnpm.io) (`npm install -g pnpm`). The project pins its own Node 24 runtime, which pnpm downloads automatically.
+Requirements: [Node.js](https://nodejs.org) 22+ and [pnpm](https://pnpm.io) (`npm install -g pnpm`).
 
 ```bash
-pnpm install     # install dependencies
-pnpm dev         # build tokens and start Storybook at http://localhost:6006
-pnpm build       # build every package
-pnpm typecheck   # type-check every package
+pnpm install       # install dependencies
+pnpm dev           # build tokens and start Storybook at http://localhost:6006
+pnpm build         # build every package and Storybook
+pnpm typecheck     # type-check every package
+pnpm tokens:merge  # apply packages/tokens/coachli/export.json, then rebuild the tokens
 ```
 
-### Project structure
+How to keep Figma and code in sync, and how to release, is in [CONTRIBUTING.md](CONTRIBUTING.md).
 
+### Relationship to Halo
+
+This repository is a copy of Halo. The original Halo code and Figma file are never changed from here: pushing to the `halo` remotes is disabled. To bring in later Halo improvements:
+
+```bash
+git fetch halo
+git merge halo/main   # then resolve conflicts, rebuild and check Storybook
 ```
-packages/
-  tokens/     figma/ ← Figma variable exports (source of truth)
-              scripts/build.mjs → dist/tokens.css, tokens.json, index.js
-  react/      src/ ← components
-apps/
-  docs/       Storybook (foundations pages + component stories)
-docs/         design notes (e.g. dark-mode mapping)
-```
-
-### Design → code workflow
-
-1. Design the component in Figma using Halo variables (never raw hex values).
-2. Build it in `packages/react/src/components/<Name>/` using the matching CSS variables.
-3. Add a `<Name>.stories.tsx` so it appears in Storybook.
-4. Review it in Storybook in both light and dark mode.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 
-[MIT](LICENSE). The Figma library also includes emojis, icons, flags and brand logos from other open-source projects; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for their licences and required credits.
+[MIT](LICENSE). Third-party assets are credited in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

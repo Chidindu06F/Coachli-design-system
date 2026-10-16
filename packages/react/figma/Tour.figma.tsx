@@ -1,6 +1,6 @@
 import figma from '@figma/code-connect';
-import { Tour } from '@halo-ds/react';
+import { Tour } from '@chidindu06f/coachli-react';
 
-figma.connect(Tour, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10529-940', {
+figma.connect(Tour, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10529-940', {
   example: () => <Tour />,
 });

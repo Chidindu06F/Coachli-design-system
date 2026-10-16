@@ -1,20 +1,20 @@
 import figma from '@figma/code-connect';
-import { Combobox, Select, SelectField } from '@halo-ds/react';
+import { Combobox, Select, SelectField } from '@chidindu06f/coachli-react';
 
 const options = [
   { value: 'design', label: 'Design' },
   { value: 'marketing', label: 'Marketing' },
 ];
 
-figma.connect(Select, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10080-232', {
+figma.connect(Select, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10080-232', {
   example: () => <Select />,
 });
 
-figma.connect(SelectField, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10080-16127', {
+figma.connect(SelectField, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10080-16127', {
   example: () => <SelectField />,
 });
 
-figma.connect(Combobox, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10101-3233', {
+figma.connect(Combobox, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10101-3233', {
   props: {
     placeholder: figma.string('Placeholder'),
     multiple: figma.enum('Type', { Multiple: true }),

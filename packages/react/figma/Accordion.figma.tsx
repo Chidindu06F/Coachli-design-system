@@ -1,6 +1,6 @@
 import figma from '@figma/code-connect';
-import { AccordionItem } from '@halo-ds/react';
+import { AccordionItem } from '@chidindu06f/coachli-react';
 
-figma.connect(AccordionItem, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=9815-16', {
+figma.connect(AccordionItem, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=9815-16', {
   example: () => <AccordionItem />,
 });

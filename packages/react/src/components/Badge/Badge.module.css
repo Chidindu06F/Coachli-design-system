@@ -52,7 +52,7 @@
 
 .solid {
   --bg: var(--solid-bg, var(--strong));
-  --fg: var(--solid-fg, var(--halo-text-on-brand));
+  --fg: var(--solid-fg, var(--halo-text-on-status));
   --dot-colour: var(--fg);
 }
 

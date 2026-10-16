@@ -2,19 +2,23 @@
   "family": {
     "heading": {
       "$type": "string",
-      "$value": "Geist"
+      "$value": "Inter"
     },
     "body": {
       "$type": "string",
-      "$value": "Geist"
+      "$value": "Inter"
     },
     "caption": {
       "$type": "string",
-      "$value": "Geist"
+      "$value": "Inter"
     },
     "label": {
       "$type": "string",
-      "$value": "Geist"
+      "$value": "Inter"
+    },
+    "display": {
+      "$type": "string",
+      "$value": "New Spirit"
     }
   },
   "weight": {

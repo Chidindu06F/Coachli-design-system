@@ -1,6 +1,6 @@
 import figma from '@figma/code-connect';
-import { Modal } from '@halo-ds/react';
+import { Modal } from '@chidindu06f/coachli-react';
 
-figma.connect(Modal, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=9953-139', {
+figma.connect(Modal, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=9953-139', {
   example: () => <Modal />,
 });

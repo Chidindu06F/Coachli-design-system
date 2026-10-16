@@ -1,7 +1,7 @@
 import figma from '@figma/code-connect';
-import { Button, Result } from '@halo-ds/react';
+import { Button, Result } from '@chidindu06f/coachli-react';
 
-figma.connect(Result, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10607-615', {
+figma.connect(Result, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10607-615', {
   props: {
     status: figma.enum('Status', {
       Success: 'success',

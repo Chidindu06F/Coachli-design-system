@@ -1,28 +1,31 @@
-# Contributing to Halo
+# Working on the Coachli design system
 
-Thanks for helping! Halo welcomes contributions from designers and developers.
+This is the Coachli copy of Halo. Figma and code are kept in step by hand: a change isn't done until both match.
 
 ## Ground rules
 
-- **Tokens, not values.** Components use semantic tokens (`--halo-surface-primary`, `--halo-text-secondary`), never hex codes or primitive colors. This is what makes dark mode work.
-- **Figma is the source of truth for tokens.** Don't hand-edit `packages/tokens/figma/*.json` or anything in `dist/`. Change the variable in Figma and re-export.
-- **Accessible by default.** Text meets WCAG AA contrast (4.5:1), interactive elements are keyboard-usable with a visible focus ring (`--halo-border-focus`), and Storybook's Accessibility panel shows no violations.
-- **Both themes.** Check every change in light and dark mode using the Storybook toolbar.
+- **Never change Halo from here.** The original Halo code and Halo Figma file are off limits; pushing to the `halo` remotes is disabled on purpose. If a fix belongs in Halo too, make it there separately.
+- **Tokens, not values.** Components use semantic tokens (`--halo-surface-primary`, `--halo-text-secondary`), never hex codes or primitive colours. This is what makes dark mode work.
+- **Text on a fill uses the matching "on" token:**
+  - `text/on-brand`, `icon/on-brand`: only on brand fills (Primary button, selected date, checkbox tick).
+  - `text/on-color`, `icon/on-color`: white in both modes, on fills that don't change between modes (social logos, Premium, destructive).
+  - `text/on-status`, `icon/on-status`: on solid status fills (information, success, warning, error badges).
+  - `icon/on-contrast`: the Switch knob.
+- **Figma is the source of truth for tokens.** Don't hand-edit `packages/tokens/figma/*.json` or anything in `dist/`.
+- **Accessible by default.** WCAG AA contrast, keyboard use, a visible focus ring (`--halo-border-focus`), and no violations in Storybook's Accessibility panel.
+- **Both themes.** Check every change in light and dark mode with the Storybook toolbar.
 
-## For designers
+## The routine for every change
 
-- Use the Halo Figma library's variables for every fill, stroke, radius and spacing value.
-- Name component variants and properties the way they'll appear in code (e.g. `variant=primary`, `size=md`, `state=disabled`).
-- To propose a new token or component, open an issue with a Figma link and a short description of the use case.
+| You changed… | Do this |
+| --- | --- |
+| A token (colour, font, spacing) in the COACHLI Figma library | Update `packages/tokens/coachli/export.json` (or replace the files in `packages/tokens/figma/` with Figma's *Export modes*), run `pnpm tokens:merge`, check Storybook |
+| A component in the COACHLI Figma library | Make the same change in `packages/react/src/components/<Name>/`, update its story and its `figma/<Name>.figma.tsx` mapping |
+| Anything | Add a line to **Unreleased** in [CHANGELOG.md](CHANGELOG.md), then commit |
 
-## For developers
+`pnpm tokens:merge` keeps any token the code has that Figma doesn't, and prints them, so nothing a component uses disappears by accident.
 
-```bash
-pnpm install
-pnpm dev        # Storybook at http://localhost:6006
-```
-
-Adding a component:
+## Adding a component
 
 ```
 packages/react/src/components/Button/
@@ -34,51 +37,23 @@ packages/react/src/components/Button/
 
 Then export it from `packages/react/src/index.ts`.
 
-## Updating tokens from Figma
-
-See [packages/tokens/README.md](packages/tokens/README.md).
-
 ## Figma Dev Mode and Code Connect
 
-Every component set in the Figma file has a link to its Storybook page and a line like `React: import { Button } from "@halo-ds/react";` in its description, so developers inspecting a design in Dev Mode can find the code on any Figma plan.
+The mappings in `packages/react/figma/*.figma.tsx` link each component to the **COACHLI DESIGN SYSTEM** Figma library (`fNq8x9qbF4yYA6ixgwdGVR`). Form, Resizable, Result, Statistic, Tree and the Table expanded row are Halo components the COACHLI library doesn't have yet, so `figma.config.json` excludes them. Add them back once they exist in the library, and point their URLs at its node ids.
 
-[Code Connect](https://developers.figma.com/docs/code-connect/) goes further: Dev Mode shows a ready-to-paste React snippet with the props set from the selected variant. The mappings live in `packages/react/figma/*.figma.tsx`. Button, Compact button, Badge, Tag, Alert and Input field map their Figma properties to props; the rest link the component and show a basic example. Publishing needs a Dev or Full seat on a Figma Organization or Enterprise plan. With that, from `packages/react`:
+Publishing needs a Dev or Full seat on a Figma Organization or Enterprise plan. From `packages/react`:
 
 ```bash
 npx @figma/code-connect connect publish --token <your Figma access token>
 ```
 
-When you add a Figma property or a component, update its `.figma.tsx` file in the same change.
+## Releasing
 
-## Releasing to npm
+Packages publish to **GitHub Packages** through the *Publish packages* GitHub Action, using the repository's own token. No npm account or paid plan is needed.
 
-Halo publishes two packages, `@halo-ds/tokens` and `@halo-ds/react`, under the `halo-ds` npm organisation.
+1. In `CHANGELOG.md`, rename **Unreleased** to the new version and add a fresh **Unreleased** above it.
+2. Set the same version in `packages/tokens/package.json` and `packages/react/package.json` (`0.1.1` for fixes, `0.2.0` for new components or token changes).
+3. Commit and push to `main`, then run the action: **Actions → Publish packages → Run workflow**, or `gh workflow run publish.yml`.
+4. Tag it: `git tag v0.1.1 && git push origin v0.1.1`.
 
-One-time setup:
-
-1. Create an npm account at [npmjs.com](https://www.npmjs.com) and turn on two-factor authentication.
-2. Create a free organisation named `halo-ds` (Add Organization in your npm profile). The `@halo-ds/` names only work once you own it.
-3. Sign in from the terminal: `npm login`. Run it from your home folder, not inside this repository: the repository asks for Node 24, so `npm` commands run inside it stop with `EBADDEVENGINES` on older Node versions (pnpm downloads Node 24 for you, so `pnpm` commands are fine). The sign-in is saved for your whole computer. Check it worked with `npm whoami`.
-
-Releases are batched. Pushing to `main` only updates Storybook; nothing goes to npm until someone runs `pnpm release`. Add each change to the **Unreleased** section of [CHANGELOG.md](CHANGELOG.md) as you make it, and release when there is a worthwhile batch, such as a few new components, a breaking change, or a fix people are waiting for.
-
-Each release:
-
-1. In `CHANGELOG.md`, rename **Unreleased** to the new version and add a fresh empty **Unreleased** section above it.
-2. Set the same new version in `packages/tokens/package.json` and `packages/react/package.json` (for example `0.1.0`, then `0.1.1` for fixes and `0.2.0` for new components).
-3. Check what would be published, without publishing:
-
-   ```bash
-   pnpm release:check
-   ```
-
-4. Publish both packages:
-
-   ```bash
-   pnpm release
-   ```
-
-   pnpm swaps the internal `workspace:*` link for the real version number, so `@halo-ds/react` depends on the matching `@halo-ds/tokens`.
-
-5. Tag the release in git: `git tag v0.1.0 && git push --tags`.
-
+Check a release locally without publishing: `pnpm release:check`.

@@ -1,7 +1,7 @@
 {
-  "name": "@halo-ds/react",
-  "version": "0.2.0",
-  "description": "React components for the Halo design system.",
+  "name": "@chidindu06f/coachli-react",
+  "version": "0.1.0",
+  "description": "React components for the Coachli design system (based on Halo).",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -28,7 +28,7 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@halo-ds/tokens": "workspace:*"
+    "@chidindu06f/coachli-tokens": "workspace:*"
   },
   "devDependencies": {
     "@phosphor-icons/react": "^2.1.10",
@@ -44,14 +44,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Chidindu06F/Halo-design-system.git",
+    "url": "git+https://github.com/Chidindu06F/Coachli-design-system.git",
     "directory": "packages/react"
   },
-  "homepage": "https://github.com/Chidindu06F/Halo-design-system#readme",
+  "homepage": "https://github.com/Chidindu06F/Coachli-design-system#readme",
   "bugs": {
-    "url": "https://github.com/Chidindu06F/Halo-design-system/issues"
+    "url": "https://github.com/Chidindu06F/Coachli-design-system/issues"
   },
   "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
     "access": "public"
   },
   "keywords": [
@@ -59,6 +60,6 @@
     "react",
     "components",
     "ui",
-    "halo"
+    "coachli"
   ]
 }

@@ -1,7 +1,7 @@
 import figma from '@figma/code-connect';
-import { Tag } from '@halo-ds/react';
+import { Tag } from '@chidindu06f/coachli-react';
 
-figma.connect(Tag, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10095-221', {
+figma.connect(Tag, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10095-221', {
   props: {
     label: figma.string('Label'),
     color: figma.enum('Colour', { Neutral: 'neutral', Blue: 'blue', Green: 'green', Yellow: 'yellow', Orange: 'orange', Red: 'red', Pink: 'pink', Purple: 'purple' }),

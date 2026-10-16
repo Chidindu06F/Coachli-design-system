@@ -1,7 +1,7 @@
 import figma from '@figma/code-connect';
-import { CompactButton } from '@halo-ds/react';
+import { CompactButton } from '@chidindu06f/coachli-react';
 
-figma.connect(CompactButton, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=9739-1191', {
+figma.connect(CompactButton, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=9739-1191', {
   props: {
     variant: figma.enum('Style', { Stroke: 'stroke', Ghost: 'ghost', Fill: 'fill' }),
     size: figma.enum('Size', { Large: 'lg', Medium: 'md' }),

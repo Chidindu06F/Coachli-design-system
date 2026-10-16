@@ -1,0 +1,44 @@
+name: Publish packages
+
+# Publishes @chidindu06f/coachli-tokens and @chidindu06f/coachli-react to GitHub Packages
+# with the repository's own token: no npm account or personal token needed.
+# Run it from Actions → Publish packages → Run workflow, or push a tag like v0.1.1.
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@chidindu06f'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - run: pnpm typecheck
+
+      - name: Publish (skips versions that are already published)
+        run: pnpm -r --filter "./packages/*" publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

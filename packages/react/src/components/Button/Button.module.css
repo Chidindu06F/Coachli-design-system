@@ -113,8 +113,8 @@
   --bg: var(--premium);
   /* Hover and Pressed lighten the gradient with a thin white wash */
   --bg-hover: linear-gradient(rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.14)), var(--premium);
-  --fg: var(--halo-text-on-brand);
-  --icon: var(--halo-icon-on-brand);
+  --fg: var(--halo-text-on-color);
+  --icon: var(--halo-icon-on-color);
 }
 
 .ghost {

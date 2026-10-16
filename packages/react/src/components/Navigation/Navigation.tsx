@@ -74,12 +74,14 @@ export const NavItem = forwardRef<HTMLElement, NavItemProps>(function NavItem(
 /* ---------- Sidebar ---------- */
 
 /** Parts you can style with `classNames` and `styles` on Sidebar. */
-export type SidebarPart = 'root' | 'header' | 'brand' | 'collapse' | 'items' | 'footer' | 'divider' | 'user';
+export type SidebarPart = 'root' | 'header' | 'brand' | 'collapse' | 'items' | 'beforeFooter' | 'footer' | 'divider' | 'user';
 
 export interface SidebarProps extends HTMLAttributes<HTMLElement>, PartsProps<SidebarPart> {
   /** Logo or workspace name at the top. */
   header?: ReactNode;
-  /** NavItems below the main ones, like Settings and Help. */
+  /** Content between the main items and the footer, like a role switch. Hidden when collapsed. Figma: Show footer (Footer slot). */
+  beforeFooter?: ReactNode;
+  /** NavItems below the main ones, like Settings, Help, Report a bug and Log out. */
   footer?: ReactNode;
   /** The signed-in person, below a divider. */
   user?: ReactNode;
@@ -95,6 +97,7 @@ export interface SidebarProps extends HTMLAttributes<HTMLElement>, PartsProps<Si
 /** The main app navigation down the left side. Children are NavItems. */
 export function Sidebar({
   header,
+  beforeFooter,
   footer,
   user,
   collapsed,
@@ -125,6 +128,7 @@ export function Sidebar({
         )}
         <div {...part('items', styles.items)}>{children}</div>
         <div className={styles.spacer} />
+        {beforeFooter && !isCollapsed && <div {...part('beforeFooter', styles.beforeFooter)}>{beforeFooter}</div>}
         {footer && <div {...part('footer', styles.items)}>{footer}</div>}
         {user && (
           <>

@@ -1,7 +1,7 @@
 {
-  "name": "halo-design-system",
+  "name": "coachli-design-system",
   "private": true,
-  "description": "Halo, an open-source design system for designers and developers.",
+  "description": "Coachli design system: Halo components themed with the Coachli brand (aubergine, Inter), for the Coachli dashboard.",
   "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@12.6.0",
@@ -11,11 +11,12 @@
   "scripts": {
     "dev": "pnpm build:tokens && pnpm --filter docs dev",
     "build": "pnpm -r build",
-    "build:tokens": "pnpm --filter @halo-ds/tokens build",
+    "build:tokens": "pnpm --filter @chidindu06f/coachli-tokens build",
     "build:docs": "pnpm build:tokens && pnpm --filter docs build",
     "typecheck": "pnpm -r typecheck",
     "release:check": "pnpm build && pnpm typecheck && pnpm -r --filter \"./packages/*\" publish --dry-run --no-git-checks",
-    "release": "pnpm build && pnpm typecheck && pnpm -r --filter \"./packages/*\" publish"
+    "release": "pnpm build && pnpm typecheck && pnpm -r --filter \"./packages/*\" publish --no-git-checks",
+    "tokens:merge": "node packages/tokens/coachli/merge.mjs && pnpm build:tokens"
   },
   "devDependencies": {
     "@typescript/typescript6": "^6.0.2",
@@ -30,10 +31,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Chidindu06F/Halo-design-system.git"
+    "url": "git+https://github.com/Chidindu06F/Coachli-design-system.git"
   },
-  "homepage": "https://github.com/Chidindu06F/Halo-design-system#readme",
+  "homepage": "https://github.com/Chidindu06F/Coachli-design-system#readme",
   "bugs": {
-    "url": "https://github.com/Chidindu06F/Halo-design-system/issues"
+    "url": "https://github.com/Chidindu06F/Coachli-design-system/issues"
   }
 }

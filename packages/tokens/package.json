@@ -1,7 +1,7 @@
 {
-  "name": "@halo-ds/tokens",
-  "version": "0.2.0",
-  "description": "Design tokens for the Halo design system: CSS variables for light and dark mode, generated from Figma.",
+  "name": "@chidindu06f/coachli-tokens",
+  "version": "0.1.0",
+  "description": "Coachli design tokens (colours, type, spacing) as CSS variables for light and dark mode, generated from the COACHLI DESIGN SYSTEM Figma library.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -26,14 +26,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Chidindu06F/Halo-design-system.git",
+    "url": "git+https://github.com/Chidindu06F/Coachli-design-system.git",
     "directory": "packages/tokens"
   },
-  "homepage": "https://github.com/Chidindu06F/Halo-design-system#readme",
+  "homepage": "https://github.com/Chidindu06F/Coachli-design-system#readme",
   "bugs": {
-    "url": "https://github.com/Chidindu06F/Halo-design-system/issues"
+    "url": "https://github.com/Chidindu06F/Coachli-design-system/issues"
   },
   "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
     "access": "public"
   },
   "keywords": [
@@ -41,6 +42,6 @@
     "design-tokens",
     "css-variables",
     "figma",
-    "halo"
+    "coachli"
   ]
 }

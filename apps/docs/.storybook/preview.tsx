@@ -1,11 +1,11 @@
 import type { Preview } from '@storybook/react-vite';
 import { withThemeByDataAttribute } from '@storybook/addon-themes';
-import '@fontsource/geist/400.css';
-import '@fontsource/geist/600.css';
-import '@fontsource/geist/700.css';
-import '@halo-ds/tokens/css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@chidindu06f/coachli-tokens/css';
 // Styles for docs pages that use the built package, like Theming.
-import '@halo-ds/react/styles.css';
+import '@chidindu06f/coachli-react/styles.css';
 import './preview.css';
 
 const preview: Preview = {

@@ -1,14 +1,14 @@
 import figma from '@figma/code-connect';
-import { ProgressBar, ProgressCircle } from '@halo-ds/react';
+import { ProgressBar, ProgressCircle } from '@chidindu06f/coachli-react';
 
-figma.connect(ProgressBar, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10224-28', {
+figma.connect(ProgressBar, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10224-28', {
   example: () => <ProgressBar />,
 });
 
-figma.connect(ProgressCircle, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10224-103', {
+figma.connect(ProgressCircle, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10224-103', {
   example: () => <ProgressCircle />,
 });
 
-figma.connect(ProgressBar, 'https://www.figma.com/design/LVZSmXHpIl0qR5fKYzzLrK/Halo?node-id=10224-1004', {
+figma.connect(ProgressBar, 'https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM?node-id=10224-1004', {
   example: () => <ProgressBar />,
 });

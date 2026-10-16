@@ -119,16 +119,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.3058823529411765,
-          0.09803921568627451,
-          0.30980392156862746
+          0.16470588235294117,
+          0.07058823529411765,
+          0.18823529411764706
         ],
         "alpha": 1,
-        "hex": "#4E194F"
+        "hex": "#2A1230"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/800",
+          "targetVariableName": "colours/aubergine/800",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -138,16 +138,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.43529411764705883,
-          0.13725490196078433,
-          0.44313725490196076
+          0.22745098039215686,
+          0.10196078431372549,
+          0.25098039215686274
         ],
         "alpha": 1,
-        "hex": "#6F2371"
+        "hex": "#3A1A40"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/700",
+          "targetVariableName": "colours/aubergine/700",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -157,16 +157,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.6980392156862745,
-          0.09803921568627451,
-          0.7137254901960784
+          0.788235294117647,
+          0.5450980392156862,
+          0.8235294117647058
         ],
         "alpha": 1,
-        "hex": "#B219B6"
+        "hex": "#C98BD2"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/400",
+          "targetVariableName": "colours/aubergine/250",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -204,7 +204,7 @@
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/200",
+          "targetVariableName": "colours/aubergine/150",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -227,6 +227,19 @@
           "targetVariableSetName": "Primitives"
         }
       }
+    },
+    "overlay": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.6,
+        "hex": "#000000"
+      }
     }
   },
   "button": {
@@ -235,16 +248,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.8,
-          0.11372549019607843,
-          0.8156862745098039
+          0.788235294117647,
+          0.5450980392156862,
+          0.8235294117647058
         ],
         "alpha": 1,
-        "hex": "#CC1DD0"
+        "hex": "#C98BD2"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/300",
+          "targetVariableName": "colours/aubergine/250",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -254,16 +267,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.6980392156862745,
-          0.09803921568627451,
-          0.7137254901960784
+          0.8666666666666667,
+          0.6862745098039216,
+          0.8862745098039215
         ],
         "alpha": 1,
-        "hex": "#B219B6"
+        "hex": "#DDAFE2"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/400",
+          "targetVariableName": "colours/aubergine/200",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -273,12 +286,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.8,
-          0.11372549019607843,
-          0.8156862745098039
+          0.788235294117647,
+          0.5450980392156862,
+          0.8235294117647058
         ],
         "alpha": 1,
-        "hex": "#CC1DD0"
+        "hex": "#C98BD2"
       },
       "$extensions": {
         "com.figma.aliasData": {
@@ -292,16 +305,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.6980392156862745,
-          0.09803921568627451,
-          0.7137254901960784
+          0.8666666666666667,
+          0.6862745098039216,
+          0.8862745098039215
         ],
         "alpha": 1,
-        "hex": "#B219B6"
+        "hex": "#DDAFE2"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/400",
+          "targetVariableName": "colours/aubergine/200",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -463,48 +476,57 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.4823529411764706,
-          0.24705882352941178,
-          0.9490196078431372
+          0.054901960784313725,
+          0.48627450980392156,
+          0.4627450980392157
         ],
         "alpha": 1,
-        "hex": "#7B3FF2"
+        "hex": "#0E7C76"
       },
-      "$description": "Start of the Premium button gradient (violet)."
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/premium/teal",
+          "targetVariableSetName": "Primitives"
+        }
+      }
     },
     "premium-middle": {
       "$type": "color",
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.8,
-          0.11372549019607843,
-          0.8156862745098039
+          0.1450980392156863,
+          0.38823529411764707,
+          0.9215686274509803
         ],
         "alpha": 1,
-        "hex": "#CC1DD0"
+        "hex": "#2563EB"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/300",
+          "targetVariableName": "colours/premium/blue",
           "targetVariableSetName": "Primitives"
         }
-      },
-      "$description": "Middle of the Premium button gradient (brand purple)."
+      }
     },
     "premium-end": {
       "$type": "color",
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.8784313725490196,
-          0.1411764705882353,
-          0.35294117647058826
+          0.48627450980392156,
+          0.22745098039215686,
+          0.9294117647058824
         ],
         "alpha": 1,
-        "hex": "#E0245A"
+        "hex": "#7C3AED"
       },
-      "$description": "End of the Premium button gradient (rose)."
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/premium/violet",
+          "targetVariableSetName": "Primitives"
+        }
+      }
     }
   },
   "icon": {
@@ -608,16 +630,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          1,
-          1,
-          1
+          0.10196078431372549,
+          0.0392156862745098,
+          0.11764705882352941
         ],
         "alpha": 1,
-        "hex": "#FFFFFF"
+        "hex": "#1A0A1E"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/neutrals/0",
+          "targetVariableName": "colours/aubergine/900",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -677,6 +699,51 @@
           "targetVariableName": "colours/black/200",
           "targetVariableSetName": "Primitives"
         }
+      }
+    },
+    "on-color": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/neutrals/0",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "on-contrast": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.10196078431372549,
+          0.10196078431372549,
+          0.10196078431372549
+        ],
+        "alpha": 1,
+        "hex": "#1A1A1A"
+      }
+    },
+    "on-status": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.10196078431372549,
+          0.10196078431372549,
+          0.10196078431372549
+        ],
+        "alpha": 1,
+        "hex": "#1A1A1A"
       }
     }
   },
@@ -762,16 +829,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.9529411764705882,
-          0.7843137254901961,
-          0.9568627450980393
+          0.788235294117647,
+          0.5450980392156862,
+          0.8235294117647058
         ],
         "alpha": 1,
-        "hex": "#F3C8F4"
+        "hex": "#C98BD2"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/200",
+          "targetVariableName": "colours/aubergine/250",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -781,16 +848,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          1,
-          1,
-          1
+          0.10196078431372549,
+          0.0392156862745098,
+          0.11764705882352941
         ],
         "alpha": 1,
-        "hex": "#FFFFFF"
+        "hex": "#1A0A1E"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/neutrals/0",
+          "targetVariableName": "colours/aubergine/900",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -831,6 +898,38 @@
           "targetVariableName": "colours/neutrals/0",
           "targetVariableSetName": "Primitives"
         }
+      }
+    },
+    "on-color": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/neutrals/0",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "on-status": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.10196078431372549,
+          0.10196078431372549,
+          0.10196078431372549
+        ],
+        "alpha": 1,
+        "hex": "#1A1A1A"
       }
     }
   },
@@ -897,16 +996,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.8,
-          0.11372549019607843,
-          0.8156862745098039
+          0.788235294117647,
+          0.5450980392156862,
+          0.8235294117647058
         ],
         "alpha": 1,
-        "hex": "#CC1DD0"
+        "hex": "#C98BD2"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/300",
+          "targetVariableName": "colours/aubergine/250",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -916,16 +1015,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.43529411764705883,
-          0.13725490196078433,
-          0.44313725490196076
+          0.788235294117647,
+          0.5450980392156862,
+          0.8235294117647058
         ],
         "alpha": 1,
-        "hex": "#6F2371"
+        "hex": "#C98BD2"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/700",
+          "targetVariableName": "colours/aubergine/250",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -1720,16 +1819,16 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.3058823529411765,
-          0.09803921568627451,
-          0.30980392156862746
+          0.16470588235294117,
+          0.07058823529411765,
+          0.18823529411764706
         ],
         "alpha": 1,
-        "hex": "#4E194F"
+        "hex": "#2A1230"
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/800",
+          "targetVariableName": "colours/aubergine/800",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -1748,7 +1847,7 @@
       },
       "$extensions": {
         "com.figma.aliasData": {
-          "targetVariableName": "colours/purple/200",
+          "targetVariableName": "colours/aubergine/150",
           "targetVariableSetName": "Primitives"
         }
       }
@@ -1767,7 +1866,6 @@
         "alpha": 1,
         "hex": "#E6E6E6"
       },
-      "$description": "First series. The main line or bar.",
       "$extensions": {
         "com.figma.aliasData": {
           "targetVariableName": "colours/neutrals/300",
@@ -1787,7 +1885,6 @@
         "alpha": 1,
         "hex": "#47C2FF"
       },
-      "$description": "Second series.",
       "$extensions": {
         "com.figma.aliasData": {
           "targetVariableName": "colours/skyblue/300",
@@ -1807,7 +1904,6 @@
         "alpha": 1,
         "hex": "#1DAF61"
       },
-      "$description": "Third series.",
       "$extensions": {
         "com.figma.aliasData": {
           "targetVariableName": "colours/green/300",
@@ -1827,7 +1923,6 @@
         "alpha": 1,
         "hex": "#F6B51E"
       },
-      "$description": "Fourth series.",
       "$extensions": {
         "com.figma.aliasData": {
           "targetVariableName": "colours/yellow/300",
@@ -1847,7 +1942,6 @@
         "alpha": 1,
         "hex": "#E4508F"
       },
-      "$description": "Fifth series.",
       "$extensions": {
         "com.figma.aliasData": {
           "targetVariableName": "colours/pink/300",
@@ -1867,7 +1961,6 @@
         "alpha": 1,
         "hex": "#474747"
       },
-      "$description": "Sixth series, or Other and comparison data.",
       "$extensions": {
         "com.figma.aliasData": {
           "targetVariableName": "colours/black/0",
@@ -1887,7 +1980,6 @@
         "alpha": 1,
         "hex": "#2B2B2B"
       },
-      "$description": "Grid lines and the axis line.",
       "$extensions": {
         "com.figma.aliasData": {
           "targetVariableName": "colours/black/300",
@@ -1910,7 +2002,6 @@
           "alpha": 1,
           "hex": "#194459"
         },
-        "$description": "Background of a blue tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/skyblue/900",
@@ -1930,7 +2021,6 @@
           "alpha": 1,
           "hex": "#C6ECFF"
         },
-        "$description": "Label and icons on a blue tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/skyblue/200",
@@ -1952,7 +2042,6 @@
           "alpha": 1,
           "hex": "#0A3D22"
         },
-        "$description": "Background of a green tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/green/900",
@@ -1972,7 +2061,6 @@
           "alpha": 1,
           "hex": "#B9E6CE"
         },
-        "$description": "Label and icons on a green tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/green/200",
@@ -1994,7 +2082,6 @@
           "alpha": 1,
           "hex": "#563F0B"
         },
-        "$description": "Background of a yellow tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/yellow/900",
@@ -2014,7 +2101,6 @@
           "alpha": 1,
           "hex": "#FCE8B9"
         },
-        "$description": "Label and icons on a yellow tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/yellow/200",
@@ -2036,7 +2122,6 @@
           "alpha": 1,
           "hex": "#593319"
         },
-        "$description": "Background of a orange tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/orange/900",
@@ -2056,7 +2141,6 @@
           "alpha": 1,
           "hex": "#FFDDC6"
         },
-        "$description": "Label and icons on a orange tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/orange/200",
@@ -2078,7 +2162,6 @@
           "alpha": 1,
           "hex": "#521318"
         },
-        "$description": "Background of a red tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/red/900",
@@ -2098,7 +2181,6 @@
           "alpha": 1,
           "hex": "#F8C0C5"
         },
-        "$description": "Label and icons on a red tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/red/200",
@@ -2120,7 +2202,6 @@
           "alpha": 1,
           "hex": "#501C32"
         },
-        "$description": "Background of a pink tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/pink/900",
@@ -2140,7 +2221,6 @@
           "alpha": 1,
           "hex": "#F7C9DC"
         },
-        "$description": "Label and icons on a pink tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/pink/200",
@@ -2162,7 +2242,6 @@
           "alpha": 1,
           "hex": "#381139"
         },
-        "$description": "Background of a purple tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/purple/900",
@@ -2182,7 +2261,6 @@
           "alpha": 1,
           "hex": "#F3C8F4"
         },
-        "$description": "Label and icons on a purple tag.",
         "$extensions": {
           "com.figma.aliasData": {
             "targetVariableName": "colours/purple/200",
@@ -2202,10 +2280,9 @@
           0,
           0
         ],
-        "alpha": 0.5,
+        "alpha": 0.502,
         "hex": "#000000"
-      },
-      "$description": "Soft shadow under things that float over the page, like Toast."
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Award, awardLabel, awardNames } from '@halo-ds/react';
+import { Award, awardLabel, awardNames } from '@chidindu06f/coachli-react';
 import { Code, Page, Section } from './shared';
 
 const groups = [

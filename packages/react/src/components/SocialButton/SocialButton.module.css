@@ -4,7 +4,7 @@
   /* Set per variant and provider below */
   --bg: transparent;
   --bg-hover: transparent;
-  --fg: var(--halo-text-on-brand);
+  --fg: var(--halo-text-on-color);
   --logo: var(--fg);
   --outline: transparent;
 

@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { tokens, type Token } from '@halo-ds/tokens';
+import { tokens, type Token } from '@chidindu06f/coachli-tokens';
 
 export { tokens };
 export type { Token };

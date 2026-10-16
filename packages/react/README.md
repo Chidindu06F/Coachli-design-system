@@ -1,16 +1,16 @@
-# @halo-ds/react
+# @chidindu06f/coachli-react
 
-React components for the Halo design system, with light and dark mode, built on the `@halo-ds/tokens` CSS variables.
+React components for the Halo design system, with light and dark mode, built on the `@chidindu06f/coachli-tokens` CSS variables.
 
 ```bash
-npm install @halo-ds/react @halo-ds/tokens @fontsource/geist
+npm install @chidindu06f/coachli-react @chidindu06f/coachli-tokens @fontsource/geist
 ```
 
 Load the tokens, the component styles and the font once, at the top of your app:
 
 ```tsx
-import '@halo-ds/tokens/css';
-import '@halo-ds/react/styles.css';
+import '@chidindu06f/coachli-tokens/css';
+import '@chidindu06f/coachli-react/styles.css';
 import '@fontsource/geist/400.css';
 import '@fontsource/geist/600.css';
 import '@fontsource/geist/700.css';
@@ -19,7 +19,7 @@ import '@fontsource/geist/700.css';
 Then use the components:
 
 ```tsx
-import { Button, Modal, EmptyState, Illustration } from '@halo-ds/react';
+import { Button, Modal, EmptyState, Illustration } from '@chidindu06f/coachli-react';
 
 export function Projects() {
   return (

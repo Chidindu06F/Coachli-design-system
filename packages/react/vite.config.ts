@@ -11,7 +11,7 @@ export default defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', /^@halo-ds\//],
+      external: ['react', 'react-dom', 'react/jsx-runtime', /^@chidindu06f\/coachli-/],
     },
     cssCodeSplit: false,
   },
