@@ -51,7 +51,7 @@ These live on the **Components** page of the Coachli Figma file, not in the desi
 | Setup checklist | Card, ProgressBar, List, Button (secondary) | 5 tasks (photo, first offering, calendar, bank, KYC). Collapsible, can't be dismissed, and hides itself when everything is done. Has Desktop and Mobile layouts |
 | Notifications | Popover (no arrow, soft shadow) + Tabs (All / Unread) + List | Unread items have a dot and a bold title, and the bell shows a red count badge. "Mark all as read". Covers bookings, payouts, orders and reviews |
 | Account menu | Avatar trigger + Popover | Name with a "view profile" icon, a pencil "edit" badge on the avatar, public link with copy ("Link copied" tooltip), share to WhatsApp, X, Facebook, LinkedIn and Gmail |
-| Create menu | Button + Menu | One flat list: 1:1 session, Session bundle, Live event, Digital product, Subscription, Service, Invoice, Discount, Email automation. Each item has a 16px glossy 3D illustration (the **Create icon** component; export the PNGs from Figma Dev Mode). Course is ready for later |
+| Create menu | Button + Menu | One flat list: 1:1 session, Session bundle, Live event, Digital product, Subscription, Service, Invoice, Discount, Email automation. Each item has a 20px glossy 3D illustration (the **Create icon** component; export the PNGs from Figma Dev Mode). Course is ready for later |
 | Create session button | Button + Menu | Empty Sessions tab: 1:1 session or Session bundle |
 | Nav group / Nav flyout | NavItem + Menu | Sidebar groups expand in place. In the collapsed sidebar, a flyout menu opens beside the icon |
 | Attendee stack | Avatar group + Tooltip | Spreads out on hover, with a name tooltip on each avatar |
