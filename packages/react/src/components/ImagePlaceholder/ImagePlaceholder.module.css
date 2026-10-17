@@ -1,0 +1,32 @@
+/* Values mirror the Image placeholder component set in Figma (Image placeholder page). */
+
+.root {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--halo-illustration-backdrop);
+}
+
+/* The icon tile is a mask, so the icons take the token colour and follow dark mode */
+.pattern {
+  position: absolute;
+  inset: 0;
+  background: var(--halo-illustration-shade);
+  -webkit-mask-image: var(--ip-tile);
+  mask-image: var(--ip-tile);
+  -webkit-mask-size: var(--ip-tile-size);
+  mask-size: var(--ip-tile-size);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+}
+
+.mark {
+  width: 47%;
+  height: auto;
+  fill: var(--halo-illustration-shade);
+}

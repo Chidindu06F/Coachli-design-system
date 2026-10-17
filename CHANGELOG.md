@@ -4,6 +4,12 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ## Unreleased
 
+## 0.2.0
+
+### New components
+
+- **Image placeholder:** `ImagePlaceholder`, the default image Coachli shows when someone hasn't uploaded one (offering and event covers, product images, thumbnails). A grey background (`illustration/backdrop`) with a pattern of 24 coaching and mentorship icons (`illustration/shade`). It follows dark mode. `ratio`: `16:9` (covers), `4:3`, `1:1`, `small-pattern` and `small-logo` (the faint Coachli mark) for thumbnails under about 80px. Large ratios fill their container; small ones are 64px unless you set `width`. Pass `label` (for example "No cover image") to have screen readers announce it; otherwise it's hidden from them. Figma: Image placeholder (Ratio). Code Connect is mapped.
+
 ## 0.1.0 (Coachli)
 
 The first Coachli release: Halo's components (as of "Add Form with built-in checks and layout helpers"), themed and adjusted to match the COACHLI DESIGN SYSTEM Figma library.

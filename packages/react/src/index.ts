@@ -113,6 +113,8 @@ export { Form, FormActions, FormRow, FormSection } from './components/Form';
 export type { FormActionsProps, FormErrors, FormProps, FormRowProps, FormSectionProps, FormValues } from './components/Form';
 export { Illustration, illustrationGroups, illustrationNames } from './components/Illustration';
 export type { IllustrationName, IllustrationProps } from './components/Illustration';
+export { ImagePlaceholder } from './components/ImagePlaceholder';
+export type { ImagePlaceholderProps, ImagePlaceholderRatio } from './components/ImagePlaceholder';
 export { Text } from './components/Text';
 export type { TextColor, TextProps, TextSize, TextWeight } from './components/Text';
 export { formatTime, TimePicker, TimePickerField } from './components/TimePicker';
