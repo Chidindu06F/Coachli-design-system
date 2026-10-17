@@ -1,7 +1,7 @@
 /* Values mirror the Progress bar, Progress circle and Progress field sets in Figma (Progress page). */
 
 .track {
-  --fill: var(--halo-button-primary);
+  --fill: var(--halo-surface-brand-contrast);
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -88,7 +88,7 @@
 .circle svg { position: absolute; inset: 0; }
 .ring { stroke: var(--halo-surface-secondary); }
 .arc {
-  stroke: var(--halo-button-primary);
+  stroke: var(--halo-surface-brand-contrast);
   transform: rotate(-90deg);
   transform-origin: center;
   transition: stroke-dasharray 240ms ease;

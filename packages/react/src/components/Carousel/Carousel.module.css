@@ -68,7 +68,7 @@
 .dot:hover { background: var(--halo-border-strong); }
 .dot[aria-current='true'] {
   width: 20px;
-  background: var(--halo-button-primary);
+  background: var(--halo-surface-brand-contrast);
 }
 .dot:focus-visible {
   outline: none;

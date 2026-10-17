@@ -24,8 +24,8 @@
   line-height: var(--halo-line-height-sm);
 }
 .indicator > svg { width: 14px; height: 14px; }
-.indicator.complete { background: var(--halo-button-primary); color: var(--halo-icon-on-brand); }
-.indicator.current { background: var(--halo-surface-primary); box-shadow: inset 0 0 0 2px var(--halo-button-primary); color: var(--halo-text-brand); }
+.indicator.complete { background: var(--halo-surface-brand-contrast); color: var(--halo-icon-on-brand); }
+.indicator.current { background: var(--halo-surface-primary); box-shadow: inset 0 0 0 2px var(--halo-surface-brand-contrast); color: var(--halo-text-brand); }
 .indicator.upcoming { background: var(--halo-surface-primary); box-shadow: inset 0 0 0 1px var(--halo-border-strong); color: var(--halo-text-secondary); }
 .indicator.error { background: var(--halo-state-error-primary); color: var(--halo-icon-on-negative); }
 
@@ -50,7 +50,7 @@
 }
 
 .connector { display: block; border-radius: var(--halo-radius-10); background: var(--halo-border-secondary); }
-.connectorDone { background: var(--halo-button-primary); }
+.connectorDone { background: var(--halo-surface-brand-contrast); }
 .connectorWrap { display: flex; flex: 1; align-items: center; min-width: 24px; height: 24px; }
 .horizontal .connector { flex: 1; height: 2px; }
 
@@ -86,5 +86,5 @@
 }
 .segments { display: flex; gap: var(--halo-spacing-2); }
 .segment { flex: 1; height: 4px; border-radius: var(--halo-radius-10); background: var(--halo-surface-secondary); }
-.segmentDone { background: var(--halo-button-primary); }
+.segmentDone { background: var(--halo-surface-brand-contrast); }
 .segmentError { background: var(--halo-state-error-primary); }

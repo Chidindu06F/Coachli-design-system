@@ -1,6 +1,6 @@
 {
   "name": "@chidindu06f/coachli-tokens",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Coachli design tokens (colours, type, spacing) as CSS variables for light and dark mode, generated from the COACHLI DESIGN SYSTEM Figma library.",
   "license": "MIT",
   "type": "module",

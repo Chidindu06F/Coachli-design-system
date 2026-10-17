@@ -50,13 +50,13 @@
 /* Hover and keyboard focus look the same */
 .header:hover:not(:disabled),
 .header:focus-visible {
-  color: var(--halo-button-primary);
+  color: var(--halo-text-brand);
   outline: none;
 }
 
 .header:hover:not(:disabled) .iconBox,
 .header:focus-visible .iconBox {
-  background: var(--halo-button-secondary-hover);
+  background: var(--halo-surface-secondary);
 }
 
 .disabled .header {

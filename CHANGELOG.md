@@ -4,6 +4,17 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ## Unreleased
 
+## 0.2.1
+
+### Changes
+
+- **Button tokens are for buttons only.** Brand-coloured parts of other components used `button/primary` (inherited from Halo). They now use brand surface tokens with the same colours:
+  - `surface/brand-contrast`: Badge (brand dot, solid brand badge), Checkbox and Radio (checked), Switch (on), Slider, Progress bar and circle, Spinner, Stepper, Tabs indicator, Carousel dot, Tree, Avatar "add" status.
+  - `surface/brand-heavy-contrast`: their hover states (a touch deeper than the button hover).
+  - `surface/secondary`: grey hover rows in Menu, List, Tag, Date picker, Event calendar and Accordion.
+  - `text/brand`: the open Accordion title.
+  - Buttons, Compact button, Social button and Link button keep the `button/*` tokens. The Figma library has the same change.
+
 ## 0.2.0
 
 ### New components

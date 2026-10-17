@@ -35,7 +35,7 @@
 }
 .item:hover,
 .item:focus-visible,
-.item[data-active='true'] { background: var(--halo-button-secondary-hover); }
+.item[data-active='true'] { background: var(--halo-surface-secondary); }
 .item:hover .shortcut,
 .item:focus-visible .shortcut,
 .item[data-active='true'] .shortcut { color: var(--halo-text-contrast); }

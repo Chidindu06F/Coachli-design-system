@@ -150,7 +150,7 @@
   fill: var(--badge);
 }
 
-.status-add { --badge: var(--halo-button-primary); }
+.status-add { --badge: var(--halo-surface-brand-contrast); }
 .status-remove { --badge: var(--halo-surface-invert); --cut: var(--halo-icon-invert); }
 
 .status-pin,

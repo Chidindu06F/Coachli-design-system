@@ -38,7 +38,7 @@
 .sm { --gap: var(--halo-spacing-4); --pad-y: var(--halo-spacing-3); --pad-x: var(--halo-spacing-4); --icon: 16px; }
 
 .interactive { cursor: pointer; }
-.interactive:hover { background: var(--halo-button-secondary-hover); }
+.interactive:hover { background: var(--halo-surface-secondary); }
 .interactive:hover .description { color: var(--halo-text-contrast); }
 .interactive:focus-visible {
   outline: none;

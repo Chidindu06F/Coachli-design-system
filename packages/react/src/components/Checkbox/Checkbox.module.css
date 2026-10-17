@@ -81,13 +81,13 @@
 
 .input:checked,
 .input:indeterminate {
-  --fill: var(--halo-button-primary);
+  --fill: var(--halo-surface-brand-contrast);
   --line: transparent;
 }
 
 .field:hover .input:checked:not(:disabled),
 .field:hover .input:indeterminate:not(:disabled) {
-  --fill: var(--halo-button-primary-hover);
+  --fill: var(--halo-surface-brand-heavy-contrast);
   --line: transparent;
 }
 

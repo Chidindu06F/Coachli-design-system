@@ -45,7 +45,7 @@
 
 .row:hover,
 .item:focus-visible > .row {
-  background: var(--halo-button-secondary-hover);
+  background: var(--halo-surface-secondary);
 }
 
 .item:focus-visible > .row {
@@ -112,7 +112,7 @@
 }
 
 .checkOn {
-  background: var(--halo-button-primary);
+  background: var(--halo-surface-brand-contrast);
   box-shadow: none;
 }
 

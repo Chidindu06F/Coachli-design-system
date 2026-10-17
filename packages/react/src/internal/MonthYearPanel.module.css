@@ -20,7 +20,7 @@
   font-variant-numeric: tabular-nums;
 }
 .headButton { cursor: pointer; }
-.headButton:hover { background: var(--halo-button-secondary-hover); }
+.headButton:hover { background: var(--halo-surface-secondary); }
 .headButton:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
 .caret { width: 16px; height: 16px; }
 
@@ -38,7 +38,7 @@
   font-variant-numeric: tabular-nums;
   cursor: pointer;
 }
-.cell:hover:not(:disabled) { background: var(--halo-button-secondary-hover); }
+.cell:hover:not(:disabled) { background: var(--halo-surface-secondary); }
 .cell:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
 .cell:disabled { color: var(--halo-text-disabled); cursor: not-allowed; }
 .selected,

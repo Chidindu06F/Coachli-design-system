@@ -1,7 +1,7 @@
 /* Values mirror the Spinner and Loading indicator sets in Figma (Spinner page). */
 
 .spinner {
-  --arc: var(--halo-button-primary);
+  --arc: var(--halo-surface-brand-contrast);
   --track: var(--halo-surface-secondary);
   --track-opacity: 1;
   display: inline-flex;

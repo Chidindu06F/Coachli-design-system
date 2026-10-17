@@ -40,7 +40,7 @@
   font: inherit;
   cursor: pointer;
 }
-.titleButton:hover { background: var(--halo-button-secondary-hover); }
+.titleButton:hover { background: var(--halo-surface-secondary); }
 .titleButton:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
 .titleButton > span { overflow: hidden; text-overflow: ellipsis; }
 .jumpPanel { z-index: 1000; }
@@ -104,7 +104,7 @@
   font-variant-numeric: tabular-nums;
   cursor: pointer;
 }
-.date:hover { background: var(--halo-button-secondary-hover); }
+.date:hover { background: var(--halo-surface-secondary); }
 .date:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
 /* Today: the number in a filled circle. */
 .today,
@@ -148,7 +148,7 @@
   font-weight: var(--halo-font-weight-semibold);
   cursor: pointer;
 }
-.more:hover { background: var(--halo-button-secondary-hover); color: var(--halo-text-primary); }
+.more:hover { background: var(--halo-surface-secondary); color: var(--halo-text-primary); }
 .popList { display: flex; flex-direction: column; gap: var(--halo-spacing-2); }
 .listEvent { min-height: 32px; }
 
@@ -170,7 +170,7 @@
 /* A timed event in the month: a dot of its colour, the time and the title, no fill. */
 .timedBar { background: transparent; color: var(--halo-text-primary); gap: var(--halo-spacing-2); }
 .timedBar::before { content: ''; flex-shrink: 0; width: 6px; height: 6px; margin-right: var(--halo-spacing-2); border-radius: var(--halo-radius-10); background: var(--event-text); }
-.timedBar:hover { background: var(--halo-button-secondary-hover); filter: none; }
+.timedBar:hover { background: var(--halo-surface-secondary); filter: none; }
 
 /* ---------- Day and week ---------- */
 .timeGrid {

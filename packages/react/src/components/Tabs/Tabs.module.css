@@ -58,7 +58,7 @@
 /* Line: a 2px indicator under the tab, or on its left when vertical. */
 .line .tab { box-shadow: inset 0 -2px 0 var(--indicator, transparent); }
 .line.vertical .tab { width: 100%; box-shadow: inset 2px 0 0 var(--indicator, transparent); }
-.line .selected { --indicator: var(--halo-button-primary); }
+.line .selected { --indicator: var(--halo-surface-brand-contrast); }
 .line .tab:focus-visible { box-shadow: inset 0 -2px 0 var(--indicator, transparent), 0 0 0 2px var(--halo-surface-primary), 0 0 0 4px var(--halo-border-focus); }
 .line.vertical .tab:focus-visible { box-shadow: inset 2px 0 0 var(--indicator, transparent), 0 0 0 2px var(--halo-surface-primary), 0 0 0 4px var(--halo-border-focus); }
 

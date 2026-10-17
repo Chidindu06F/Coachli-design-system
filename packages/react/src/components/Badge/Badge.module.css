@@ -40,7 +40,7 @@
 /* --soft-bg and --soft-fg tint the badge, --strong is the solid fill, outline border and dot */
 
 .neutral { --soft-bg: var(--halo-surface-secondary); --soft-fg: var(--halo-text-contrast); --strong: var(--halo-text-contrast); --line: var(--halo-border-secondary); --solid-bg: var(--halo-surface-invert); --solid-fg: var(--halo-text-invert); }
-.brand { --soft-bg: var(--halo-surface-brand-secondary); --soft-fg: var(--halo-text-brand); --strong: var(--halo-button-primary); --line: var(--halo-border-contrast); --solid-bg: var(--halo-button-primary); --solid-fg: var(--halo-text-on-brand); }
+.brand { --soft-bg: var(--halo-surface-brand-secondary); --soft-fg: var(--halo-text-brand); --strong: var(--halo-surface-brand-contrast); --line: var(--halo-border-contrast); --solid-bg: var(--halo-surface-brand-contrast); --solid-fg: var(--halo-text-on-brand); }
 .information { --soft-bg: var(--halo-state-information-secondary); --soft-fg: var(--halo-state-information-contrast); --strong: var(--halo-state-information-primary); }
 .success { --soft-bg: var(--halo-state-success-secondary); --soft-fg: var(--halo-state-success-contrast); --strong: var(--halo-state-success-primary); }
 .warning { --soft-bg: var(--halo-state-warning-secondary); --soft-fg: var(--halo-state-warning-contrast); --strong: var(--halo-state-warning-primary); }

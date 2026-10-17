@@ -35,7 +35,7 @@
   line-height: var(--halo-line-height-md);
   cursor: pointer;
 }
-.titleButton:hover { background: var(--halo-button-secondary-hover); }
+.titleButton:hover { background: var(--halo-surface-secondary); }
 .titleButton:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
 .picker { min-height: 280px; }
 .monthTitle {
@@ -77,7 +77,7 @@
   font-variant-numeric: tabular-nums;
   cursor: pointer;
 }
-.day:hover:not(:disabled) { background: var(--halo-button-secondary-hover); }
+.day:hover:not(:disabled) { background: var(--halo-surface-secondary); }
 .day:focus-visible {
   outline: none;
   background: var(--halo-surface-primary);
@@ -113,7 +113,7 @@
   text-align: left;
   cursor: pointer;
 }
-.preset:hover { background: var(--halo-button-secondary-hover); }
+.preset:hover { background: var(--halo-surface-secondary); }
 .preset:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-surface-primary), 0 0 0 4px var(--halo-border-focus); }
 .presetOn { background: var(--halo-surface-secondary); font-weight: var(--halo-font-weight-semibold); }
 

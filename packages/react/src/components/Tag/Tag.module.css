@@ -37,7 +37,7 @@
   cursor: pointer;
 }
 .remove > svg { width: 100%; height: 100%; }
-.remove:hover:not(:disabled) { background: var(--halo-button-secondary-hover); }
+.remove:hover:not(:disabled) { background: var(--halo-surface-secondary); }
 .remove:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--halo-border-focus); }
 
 /* Colours. Icons and the remove button take the label colour. */

@@ -65,8 +65,8 @@
 }
 
 .field:hover .input:not(:disabled) { --line: var(--halo-border-contrast); }
-.input:checked { --fill: var(--halo-button-primary); --line: transparent; --dot-color: var(--halo-icon-on-brand); }
-.field:hover .input:checked:not(:disabled) { --fill: var(--halo-button-primary-hover); }
+.input:checked { --fill: var(--halo-surface-brand-contrast); --line: transparent; --dot-color: var(--halo-icon-on-brand); }
+.field:hover .input:checked:not(:disabled) { --fill: var(--halo-surface-brand-heavy-contrast); }
 
 .input:focus-visible {
   outline: none;
