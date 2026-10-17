@@ -57,6 +57,9 @@ These live on the **Components** page of the Coachli Figma file, not in the desi
 | Attendee stack | Avatar group + Tooltip | Spreads out on hover, with a name tooltip on each avatar |
 | Time zone picker | Modal (desktop) / bottom Drawer (mobile) + Switch field + Combobox | "Set automatically" uses the device time zone and disables the combobox |
 | Report a bug | Modal / bottom Drawer + Input, Textarea, File upload | Validation: description required, file 10 MB maximum |
+| Message | Text + tokens | Chat bubble. Received: grey (`--halo-surface-secondary`) on the left; Sent: `--halo-surface-brand-contrast` with `--halo-text-on-brand`, on the right. 16px radius with a 4px corner on the sender's side. Max width 75% of the thread. Time under the bubble; sent messages add "Seen". Type=File shows an attachment row |
+| Message composer | Compact button, Button (icon only) | Attach, emoji (desktop only), text field that grows to 5 lines then scrolls, Send. Enter sends, Shift+Enter adds a line, Send is disabled while empty |
+| Messaging page | List, List item, Avatar, Badge, Input, Tabs, Divider, Message, Message composer | Desktop: three columns inside one card: conversations (300px; search, All/Unread tabs, unread count badges), the open conversation, and customer details (280px; spent, purchases with cover thumbnails, upcoming session, View customer). The person button in the conversation header shows/hides the details. Day dividers ("Yesterday", "Today") and booking events (booked, moved) appear as neutral badges in the thread. Mobile: the list is its own screen; a conversation opens full screen with Back. New message: Modal (desktop) / bottom Drawer (mobile) with To (search customers) and Message |
 
 ## Product rules (from design reviews)
 
