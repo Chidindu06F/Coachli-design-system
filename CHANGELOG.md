@@ -4,6 +4,12 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ## Unreleased
 
+## 0.2.5
+
+### Fixes
+
+- **Avatar icon badge:** the icon now sits at 64% of the badge, centred, so icons without built-in padding (like a pencil) no longer touch the edge. In Figma, the Avatar's status slots are also anchored to their corner, so a smaller badge on a large avatar stays tucked in the corner.
+
 ## 0.2.4
 
 ### Changes

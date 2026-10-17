@@ -163,8 +163,8 @@
 /* Any icon passed to an icon badge, such as a pencil. Uses currentColor. */
 .iconSlot {
   display: flex;
-  width: 70%;
-  height: 70%;
+  width: 64%;
+  height: 64%;
   color: var(--icon-colour, var(--halo-icon-primary));
 }
 
@@ -174,8 +174,8 @@
 }
 
 .pinIcon {
-  width: 100%;
-  height: 100%;
+  width: 64%;
+  height: 64%;
   fill: var(--icon-colour, var(--halo-icon-primary));
 }
 
