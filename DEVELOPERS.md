@@ -60,6 +60,8 @@ These live on the **Components** page of the Coachli Figma file, not in the desi
 
 ## Product rules (from design reviews)
 
+- **Page scrolling (desktop):** the dashboard is an app shell exactly the height of the window (`100vh`). The window never scrolls. The sidebar is full height; the page header (greeting, time zone, bell, Create, avatar) stays pinned at the top; only the body below it scrolls (`overflow-y: auto`). Figma shows this on *Home: scroll behaviour (prototype)*. Other screens are drawn at full height only so the whole design is visible.
+- **Modals:** never taller than 720px or the window. Long content scrolls inside the modal while the title and buttons stay visible (built into `Modal` from 0.2.6).
 - **Toasts:** title only (for example "Bug report sent", "Time zone updated"), shown at the **top centre**. No body text unless a design shows one.
 - **Dropdowns and popovers:** no arrow, soft shadow (`--halo-shadow-soft`).
 - **Empty states:** illustration, title, one line and a single Create button with a dropdown. Top customers and Top offerings have no button.

@@ -4,6 +4,12 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ## Unreleased
 
+## 0.2.6
+
+### Changes
+
+- **Modal: long content scrolls inside the modal.** The modal never grows past 720px (or the window, if smaller). The title, description and actions stay put; only the content area scrolls. Before, the whole modal scrolled. Figma: the Modal's Content slot has a 480px max height with vertical scrolling.
+
 ## 0.2.5
 
 ### Fixes

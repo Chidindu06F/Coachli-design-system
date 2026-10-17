@@ -7,8 +7,9 @@
   gap: var(--halo-spacing-7);
   width: 440px;
   max-width: 100%;
-  max-height: 100%;
-  overflow-y: auto;
+  /* Never taller than 720px or the window. Only .content scrolls, so the header and actions stay visible. */
+  max-height: min(100%, 720px);
+  overflow: hidden;
   padding: var(--halo-spacing-9);
   border-radius: var(--halo-radius-6);
   background: var(--halo-surface-primary);
@@ -54,6 +55,10 @@
   line-height: var(--halo-line-height-md);
 }
 .content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   color: var(--halo-text-primary);
   font-family: var(--halo-font-family-body);
   font-size: var(--halo-font-size-md);
