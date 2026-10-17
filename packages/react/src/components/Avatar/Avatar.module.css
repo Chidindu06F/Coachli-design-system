@@ -138,8 +138,7 @@
 
 .status-add,
 .status-remove,
-.status-pin,
-.status-edit,
+.status-icon,
 .status-logo {
   border-radius: 50%;
   box-shadow: var(--ring);
@@ -154,16 +153,20 @@
 .status-add { --badge: var(--halo-surface-brand-contrast); }
 .status-remove { --badge: var(--halo-surface-invert); --cut: var(--halo-icon-invert); }
 
-.status-pin,
-.status-edit,
+.status-icon,
 .status-logo { background: var(--halo-surface-primary); }
 
-/* Edit: a pencil in a white circle with a thin border, for "change photo" or "edit profile". Figma: Type=Edit. */
-.status-edit { box-shadow: var(--ring), inset 0 0 0 1px var(--halo-border-secondary); }
-.editIcon {
-  width: 58%;
-  height: 58%;
-  fill: var(--halo-icon-primary);
+/* Any icon passed to an icon badge, such as a pencil. Uses currentColor. */
+.iconSlot {
+  display: flex;
+  width: 70%;
+  height: 70%;
+  color: var(--halo-icon-primary);
+}
+
+.iconSlot > * {
+  width: 100%;
+  height: 100%;
 }
 
 .pinIcon {

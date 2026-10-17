@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
-import { PENCIL_SIMPLE, PLUS_CIRCLE_FILL, PUSH_PIN, SEAL_CHECK_FILL, X_CIRCLE_FILL } from './icons';
+import { PLUS_CIRCLE_FILL, PUSH_PIN, SEAL_CHECK_FILL, X_CIRCLE_FILL } from './icons';
 import styles from './Avatar.module.css';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -12,8 +12,9 @@ export type AvatarStatusType =
   | 'verified'
   | 'add'
   | 'remove'
+  | 'icon'
+  /** @deprecated Use `icon` (the push pin is its default). */
   | 'pin'
-  | 'edit'
   | 'notification'
   | 'logo';
 
@@ -26,6 +27,8 @@ export interface AvatarStatusProps extends HTMLAttributes<HTMLSpanElement> {
   count?: number | string;
   /** The logo on a logo badge, such as an svg or img. Figma: Logo. */
   logo?: ReactNode;
+  /** The icon on an icon badge, such as a pencil for "edit profile". Defaults to a push pin. Figma: Change icon. */
+  icon?: ReactNode;
   /** What screen readers announce. Defaults to the type, such as "Online". */
   label?: string;
 }
@@ -38,8 +41,8 @@ const LABELS: Record<AvatarStatusType, string> = {
   verified: 'Verified',
   add: 'Add',
   remove: 'Remove',
+  icon: 'Icon',
   pin: 'Pinned',
-  edit: 'Edit',
   notification: 'Notifications',
   logo: 'Logo',
 };
@@ -56,7 +59,7 @@ function CircleIcon({ d, className }: { d: string; className?: string }) {
   );
 }
 
-function content(type: AvatarStatusType, count: AvatarStatusProps['count'], logo: ReactNode) {
+function content(type: AvatarStatusType, count: AvatarStatusProps['count'], logo: ReactNode, icon: ReactNode) {
   if (DOTS.includes(type)) return <span className={styles.dot} />;
   switch (type) {
     case 'verified':
@@ -73,10 +76,13 @@ function content(type: AvatarStatusType, count: AvatarStatusProps['count'], logo
       return <CircleIcon d={PLUS_CIRCLE_FILL} className={styles.circleIcon} />;
     case 'remove':
       return <CircleIcon d={X_CIRCLE_FILL} className={styles.circleIcon} />;
+    case 'icon':
     case 'pin':
-      return <svg className={styles.pinIcon} viewBox="0 0 256 256" aria-hidden="true"><path d={PUSH_PIN} /></svg>;
-    case 'edit':
-      return <svg className={styles.editIcon} viewBox="0 0 256 256" aria-hidden="true"><path d={PENCIL_SIMPLE} /></svg>;
+      return icon ? (
+        <span className={styles.iconSlot} aria-hidden="true">{icon}</span>
+      ) : (
+        <svg className={styles.pinIcon} viewBox="0 0 256 256" aria-hidden="true"><path d={PUSH_PIN} /></svg>
+      );
     case 'notification':
       return <span aria-hidden="true">{count}</span>;
     default:
@@ -86,14 +92,14 @@ function content(type: AvatarStatusType, count: AvatarStatusProps['count'], logo
 
 /** A small badge for the corner of an Avatar: presence, verified, a count, a logo and more. */
 export const AvatarStatus = forwardRef<HTMLSpanElement, AvatarStatusProps>(function AvatarStatus(
-  { type, size = 'md', count, logo, label, className, ...rest },
+  { type, size = 'md', count, logo, icon, label, className, ...rest },
   ref,
 ) {
   const name = label ?? (type === 'notification' && count !== undefined ? `${count} notifications` : LABELS[type]);
-  const classes = [styles.status, styles[size], styles[`status-${type}`], className].filter(Boolean).join(' ');
+  const classes = [styles.status, styles[size], styles[`status-${type === 'pin' ? 'icon' : type}`], className].filter(Boolean).join(' ');
   return (
     <span ref={ref} role="img" aria-label={name} data-halo="avatar-status" className={classes} {...rest}>
-      {content(type, count, logo)}
+      {content(type, count, logo, icon)}
     </span>
   );
 });

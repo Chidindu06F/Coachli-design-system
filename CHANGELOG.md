@@ -4,6 +4,12 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ## Unreleased
 
+## 0.2.3
+
+### Changes
+
+- **Avatar status: `icon` replaces `pin` and `edit`.** One badge type for any icon: `<AvatarStatus type="icon" icon={<PencilSimple />} />`. It's a push pin when you don't pass `icon`. `type="pin"` still works but is deprecated. The `edit` type from 0.2.2 is removed: use `icon` with a pencil. Figma: Avatar status, Type=Icon with Change icon (Pin was renamed and the Edit variants were removed).
+
 ## 0.2.2
 
 ### Changes

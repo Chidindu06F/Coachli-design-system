@@ -19,7 +19,7 @@ const illustration = (n: number) => `avatars/notionists-${String(n).padStart(2, 
 
 const sizes: AvatarSize[] = ['xs', 'sm', 'md', 'lg', 'xl'];
 const colors: AvatarColor[] = ['neutral', 'purple', 'blue', 'green', 'orange'];
-const statusTypes: AvatarStatusType[] = ['online', 'offline', 'busy', 'away', 'verified', 'add', 'remove', 'pin', 'edit', 'notification', 'logo'];
+const statusTypes: AvatarStatusType[] = ['online', 'offline', 'busy', 'away', 'verified', 'add', 'remove', 'icon', 'notification', 'logo'];
 const sizeLabel: Record<AvatarSize, string> = { xs: 'XS', sm: 'S', md: 'M', lg: 'L', xl: 'XL' };
 const title = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
@@ -134,7 +134,7 @@ export const TwoBadges: Story = {
     <div style={row}>
       <Avatar size="xl" src={photo(5)} name="Zainab Bello" status="online" topStatus={badge('logo')} />
       <Avatar size="xl" src={photo(6)} name="Kemi Ade" status="busy" topStatus="verified" />
-      <Avatar size="xl" name="Ada Okafor" color="orange" status={badge('notification')} topStatus="pin" />
+      <Avatar size="xl" name="Ada Okafor" color="orange" status={badge('notification')} topStatus="icon" />
     </div>
   ),
 };
