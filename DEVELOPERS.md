@@ -65,6 +65,7 @@ These live on the **Components** page of the Coachli Figma file, not in the desi
 - **Empty states:** illustration, title, one line and a single Create button with a dropdown. Top customers and Top offerings have no button.
 - **Event types:** neutral soft badges with a coloured dot (Session, Live event). 1:1 sessions and bundles are both "Session"; a bundle shows "Session 2 of 4" in its details.
 - **Service orders:** statuses are Completed, Dispute opened, Delivered, Refunded and Cancelled.
+- **Offerings in tables and lists:** show the offering's **cover image** as a rounded thumbnail before its name (36px in tables, 40px in lists, 8px radius), not a type icon. In tables, use a `TableCell` with custom content.
 - **Missing images:** wherever a coach hasn't uploaded an image (offering or event cover, product image, thumbnail), show `<ImagePlaceholder>` with the closest `ratio`. Use `small-pattern` or `small-logo` under about 80px. Never leave an empty box.
 - **Product tour:** 7 steps with the `Tour` component: setup checklist, Create, time zone, notifications, public profile, Help (desktop) or Menu (mobile), Report a bug. It starts on first login; Skip or Done ends it.
 
