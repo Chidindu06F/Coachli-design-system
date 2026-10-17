@@ -74,6 +74,7 @@ These live on the **Components** page of the Coachli Figma file, not in the desi
 - **Copy length:** empty-state descriptions and any helper/supporting text fit in **two lines** at most. Short, scannable sentences.
 - **List alignment:** list rows that aren't clickable (for example the customer panel's purchases) have no side padding, so they line up with their heading. Clickable rows keep their padding for the hover background, and their heading is indented to match.
 - **Side drawers** (desktop) are **470px** wide.
+- **Tabs:** tabs that filter content (All / Unread, Local / Foreign currency, Upcoming events) are **Pill, Medium** on desktop and mobile. **Line** tabs are only for switching between sub-pages (Payout: Withdrawal / Payout settings / Transaction fee settings).
 - **Toasts:** title only (for example "Bug report sent", "Time zone updated"), shown at the **top centre**. No body text unless a design shows one.
 - **Dropdowns and popovers:** no arrow, soft shadow (`--halo-shadow-soft`).
 - **Empty states:** illustration, title, one line and a single Create button with a dropdown. Top customers and Top offerings have no button.
