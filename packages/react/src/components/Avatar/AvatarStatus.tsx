@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
-import { PLUS_CIRCLE_FILL, PUSH_PIN, SEAL_CHECK_FILL, X_CIRCLE_FILL } from './icons';
+import { PENCIL_SIMPLE, PLUS_CIRCLE_FILL, PUSH_PIN, SEAL_CHECK_FILL, X_CIRCLE_FILL } from './icons';
 import styles from './Avatar.module.css';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -13,6 +13,7 @@ export type AvatarStatusType =
   | 'add'
   | 'remove'
   | 'pin'
+  | 'edit'
   | 'notification'
   | 'logo';
 
@@ -38,6 +39,7 @@ const LABELS: Record<AvatarStatusType, string> = {
   add: 'Add',
   remove: 'Remove',
   pin: 'Pinned',
+  edit: 'Edit',
   notification: 'Notifications',
   logo: 'Logo',
 };
@@ -73,6 +75,8 @@ function content(type: AvatarStatusType, count: AvatarStatusProps['count'], logo
       return <CircleIcon d={X_CIRCLE_FILL} className={styles.circleIcon} />;
     case 'pin':
       return <svg className={styles.pinIcon} viewBox="0 0 256 256" aria-hidden="true"><path d={PUSH_PIN} /></svg>;
+    case 'edit':
+      return <svg className={styles.editIcon} viewBox="0 0 256 256" aria-hidden="true"><path d={PENCIL_SIMPLE} /></svg>;
     case 'notification':
       return <span aria-hidden="true">{count}</span>;
     default:

@@ -139,6 +139,7 @@
 .status-add,
 .status-remove,
 .status-pin,
+.status-edit,
 .status-logo {
   border-radius: 50%;
   box-shadow: var(--ring);
@@ -154,7 +155,16 @@
 .status-remove { --badge: var(--halo-surface-invert); --cut: var(--halo-icon-invert); }
 
 .status-pin,
+.status-edit,
 .status-logo { background: var(--halo-surface-primary); }
+
+/* Edit: a pencil in a white circle with a thin border, for "change photo" or "edit profile". Figma: Type=Edit. */
+.status-edit { box-shadow: var(--ring), inset 0 0 0 1px var(--halo-border-secondary); }
+.editIcon {
+  width: 58%;
+  height: 58%;
+  fill: var(--halo-icon-primary);
+}
 
 .pinIcon {
   width: 100%;

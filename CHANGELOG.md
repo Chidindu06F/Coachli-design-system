@@ -4,6 +4,12 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ## Unreleased
 
+## 0.2.2
+
+### Changes
+
+- **Avatar status: new `edit` type.** A pencil in a white circle with a thin border, for "change photo" or "edit profile", like the account menu's avatar: `<Avatar status="edit" />`. Screen readers announce "Edit" unless you pass a `label`. Figma: Avatar status, Type=Edit.
+
 ## 0.2.1
 
 ### Changes
