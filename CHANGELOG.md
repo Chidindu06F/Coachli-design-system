@@ -4,6 +4,12 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ## Unreleased
 
+## 0.2.4
+
+### Changes
+
+- **Avatar status icon badge: new `brand` option.** Plain by default (white circle, `icon/primary`). Pass `brand` to fill it with the primary colour (`surface/brand-contrast`) and an `icon/on-brand` icon, like a small primary button. The account menu's pencil uses `brand`. Figma: Avatar status, Type=Icon, Brand.
+
 ## 0.2.3
 
 ### Changes

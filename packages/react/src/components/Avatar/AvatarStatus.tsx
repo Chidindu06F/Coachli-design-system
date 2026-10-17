@@ -29,6 +29,8 @@ export interface AvatarStatusProps extends HTMLAttributes<HTMLSpanElement> {
   logo?: ReactNode;
   /** The icon on an icon badge, such as a pencil for "edit profile". Defaults to a push pin. Figma: Change icon. */
   icon?: ReactNode;
+  /** Fills an icon badge with the brand colour, like a small primary button. Plain by default. Figma: Brand. */
+  brand?: boolean;
   /** What screen readers announce. Defaults to the type, such as "Online". */
   label?: string;
 }
@@ -92,11 +94,11 @@ function content(type: AvatarStatusType, count: AvatarStatusProps['count'], logo
 
 /** A small badge for the corner of an Avatar: presence, verified, a count, a logo and more. */
 export const AvatarStatus = forwardRef<HTMLSpanElement, AvatarStatusProps>(function AvatarStatus(
-  { type, size = 'md', count, logo, icon, label, className, ...rest },
+  { type, size = 'md', count, logo, icon, brand, label, className, ...rest },
   ref,
 ) {
   const name = label ?? (type === 'notification' && count !== undefined ? `${count} notifications` : LABELS[type]);
-  const classes = [styles.status, styles[size], styles[`status-${type === 'pin' ? 'icon' : type}`], className].filter(Boolean).join(' ');
+  const classes = [styles.status, styles[size], styles[`status-${type === 'pin' ? 'icon' : type}`], brand && styles.brand, className].filter(Boolean).join(' ');
   return (
     <span ref={ref} role="img" aria-label={name} data-halo="avatar-status" className={classes} {...rest}>
       {content(type, count, logo, icon)}
