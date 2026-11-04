@@ -4,6 +4,14 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ## Unreleased
 
+## 0.2.7
+
+### Changes
+
+- **Primary buttons are teal again.** `button/primary` is `colours/teal/300` (`#1B7470`), with `teal/400` for hover and pressed. Dark mode uses `teal/250`, with `teal/200` for hover and pressed. Link buttons follow, since they use `button/primary` for their text.
+- **New token `button/primary-label`** for the label, icons and loading spinner on Primary buttons: white in light mode, `teal/900` in dark mode. Primary buttons no longer use `text/on-brand` / `icon/on-brand`, which stay lilac for the other brand fills.
+- Only buttons change. Checkboxes, radios, switches, tabs, the selected date and other brand fills keep `surface/brand-contrast` (aubergine). The Figma library has the same change.
+
 ## 0.2.6
 
 ### Changes

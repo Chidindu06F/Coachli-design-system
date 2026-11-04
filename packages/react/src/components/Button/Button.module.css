@@ -97,8 +97,8 @@
 .primary {
   --bg: var(--halo-button-primary);
   --bg-hover: var(--halo-button-primary-hover);
-  --fg: var(--halo-text-on-brand);
-  --icon: var(--halo-icon-on-brand);
+  --fg: var(--halo-button-primary-label);
+  --icon: var(--halo-button-primary-label);
 }
 
 .secondary {
@@ -186,4 +186,5 @@
   inset: 0;
   margin: auto;
 }
+.primary .spinner { --arc: var(--halo-button-primary-label); --track: var(--halo-button-primary-label); }
 
