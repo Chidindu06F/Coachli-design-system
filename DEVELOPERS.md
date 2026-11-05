@@ -77,6 +77,8 @@ These live on the **Components** page of the Coachli Figma file, not in the desi
 - **Copy length:** empty-state descriptions and any helper/supporting text fit in **two lines** at most. Short, scannable sentences.
 - **List alignment:** list rows that aren't clickable (for example the customer panel's purchases) have no side padding, so they line up with their heading. Clickable rows keep their padding for the hover background, and their heading is indented to match.
 - **Side drawers** (desktop) are **560px** wide (Drawer Size=Large).
+- **Grouping:** a section's heading, its actions and its content (table or list) live in one container with a tight gap (12–16px); sections are separated by the larger page gap. Table actions (count, search, Export CSV) sit in one Table toolbar directly above the table, as on Contacts and Sales and insights.
+- **Mobile keeps every action:** a row with a ⋮ menu on desktop has a ⋮ on mobile too, and a menu always opens from a visible ⋮ (or the button/field that triggers it).
 - **Tabs:** tabs that filter content (All / Unread, Local / Foreign currency, Upcoming events) are **Pill, Medium** on desktop and mobile. **Line** tabs are only for switching between sub-pages (Payout: Withdrawal / Payout settings / Transaction fee settings). When a tab holds a list, show how many items it has with the tab's count badge (Upcoming events: All 5 / Sessions 3 / Live events 2; 1:1 sessions: Upcoming 4 / Past 3; Notifications: All / Activity / What's new; Help: All / Videos / Articles).
 - **Toasts:** title only (for example "Bug report sent", "Time zone updated"), shown at the **top centre**. No body text unless a design shows one.
 - **Dropdowns and popovers:** no arrow, soft shadow (`--halo-shadow-soft`).
