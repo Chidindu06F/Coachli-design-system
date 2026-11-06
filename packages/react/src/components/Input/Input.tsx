@@ -9,6 +9,8 @@ import { parts } from '../../internal/parts';
 import type { PartsProps } from '../../internal/parts';
 import styles from './Input.module.css';
 
+const tightClass = { sm: 'tightSm', md: 'tightMd', lg: 'tightLg' } as const;
+
 export type InputSize = 'sm' | 'md' | 'lg';
 
 /** Parts you can style with `classNames` and `styles`. */
@@ -38,7 +40,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 ) {
   const part = parts<InputPart>('input', { classNames, styles: partStyles });
   return (
-    <div {...part('root', [styles.box, styles[size], invalid && styles.invalid, disabled && styles.disabled, className])}>
+    <div {...part('root', [styles.box, styles[size], styles[tightClass[size]], invalid && styles.invalid, disabled && styles.disabled, className])}>
       {iconLeft && <span {...part('icon', styles.icon)}>{iconLeft}</span>}
       {prefix && <span {...part('prefix', [styles.affix, styles.prefix])}>{prefix}</span>}
       <input ref={ref} disabled={disabled} aria-invalid={invalid || rest['aria-invalid'] || undefined} {...rest} {...part('input', styles.input, rest.style)} />

@@ -13,6 +13,8 @@ import inputStyles from '../Input/Input.module.css';
 import menuStyles from '../Menu/Menu.module.css';
 import { Tag } from '../Tag';
 import styles from './Select.module.css';
+
+const tightClass = { sm: 'tightSm', md: 'tightMd', lg: 'tightLg' } as const;
 import type { SelectOption } from './Select';
 
 /** Parts you can style with `classNames` and `styles`. The menu opens in a layer over the page. */
@@ -133,6 +135,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps | MultiCombob
           inputStyles.box,
           inputStyles[size],
           styles.combobox,
+          inputStyles[tightClass[size]],
           multiple && styles.multiple,
           (invalid || props['aria-invalid']) && inputStyles.invalid,
           disabled && inputStyles.disabled,

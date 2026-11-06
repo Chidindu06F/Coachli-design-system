@@ -4,6 +4,7 @@
   --height: 32px;
   --pad: var(--halo-spacing-5);
   --gap: var(--halo-spacing-3);
+  --base-gap: var(--halo-spacing-3);
   --icon: 16px;
   --text-size: var(--halo-font-size-sm);
   --text-height: var(--halo-line-height-sm);
@@ -12,6 +13,7 @@
   --height: 40px;
   --pad: var(--halo-spacing-6);
   --gap: var(--halo-spacing-4);
+  --base-gap: var(--halo-spacing-4);
   --icon: 20px;
   --text-size: var(--halo-font-size-md);
   --text-height: var(--halo-line-height-md);
@@ -20,6 +22,7 @@
   --height: 48px;
   --pad: var(--halo-spacing-7);
   --gap: var(--halo-spacing-4);
+  --base-gap: var(--halo-spacing-4);
   --icon: 20px;
   --text-size: var(--halo-font-size-md);
   --text-height: var(--halo-line-height-md);
@@ -116,3 +119,17 @@
 @media (prefers-reduced-motion: reduce) {
   .box { transition: none; }
 }
+
+/*
+ * Content-based side padding (Figma: Input, Select, Combobox).
+ * The box edge is tight (6 / 8 / 12px) so a leading or trailing icon, flag or avatar sits evenly.
+ * Text gets 4px more of its own, so text at the edge is still 10 / 12 / 16px,
+ * and the gap between an icon and text is 4px less so it stays the same.
+ */
+.box.tightSm { --pad: var(--halo-spacing-3); --gap: var(--halo-spacing-1); }
+.box.tightMd { --pad: var(--halo-spacing-4); --gap: var(--halo-spacing-2); }
+.box.tightLg { --pad: var(--halo-spacing-6); --gap: var(--halo-spacing-2); }
+.box:is(.tightSm, .tightMd, .tightLg) { --text-inset: var(--halo-spacing-2); }
+.box:is(.tightSm, .tightMd, .tightLg) .input { padding-inline: var(--text-inset); }
+.box:is(.tightSm, .tightMd, .tightLg) .prefix { padding-left: var(--text-inset); }
+.box:is(.tightSm, .tightMd, .tightLg) .suffix { padding-right: var(--text-inset); }

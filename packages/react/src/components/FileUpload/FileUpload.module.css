@@ -46,7 +46,7 @@
   font-size: var(--halo-font-size-sm);
   line-height: var(--halo-line-height-sm);
 }
-.errorText { color: var(--halo-state-error-contrast); }
+.errorText { color: var(--halo-state-error-primary); }
 
 /* ---------- File item ---------- */
 
@@ -89,6 +89,8 @@
 }
 .meta { display: flex; align-items: center; gap: var(--halo-spacing-2); }
 .details {
+  flex: 1;
+  min-width: 0;
   color: var(--halo-text-secondary);
   font-family: var(--halo-font-family-body);
   font-size: var(--halo-font-size-sm);

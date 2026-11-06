@@ -12,6 +12,8 @@ import inputStyles from '../Input/Input.module.css';
 import menuStyles from '../Menu/Menu.module.css';
 import styles from './Select.module.css';
 
+const tightClass = { sm: 'tightSm', md: 'tightMd', lg: 'tightLg' } as const;
+
 export interface SelectOption {
   value: string;
   label: string;
@@ -127,7 +129,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
         aria-describedby={aria['aria-describedby']}
         aria-required={required || undefined}
         disabled={disabled}
-        {...part('root', [inputStyles.box, inputStyles[size], styles.trigger, (invalid || aria['aria-invalid']) && inputStyles.invalid, disabled && inputStyles.disabled, className])}
+        {...part('root', [inputStyles.box, inputStyles[size], styles.trigger, inputStyles[tightClass[size]], (invalid || aria['aria-invalid']) && inputStyles.invalid, disabled && inputStyles.disabled, className])}
         onClick={() => setOpen(!open)}
         onKeyDown={onKey}
       >

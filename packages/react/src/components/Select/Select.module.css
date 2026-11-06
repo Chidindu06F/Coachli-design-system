@@ -28,6 +28,8 @@
   white-space: nowrap;
 }
 .placeholder { color: var(--halo-text-secondary); }
+/* Text inset; see Input.module.css (content-based side padding). */
+.trigger .value { padding-inline: var(--text-inset, 0); }
 
 .caret {
   width: var(--icon);
@@ -68,9 +70,13 @@
   line-height: var(--text-height);
 }
 .comboInput::placeholder { color: var(--halo-text-secondary); }
+.combobox:not(.multiple) .values { padding-inline: var(--text-inset, 0); }
+/* Multiple keeps tags tight to the edge and the usual gap. */
 .multiple { border-radius: var(--halo-radius-6); }
+.combobox.multiple.multiple { --gap: var(--base-gap); }
 .multiple > .caret { align-self: flex-start; margin-top: calc((var(--height) - 10px - var(--icon)) / 2); }
 
 @media (prefers-reduced-motion: reduce) {
   .caret { transition: none; }
 }
+

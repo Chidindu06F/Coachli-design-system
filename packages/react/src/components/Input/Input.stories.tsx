@@ -3,6 +3,7 @@ import { MagnifyingGlass } from '@phosphor-icons/react';
 import { Input, InputField, PasswordInput } from './Input';
 import { NumberInput } from './NumberInput';
 import { VerificationCode } from './VerificationCode';
+import { InputAffixSelect } from './InputAffixSelect';
 
 const meta = {
   title: 'Components/Input',
@@ -82,4 +83,26 @@ export const Number: Story = {
 /** One circle per digit. Pasting fills them all. */
 export const Code: Story = {
   render: () => <VerificationCode length={6} defaultValue="482" />,
+};
+
+// Simple flags for the story only. In the product use the flag set from the design system.
+const flag = (body: React.ReactNode) => <svg viewBox="0 0 20 15" width="20" height="15">{body}</svg>;
+const FLAGS = {
+  USD: flag(<><rect width="20" height="15" fill="#fff" /><path d="M0 0h20v1.2H0zM0 2.3h20v1.2H0zM0 4.6h20v1.2H0zM0 6.9h20v1.2H0zM0 9.2h20v1.2H0zM0 11.5h20v1.2H0zM0 13.8h20V15H0z" fill="#B22234" /><rect width="9" height="8" fill="#3C3B6E" /></>),
+  NGN: flag(<><rect width="20" height="15" fill="#fff" /><rect width="6.7" height="15" fill="#008751" /><rect x="13.3" width="6.7" height="15" fill="#008751" /></>),
+  GBP: flag(<><rect width="20" height="15" fill="#012169" /><path d="M0 0l20 15M20 0L0 15" stroke="#fff" strokeWidth="3" /><path d="M10 0v15M0 7.5h20" stroke="#fff" strokeWidth="4" /><path d="M10 0v15M0 7.5h20" stroke="#C8102E" strokeWidth="2" /></>),
+};
+const currencies = (['USD', 'NGN', 'GBP'] as const).map((c) => ({ value: c, label: c, icon: FLAGS[c] }));
+
+/** A price with its currency inside the field: an `InputAffixSelect` in the prefix. For pay what you want, put the currency on the minimum price and keep the suggested price as a plain input. */
+export const CurrencyPrice: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <InputField label="Price" defaultValue="50" inputMode="decimal" prefix={<InputAffixSelect aria-label="Currency" options={currencies} defaultValue="USD" />} />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <InputField label="Minimum price" defaultValue="20" inputMode="decimal" prefix={<InputAffixSelect aria-label="Currency" options={currencies} defaultValue="NGN" />} />
+        <InputField label="Suggested price" defaultValue="50" inputMode="decimal" />
+      </div>
+    </div>
+  ),
 };

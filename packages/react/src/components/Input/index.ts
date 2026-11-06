@@ -6,3 +6,5 @@ export { VerificationCode } from './VerificationCode';
 export type { VerificationCodeProps } from './VerificationCode';
 export type { InputPart } from './Input';
 export type { VerificationCodePart } from './VerificationCode';
+export { InputAffixSelect } from './InputAffixSelect';
+export type { InputAffixSelectOption, InputAffixSelectProps } from './InputAffixSelect';
