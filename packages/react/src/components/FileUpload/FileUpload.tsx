@@ -168,7 +168,7 @@ export interface FileItemProps extends HTMLAttributes<HTMLDivElement>, PartsProp
 
 /** One file in an upload list: progress while uploading, then done or failed. */
 export const FileItem = forwardRef<HTMLDivElement, FileItemProps>(function FileItem(
-  { name, size, status = 'complete', progress = 0, error = 'Upload failed.', icon, onCancel, onRemove, onRetry, className, classNames, styles: partStyles, ...rest },
+  { name, size, status = 'complete', progress = 0, error = 'Upload failed. Try again.', icon, onCancel, onRemove, onRetry, className, classNames, styles: partStyles, ...rest },
   ref,
 ) {
   const part = parts<FileItemPart>('file-item', { classNames, styles: partStyles });
