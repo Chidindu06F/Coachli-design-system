@@ -105,7 +105,7 @@ These live on the **Components** page of the Coachli Figma file, not in the desi
   - The full preview stacks the session details above the booking calendar. Leave without saving and Session published are centred modals.
 - **Create invoice uses the same steps:**
   - Step 1 Content has Invoice details, From, Bill to, Items, and Note and attachment.
-  - Step 2 Customise has Logo, Template, Accent colour and Font.
+  - Step 2 Customise is one Branding section, open by default, holding Logo, Template, Accent colour and Font, each with its own label.
   - Each is a collapsible section on one page, with the live invoice preview on the right.
   - Actions: Cancel or Back, Save as draft, then Next or Publish invoice. Leaving asks "Leave without saving?".
   - On mobile, items stack as cards (name, then quantity, unit price and discount, then the amount).
