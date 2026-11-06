@@ -103,6 +103,17 @@ These live on the **Components** page of the Coachli Figma file, not in the desi
   - A bottom bar is pinned with the actions: step 1 has Save as draft and Next. Later steps add an icon-only Back button. The last step's button is Create session or Create bundle. Edit uses Next and Save changes.
   - Rows that sit side by side on desktop stack on mobile: custom duration, the bundle's number of sessions, interval and length, and each pay-what-you-want currency (currency on top, then minimum and suggested price side by side).
   - The full preview stacks the session details above the booking calendar. Leave without saving and Session published are centred modals.
+- **Create invoice uses the same steps:**
+  - Step 1 Content has Invoice details, From, Bill to, Items, and Note and attachment.
+  - Step 2 Customise has Logo, Template, Accent colour and Font.
+  - Each is a collapsible section on one page, with the live invoice preview on the right.
+  - Actions: Cancel or Back, Save as draft, then Next or Publish invoice. Leaving asks "Leave without saving?".
+  - On mobile, items stack as cards (name, then quantity, unit price and discount, then the amount).
+  - The old checklist flow is on the Archive page.
+- **Price rows:**
+  - The first currency row is labelled "Default price" ("Default minimum price" for pay what you want), with no Default badge.
+  - Other rows end with a 20px bin button, centred on the field.
+  - On mobile, pay what you want keeps Minimum and Suggested price on one line: Suggested is 110px wide and Minimum fills the rest.
 - **Bundles, duplicate and edit use the same steps:** **Create a session bundle** has the same three steps; its first section is Bundle details: Bundle name, Bundle description, then a row of **Number of sessions**, **Booking interval** and **Each session lasts**. The last step's button is **Create bundle**, and the preview shows "4 sessions · 60 minutes each". **Duplicate** in the row ⋮ menu shows a "Session duplicated" toast, then opens the copy on step 1 titled "<name> (copy)" with a Draft badge. **Edit** opens the same steps with the session name as the heading and a Published badge, and **Save changes** in place of Save as draft. The old checklist versions of edit and duplicate are on the Archive page. In Figma, both flows start from the row ⋮ menu open with Duplicate or Edit hovered.
 - **Step intros:** Checkout questions starts with "We collect first name, last name and email address by default. You can add up to 10 more questions." Automations starts with "Send emails automatically when someone books, like a welcome note or a reminder before the session." Both are small secondary text at the top of the section.
 - **1:1 sessions has two kinds:** a **one-off session** and a **session bundle**. Use "One-off session" in menus and labels, never "1:1 session" for the single kind.
