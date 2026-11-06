@@ -23,7 +23,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Stacked sections that open and close. Each `AccordionItem` has a title and a content slot: put any content inside it. Wrap items in `Accordion` to manage them together; `type="single"` keeps only one open at a time. Hover and keyboard focus turn the title purple.',
+          'Stacked sections that open and close. Each `AccordionItem` has a title and a content slot: put any content inside it. Wrap items in `Accordion` to manage them together; `type="single"` keeps only one open at a time. Hover and keyboard focus turn the title teal.',
       },
     },
   },

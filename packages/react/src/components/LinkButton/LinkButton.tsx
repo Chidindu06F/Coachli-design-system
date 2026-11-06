@@ -11,7 +11,7 @@ export type LinkButtonSize = 'sm' | 'md';
 export type LinkButtonPart = 'root' | 'icon' | 'label';
 
 interface LinkButtonBaseProps extends PartsProps<LinkButtonPart> {
-  /** Brand purple or red. Figma: Type. */
+  /** Brand teal or red. Figma: Type. */
   variant?: LinkButtonVariant;
   /** md is 14px with 20px icons (default); sm is 12px with 16px icons. Figma: Size. */
   size?: LinkButtonSize;

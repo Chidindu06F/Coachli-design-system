@@ -6,6 +6,7 @@ import type { PartsProps } from '../../internal/parts';
 import styles from './List.module.css';
 
 const SizeCtx = createContext<'md' | 'sm'>('md');
+const InsetCtx = createContext(false);
 
 /** Parts you can style with `classNames` and `styles`. */
 export type ListPart = 'root' | 'divider';
@@ -15,15 +16,22 @@ export interface ListProps extends HTMLAttributes<HTMLUListElement>, PartsProps<
   variant?: 'plain' | 'divided' | 'card';
   /** Figma: Size. */
   size?: 'md' | 'sm';
+  /**
+   * For lists whose rows can be hovered or selected (conversations, pickers): every row gets
+   * 8px side padding so the highlight doesn't touch its content. Rows have no side padding
+   * otherwise; the container gives the inset. Figma: 8px padding override on the List item.
+   */
+  inset?: boolean;
 }
 
 /** A vertical list of ListItems, like files, settings or people. */
-export const List = forwardRef<HTMLUListElement, ListProps>(function List({ variant = 'plain', size = 'md', className, classNames, styles: partStyles, children, ...rest }, ref) {
+export const List = forwardRef<HTMLUListElement, ListProps>(function List({ variant = 'plain', size = 'md', inset = false, className, classNames, styles: partStyles, children, ...rest }, ref) {
   const part = parts<ListPart>('list', { classNames, styles: partStyles });
   const items = Children.toArray(children).filter(isValidElement);
   return (
     <SizeCtx.Provider value={size}>
-      <ul ref={ref} {...rest} {...part('root', [styles.list, styles[variant], className], rest.style)}>
+     <InsetCtx.Provider value={inset}>
+      <ul ref={ref} {...rest} {...part('root', [styles.list, styles[variant], inset && styles.insetList, className], rest.style)}>
         {items.map((child, i) => (
           <Fragment key={child.key ?? i}>
             {variant === 'divided' && i > 0 && <li role="presentation" {...part('divider', styles.divider)} />}
@@ -31,6 +39,7 @@ export const List = forwardRef<HTMLUListElement, ListProps>(function List({ vari
           </Fragment>
         ))}
       </ul>
+     </InsetCtx.Provider>
     </SizeCtx.Provider>
   );
 });
@@ -55,18 +64,22 @@ export interface ListItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'titl
   href?: string;
   /** Makes the row a button. */
   onClick?: MouseEventHandler<HTMLElement>;
-  /** Purple background for the chosen row. Figma: State=Selected. */
+  /** Brand background for the chosen row. Figma: State=Selected. */
   selected?: boolean;
   disabled?: boolean;
+  /** 8px side padding for a selectable row. Defaults to the List's `inset`. */
+  inset?: boolean;
 }
 
 /** One row of a List. Pass `href` or `onClick` to make the whole row clickable. */
 export const ListItem = forwardRef<HTMLLIElement, ListItemProps>(function ListItem(
-  { title, description, icon, leading, trailing, trailingIcon, href, onClick, selected, disabled, className, classNames, styles: partStyles, ...rest },
+  { title, description, icon, leading, trailing, trailingIcon, href, onClick, selected, disabled, inset: insetProp, className, classNames, styles: partStyles, ...rest },
   ref,
 ) {
   const part = parts<ListItemPart>('list-item', { classNames, styles: partStyles });
   const size = useContext(SizeCtx);
+  const listInset = useContext(InsetCtx);
+  const inset = insetProp ?? listInset;
   const inner = (
     <>
       {icon && <span {...part('icon', styles.icon)} aria-hidden="true">{icon}</span>}
@@ -79,7 +92,7 @@ export const ListItem = forwardRef<HTMLLIElement, ListItemProps>(function ListIt
       {trailingIcon && <span {...part('icon', [styles.icon, styles.trailingIcon])} aria-hidden="true">{trailingIcon}</span>}
     </>
   );
-  const rowClass = cx(styles.row, styles[size], selected && styles.selected, disabled && styles.disabled);
+  const rowClass = cx(styles.row, styles[size], inset && styles.inset, selected && styles.selected, disabled && styles.disabled);
   return (
     <li ref={ref} {...rest} {...part('root', [styles.item, className], rest.style)}>
       {href && !disabled ? (

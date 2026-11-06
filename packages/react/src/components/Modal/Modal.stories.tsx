@@ -73,7 +73,7 @@ export const Destructive: Story = {
   },
 };
 
-/** A form in the content area. The field gets focus first via `data-autofocus`. */
+/** A description and a form, both in the Body. The field gets focus first via `data-autofocus`. */
 export const WithContent: Story = {
   render: function Render() {
     const [open, setOpen] = useState(false);
@@ -86,6 +86,7 @@ export const WithContent: Story = {
           onClose={close}
           icon={false}
           title="Rename file"
+          description="People you've shared it with will see the new name."
           actions={
             <>
               <Button variant="secondary" onClick={close}>Cancel</Button>

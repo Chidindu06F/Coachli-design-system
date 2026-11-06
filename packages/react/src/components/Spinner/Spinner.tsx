@@ -14,7 +14,7 @@ export type SpinnerPart = 'root' | 'track' | 'arc';
 export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement>, PartsProps<SpinnerPart> {
   /** 12, 16, 24, 32 or 48px. Figma: Size. */
   size?: SpinnerSize;
-  /** brand by default; onBrand on purple surfaces like a primary Button. Figma: Colour. */
+  /** brand by default; onBrand on brand surfaces like a primary Button. Figma: Colour. */
   color?: SpinnerColor;
   /** Read by screen readers. Defaults to "Loading". Pass an empty string inside labelled parents. */
   label?: string;

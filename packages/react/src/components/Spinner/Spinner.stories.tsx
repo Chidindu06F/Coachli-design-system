@@ -36,7 +36,7 @@ export const Sizes: Story = {
   ),
 };
 
-/** onBrand on a purple Button, neutral for quieter places. */
+/** onBrand on a primary Button, neutral for quieter places. */
 export const InButtons: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 12 }}>

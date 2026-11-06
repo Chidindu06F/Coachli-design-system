@@ -10,7 +10,7 @@ import { Overlay } from '../Overlay';
 import styles from './Modal.module.css';
 
 /** Parts you can style with `classNames` and `styles`. */
-export type ModalPart = 'overlay' | 'root' | 'header' | 'icon' | 'title' | 'close' | 'description' | 'content' | 'actions';
+export type ModalPart = 'overlay' | 'root' | 'header' | 'icon' | 'title' | 'close' | 'body' | 'description' | 'footer';
 
 export interface ModalProps extends PartsProps<ModalPart> {
   open: boolean;
@@ -18,7 +18,7 @@ export interface ModalProps extends PartsProps<ModalPart> {
   onClose: () => void;
   /** Figma: Title. */
   title: ReactNode;
-  /** Figma: Description. */
+  /** The message at the top of the Body. Figma: the Description text in the Body slot. */
   description?: ReactNode;
   /** destructive uses a red icon. Pair it with a destructive Button. Figma: Type. */
   type?: 'default' | 'destructive';
@@ -28,13 +28,13 @@ export interface ModalProps extends PartsProps<ModalPart> {
   layout?: 'horizontal' | 'stacked';
   /** Figma: Show close. */
   showClose?: boolean;
-  /** Buttons. Put the main action last in a row, first when stacked. Figma: Actions. */
+  /** Buttons in the Footer. Put the main action last in a row, first when stacked. Figma: Footer slot. */
   actions?: ReactNode;
   /** Closes when the overlay is clicked. Turn off when closing would lose work. */
   closeOnOverlayClick?: boolean;
   /** Overlay style. */
   overlay?: 'dim' | 'blur';
-  /** Extra content between the text and the buttons, like a form. Figma: Content slot. */
+  /** Anything else in the Body, under the description: a form, an image, a list. Figma: Body slot. */
   children?: ReactNode;
   className?: string;
 }
@@ -95,9 +95,13 @@ export function Modal({
               </CompactButton>
             )}
           </div>
-          {description && <p id={`${id}-desc`} {...part('description', styles.description)}>{description}</p>}
-          {children && <div {...part('content', styles.content)}>{children}</div>}
-          {actions && <div {...part('actions', styles.actions)}>{actions}</div>}
+          {(description || children) && (
+            <div {...part('body', styles.body)}>
+              {description && <p id={`${id}-desc`} {...part('description', styles.description)}>{description}</p>}
+              {children}
+            </div>
+          )}
+          {actions && <div {...part('footer', styles.footer)}>{actions}</div>}
         </div>
       </Overlay>
     </Portal>

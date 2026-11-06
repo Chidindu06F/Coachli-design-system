@@ -57,7 +57,7 @@
   right: calc(var(--thumb) / -2);
   background: var(--halo-surface-secondary);
 }
-/* Purple fill from the start (or the first handle) to the handle */
+/* Brand fill from the start (or the first handle) to the handle */
 .track::after {
   left: calc(var(--thumb) / -2);
   right: calc(100% - var(--to));

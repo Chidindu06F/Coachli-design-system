@@ -103,6 +103,8 @@ export { Calendar, DatePicker, DatePickerField, DateRangePicker, DateRangePicker
 export type { CalendarPreset, CalendarProps, DatePickerFieldProps, DatePickerProps, DateRange, DateRangePickerFieldProps, DateRangePickerProps, MultiDatePickerFieldProps, MultiDatePickerProps, MultipleCalendarProps, RangeCalendarProps, SingleCalendarProps } from './components/DatePicker';
 export { FileItem, FileUpload, formatBytes } from './components/FileUpload';
 export type { FileItemProps, FileUploadProps } from './components/FileUpload';
+export { ImageUpload } from './components/ImageUpload';
+export type { ImageUploadProps } from './components/ImageUpload';
 export { ResizableHandle, ResizablePanel, ResizablePanelGroup } from './components/Resizable';
 export type { ResizableHandleProps, ResizablePanelGroupProps, ResizablePanelProps } from './components/Resizable';
 export { Result } from './components/Result';
@@ -149,6 +151,7 @@ export type { DrawerPart } from './components/Drawer';
 export type { EmptyStatePart } from './components/EmptyState';
 export type { FieldPart, FieldWrapperProps } from './components/Field';
 export type { FileItemPart, FileUploadPart } from './components/FileUpload';
+export type { ImageUploadPart } from './components/ImageUpload';
 export type { FormPart } from './components/Form';
 export type { InputPart, VerificationCodePart } from './components/Input';
 export type { LinkButtonPart } from './components/LinkButton';

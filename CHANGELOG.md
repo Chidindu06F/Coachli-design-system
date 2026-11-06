@@ -4,6 +4,19 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ## Unreleased
 
+## 0.2.8
+
+### Changes
+
+- **Modal is Header, Body, Footer.** The Body holds everything between the title and the buttons: the `description` first, then any `children` (a form, an image, a list). It is one area with a 12px gap, and it's the part that scrolls past 720px. Before, the description and the content were two separate areas.
+- **Style parts renamed:** `content` → `body` (it now also wraps the description) and `actions` → `footer`. The `description` part stays. Props are unchanged.
+- **The whole brand is teal, not only buttons.** Every brand token now uses the teal ramp at the same step it used on aubergine: `surface/brand` (`teal/0`), `surface/brand-secondary` (`teal/100`), `surface/brand-contrast` and `text/brand` and `border/contrast` (`teal/300`), `surface/brand-heavy-contrast` (`teal/600`), `border/focus` (`teal/200`), `illustration/accent` (`teal/100`) and `illustration/accent-strong` (`teal/200`). Dark mode does the same with the dark steps. So progress bars, checkboxes, radios, switches, tabs, selected dates, sliders, steppers and focus rings are teal. `text/on-brand` and `icon/on-brand` are white in light mode (were lilac) and `teal/900` in dark mode. The `colours/aubergine/*` ramp stays for anything that names it directly.
+- **New: `ImageUpload`.** A round image with Upload, or Change and a red Remove once there's an image, for profile photos and business logos. `kind` is `person` (user icon when empty) or `business` (building icon), and `layout` is `default` (title and hint beside it) or `compact`. Figma: Image upload on the File upload page.
+- **List rows have no side padding**, matching Figma: the container gives the inset. The `card` list is 12px at the sides and 8px at the top and bottom, and rows sit flush (gap 0).
+- **New `inset` on `List` and `ListItem`** for lists whose rows can be hovered or selected, like conversations and pickers: each row gets 8px side padding (`spacing-4`) so the highlight doesn't touch the avatar.
+- **New tokens for chat bubbles:** `surface/chat-sent` and `text/chat-sent` on a new `colours/slate` ramp (`100`, `200`, `800`, `900`), with light and dark values. Sent messages use them instead of brand teal.
+- Figma: the Modal's Body frame and Content slot are now one **Body** slot that starts with the description; replace it or add anything. **Show content** is gone, and the **Actions** slot is now **Footer**.
+
 ## 0.2.7
 
 ### Changes

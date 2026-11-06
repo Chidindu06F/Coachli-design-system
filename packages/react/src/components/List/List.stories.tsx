@@ -46,6 +46,25 @@ export const Playground: Story = {
   },
 };
 
+/** Selectable lists, like a conversation list or a customer picker: `inset` gives every row 8px side padding so the hover and selected highlight don't touch the avatar. */
+export const Inset: Story = {
+  render: function Render(args) {
+    const [chosen, setChosen] = useState('ada');
+    const people = [
+      { id: 'ada', name: 'Ada Obi', last: 'Perfect, thank you! See you Friday', when: 'Today' },
+      { id: 'chioma', name: 'Chioma Eze', last: 'Is the masterclass still open for enrolment?', when: 'Today' },
+      { id: 'kemi', name: 'Kemi Lawal', last: 'Can I pay for the bundle in two parts?', when: 'Yesterday' },
+    ];
+    return (
+      <List {...args} inset>
+        {people.map((p) => (
+          <ListItem key={p.id} title={p.name} description={p.last} leading={<Avatar size="sm" name={p.name} />} trailing={<span style={{ fontSize: 12 }}>{p.when}</span>} selected={chosen === p.id} onClick={() => setChosen(p.id)} />
+        ))}
+      </List>
+    );
+  },
+};
+
 /** Lines between rows. */
 export const Divided: Story = {
   render: () => (

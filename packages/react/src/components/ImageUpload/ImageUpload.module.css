@@ -1,0 +1,30 @@
+/* Values mirror the Image upload set in Figma (File upload page). */
+
+.root {
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--halo-spacing-7);
+}
+.compact { align-items: center; }
+
+.content { display: flex; flex: 1; flex-direction: column; gap: var(--halo-spacing-2); min-width: 0; }
+.title {
+  color: var(--halo-text-primary);
+  font-family: var(--halo-font-family-body);
+  font-size: var(--halo-font-size-md);
+  font-weight: var(--halo-font-weight-semibold, 600);
+  line-height: var(--halo-line-height-md);
+}
+.hint {
+  color: var(--halo-text-secondary);
+  font-family: var(--halo-font-family-body);
+  font-size: var(--halo-font-size-sm);
+  line-height: var(--halo-line-height-sm);
+}
+
+.actions { display: flex; align-items: center; gap: var(--halo-spacing-4); }
+.actionsSpaced { padding-top: var(--halo-spacing-4); }
+
+/* The bin is red. Figma: Remove, icon/negative. */
+.remove { --icon: var(--halo-icon-negative); }

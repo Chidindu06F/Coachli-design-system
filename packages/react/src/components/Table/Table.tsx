@@ -68,7 +68,7 @@ export const TableHead = (props: HTMLAttributes<HTMLTableSectionElement>) => <th
 export const TableBody = (props: HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props} />;
 
 export interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
-  /** Purple background for a selected row. Figma: State=Selected. */
+  /** Brand background for a selected row. Figma: State=Selected. */
   selected?: boolean;
 }
 export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(function TableRow({ selected, className, ...rest }, ref) {

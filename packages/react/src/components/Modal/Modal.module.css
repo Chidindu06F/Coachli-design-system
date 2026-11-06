@@ -7,7 +7,7 @@
   gap: var(--halo-spacing-7);
   width: 440px;
   max-width: 100%;
-  /* Never taller than 720px or the window. Only .content scrolls, so the header and actions stay visible. */
+  /* Never taller than 720px or the window. Only .body scrolls, so the header and footer stay visible. */
   max-height: min(100%, 720px);
   overflow: hidden;
   padding: var(--halo-spacing-9);
@@ -54,7 +54,11 @@
   font-size: var(--halo-font-size-md);
   line-height: var(--halo-line-height-md);
 }
-.content {
+/* Body: the description and anything else (Figma: Body slot). */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--halo-spacing-6);
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
@@ -65,9 +69,9 @@
   line-height: var(--halo-line-height-md);
 }
 
-.actions { display: flex; justify-content: flex-end; gap: var(--halo-spacing-4); }
-.stacked .actions { flex-direction: column; }
-.stacked .actions > * { width: 100%; }
+.footer { display: flex; justify-content: flex-end; gap: var(--halo-spacing-4); }
+.stacked .footer { flex-direction: column; }
+.stacked .footer > * { width: 100%; }
 
 @keyframes in { from { opacity: 0; transform: translateY(4px) scale(0.99); } }
 

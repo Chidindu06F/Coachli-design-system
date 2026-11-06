@@ -7,7 +7,7 @@ This is the Coachli copy of Halo. Figma and code are kept in step by hand: a cha
 - **Never change Halo from here.** The original Halo code and Halo Figma file are off limits; pushing to the `halo` remotes is disabled on purpose. If a fix belongs in Halo too, make it there separately.
 - **Tokens, not values.** Components use semantic tokens (`--halo-surface-primary`, `--halo-text-secondary`), never hex codes or primitive colours. This is what makes dark mode work.
 - **Text on a fill uses the matching "on" token:**
-  - `text/on-brand`, `icon/on-brand`: only on brand fills (selected date, checkbox tick).
+  - `text/on-brand`, `icon/on-brand`: only on brand fills (selected date, checkbox tick). White in light mode.
   - `button/primary-label`: the label, icons and spinner on Primary buttons (`button/primary` is teal).
   - `text/on-color`, `icon/on-color`: white in both modes, on fills that don't change between modes (social logos, Premium, destructive).
   - `text/on-status`, `icon/on-status`: on solid status fills (information, success, warning, error badges).

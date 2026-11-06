@@ -15,7 +15,7 @@ export interface IllustrationProps extends Omit<SVGAttributes<SVGSVGElement>, 'n
 }
 
 /**
- * Spot illustrations for empty states, drawn in quiet greys with a soft purple accent.
+ * Spot illustrations for empty states, drawn in quiet greys with a soft brand accent.
  * Recolour them with the --halo-illustration-* variables, on the page or on one element.
  */
 export const Illustration = forwardRef<SVGSVGElement, IllustrationProps>(function Illustration(
