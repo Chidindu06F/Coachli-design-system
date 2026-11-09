@@ -1,0 +1,215 @@
+{
+  "profile": {
+    "background": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6157,
+          0.3059,
+          0.8667
+        ],
+        "alpha": 1,
+        "hex": "#9D4EDD"
+      }
+    },
+    "block": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        }
+      }
+    },
+    "surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0,
+          0.9608,
+          0.8314
+        ],
+        "alpha": 1,
+        "hex": "#00F5D4"
+      }
+    },
+    "highlight": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9451,
+            0.3569,
+            0.7098
+          ],
+          "alpha": 1,
+          "hex": "#F15BB5"
+        }
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1333,
+            0.1333,
+            0.1333
+          ],
+          "alpha": 1,
+          "hex": "#222222"
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1333,
+            0.1333,
+            0.1333
+          ],
+          "alpha": 0.8,
+          "hex": "#222222"
+        }
+      },
+      "tertiary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.549,
+            0.549,
+            0.549
+          ],
+          "alpha": 1,
+          "hex": "#8C8C8C"
+        }
+      }
+    },
+    "icon": {
+      "primary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.549,
+            0.549,
+            0.549
+          ],
+          "alpha": 1,
+          "hex": "#8C8C8C"
+        }
+      }
+    },
+    "button": {
+      "fill": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1333,
+            0.1333,
+            0.1333
+          ],
+          "alpha": 1,
+          "hex": "#222222"
+        }
+      }
+    },
+    "border": {
+      "image": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        }
+      },
+      "highlight": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "alpha": 1,
+          "hex": "#000000"
+        }
+      },
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "alpha": 1,
+          "hex": "#000000"
+        }
+      }
+    },
+    "font": {
+      "heading": {
+        "$type": "string",
+        "$value": "Fira Code"
+      },
+      "body": {
+        "$type": "string",
+        "$value": "Fira Code"
+      },
+      "display": {
+        "$type": "string",
+        "$value": "Fira Code"
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Retro"
+  }
+}

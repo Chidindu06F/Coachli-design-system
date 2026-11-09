@@ -1,0 +1,215 @@
+{
+  "profile": {
+    "background": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.1647,
+          0.1059,
+          0.2196
+        ],
+        "alpha": 1,
+        "hex": "#2A1B38"
+      }
+    },
+    "block": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2314,
+            0.1569,
+            0.3098
+          ],
+          "alpha": 1,
+          "hex": "#3B284F"
+        }
+      }
+    },
+    "surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.1647,
+          0.1059,
+          0.2196
+        ],
+        "alpha": 1,
+        "hex": "#2A1B38"
+      }
+    },
+    "highlight": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1647,
+            0.1059,
+            0.2196
+          ],
+          "alpha": 1,
+          "hex": "#2A1B38"
+        }
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9137,
+            0.8314,
+            1.0
+          ],
+          "alpha": 1,
+          "hex": "#E9D4FF"
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9137,
+            0.8314,
+            1.0
+          ],
+          "alpha": 0.8,
+          "hex": "#E9D4FF"
+        }
+      },
+      "tertiary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.549,
+            0.549,
+            0.549
+          ],
+          "alpha": 1,
+          "hex": "#8C8C8C"
+        }
+      }
+    },
+    "icon": {
+      "primary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7216,
+            0.5725,
+            1.0
+          ],
+          "alpha": 1,
+          "hex": "#B892FF"
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.549,
+            0.549,
+            0.549
+          ],
+          "alpha": 1,
+          "hex": "#8C8C8C"
+        }
+      }
+    },
+    "button": {
+      "fill": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7216,
+            0.5725,
+            1.0
+          ],
+          "alpha": 1,
+          "hex": "#B892FF"
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1647,
+            0.1059,
+            0.2196
+          ],
+          "alpha": 1,
+          "hex": "#2A1B38"
+        }
+      }
+    },
+    "border": {
+      "image": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2314,
+            0.1569,
+            0.3098
+          ],
+          "alpha": 1,
+          "hex": "#3B284F"
+        }
+      },
+      "highlight": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3255,
+            0.2,
+            0.4392
+          ],
+          "alpha": 1,
+          "hex": "#533370"
+        }
+      },
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3255,
+            0.2,
+            0.4392
+          ],
+          "alpha": 1,
+          "hex": "#533370"
+        }
+      }
+    },
+    "font": {
+      "heading": {
+        "$type": "string",
+        "$value": "Lora"
+      },
+      "body": {
+        "$type": "string",
+        "$value": "Lora"
+      },
+      "display": {
+        "$type": "string",
+        "$value": "Lora"
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Velvet"
+  }
+}

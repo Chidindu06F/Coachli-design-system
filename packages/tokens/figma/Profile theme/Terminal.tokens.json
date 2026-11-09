@@ -1,0 +1,215 @@
+{
+  "profile": {
+    "background": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.051,
+          0.0667,
+          0.0902
+        ],
+        "alpha": 1,
+        "hex": "#0D1117"
+      }
+    },
+    "block": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.051,
+            0.0667,
+            0.0902
+          ],
+          "alpha": 1,
+          "hex": "#0D1117"
+        }
+      }
+    },
+    "surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.051,
+          0.0667,
+          0.0902
+        ],
+        "alpha": 1,
+        "hex": "#0D1117"
+      }
+    },
+    "highlight": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.051,
+            0.0667,
+            0.0902
+          ],
+          "alpha": 1,
+          "hex": "#0D1117"
+        }
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2471,
+            0.7255,
+            0.3137
+          ],
+          "alpha": 1,
+          "hex": "#3FB950"
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2471,
+            0.7255,
+            0.3137
+          ],
+          "alpha": 0.8,
+          "hex": "#3FB950"
+        }
+      },
+      "tertiary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.549,
+            0.549,
+            0.549
+          ],
+          "alpha": 1,
+          "hex": "#8C8C8C"
+        }
+      }
+    },
+    "icon": {
+      "primary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2471,
+            0.7255,
+            0.3137
+          ],
+          "alpha": 1,
+          "hex": "#3FB950"
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.549,
+            0.549,
+            0.549
+          ],
+          "alpha": 1,
+          "hex": "#8C8C8C"
+        }
+      }
+    },
+    "button": {
+      "fill": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2471,
+            0.7255,
+            0.3137
+          ],
+          "alpha": 1,
+          "hex": "#3FB950"
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2471,
+            0.7255,
+            0.3137
+          ],
+          "alpha": 1,
+          "hex": "#3FB950"
+        }
+      }
+    },
+    "border": {
+      "image": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.051,
+            0.0667,
+            0.0902
+          ],
+          "alpha": 1,
+          "hex": "#0D1117"
+        }
+      },
+      "highlight": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2471,
+            0.7255,
+            0.3137
+          ],
+          "alpha": 1,
+          "hex": "#3FB950"
+        }
+      },
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2471,
+            0.7255,
+            0.3137
+          ],
+          "alpha": 1,
+          "hex": "#3FB950"
+        }
+      }
+    },
+    "font": {
+      "heading": {
+        "$type": "string",
+        "$value": "JetBrains Mono"
+      },
+      "body": {
+        "$type": "string",
+        "$value": "JetBrains Mono"
+      },
+      "display": {
+        "$type": "string",
+        "$value": "JetBrains Mono"
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Terminal"
+  }
+}
