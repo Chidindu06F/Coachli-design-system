@@ -1,0 +1,38 @@
+/* Values mirror the Confetti layer in Figma (Coachli file: "Session published" and "New badge earned" modals). */
+
+.confetti {
+  /* The six confetti colours from Figma: aubergine, logo green, aqua, soft purple, yellow, pink */
+  --confetti-1: var(--halo-color-aubergine-300);
+  --confetti-2: #BDF8AF;
+  --confetti-3: var(--halo-color-teal-250);
+  --confetti-4: #CBC1E1;
+  --confetti-5: #FFC74D;
+  --confetti-6: #E55973;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  container-type: size;
+  z-index: 1;
+}
+
+.piece {
+  position: absolute;
+  top: -24px;
+  border-radius: 1px;
+  opacity: 0;
+  animation: fall calc(var(--confetti-duration) * var(--fall)) cubic-bezier(0.3, 0.1, 0.6, 1) calc(var(--confetti-duration) * var(--delay)) forwards;
+  will-change: transform;
+}
+.round { border-radius: 6px; }
+
+/* Start: hidden above the top edge. Falling: spread over the whole parent. Landed: gone past the bottom edge. */
+@keyframes fall {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(var(--rotate)); }
+  100% { opacity: 1; transform: translate3d(var(--drift), calc(100cqh + 48px), 0) rotate(calc(var(--rotate) + var(--spin))); }
+}
+
+/* Reduced motion: no confetti at all */
+@media (prefers-reduced-motion: reduce) {
+  .confetti { display: none; }
+}

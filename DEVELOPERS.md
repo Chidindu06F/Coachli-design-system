@@ -162,6 +162,27 @@ These live on the **Components** page of the Coachli Figma file, not in the desi
 - Notifications, Create, Account, Time zone and Report a bug open as **bottom Drawers** (sheets). Long forms scroll, and their buttons stay pinned at the bottom.
 - The Top offerings table becomes a list. Event rows drop the View button and keep the ⋮ menu.
 
+## Animations
+
+- **Confetti** is the only animation that is not built into a component's own behaviour. Use the `Confetti` component; do not write your own:
+
+  ```tsx
+  import { Confetti, Modal } from '@chidindu06f/coachli-react';
+
+  <Modal open={open} onClose={close} title="Session published">
+    <div style={{ position: 'relative' }}>
+      <Confetti />
+      {/* modal content */}
+    </div>
+  </Modal>
+  ```
+
+  It plays once when the modal opens, is clipped at the edge of its parent and removes itself when it ends. Try it in Storybook under Components / Confetti.
+
+## AI coding tools
+
+If you build with Claude Code, Cursor, Copilot or similar, copy the files in [`skills/`](skills/README.md) into the dashboard app. They make the tool use these components and tokens, and follow the product rules in this guide, instead of writing its own UI.
+
 ## When the design system changes
 
 You'll get a new version of the packages and a CHANGELOG entry. Update with:

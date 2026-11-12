@@ -143,6 +143,8 @@ export type { CarouselPart } from './components/Carousel';
 export type { ChartPart } from './components/Chart';
 export type { CheckboxGroupPart, CheckboxPart } from './components/Checkbox';
 export type { ColorInputPart, ColorPickerPart } from './components/ColorPicker';
+export { Confetti } from './components/Confetti';
+export type { ConfettiPart, ConfettiProps } from './components/Confetti';
 export type { CompactButtonPart } from './components/CompactButton';
 export type { CalendarPart, DatePickerPart } from './components/DatePicker';
 export type { DividerPart } from './components/Divider';
