@@ -71,7 +71,7 @@ These come up often. The full list and details are in `DEVELOPERS.md`.
 
 1. Check Storybook again, including the "Coachli-only pieces" section of `DEVELOPERS.md` (those are built in the dashboard app from design system components).
 2. Compose it from existing components and tokens.
-3. If it is truly new and reusable, do not invent it in the app: tell the user it should be added to the design system (Figma first, then the React package), and build the screen with the closest existing component in the meantime.
+3. If it is truly new and reusable, do not invent it in the app: tell the developer you are working with to ask the designer to add it to the design system (Figma first, then the React package), and build the screen with the closest existing component in the meantime.
 
 ## Check your work
 

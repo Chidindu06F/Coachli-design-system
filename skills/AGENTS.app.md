@@ -6,7 +6,7 @@ This app is the Coachli dashboard. All UI is built with the Coachli design syste
 - In CSS use `var(--halo-…)` tokens only. No hex or rgb colours, no pixel font sizes.
 - Before building or changing a screen, read the product rules for that area in the design system's `DEVELOPERS.md`: https://github.com/Chidindu06F/Coachli-design-system/blob/main/DEVELOPERS.md
 - Component docs and props: https://chidindu06f.github.io/Coachli-design-system/
-- If a component is missing, compose it from existing ones and say so. Do not invent a new primitive in this app.
+- If a component is missing, compose it from existing ones and say so, so the developer can ask the designer to add it to the design system. Do not invent a new primitive in this app.
 - Every screen must work in dark mode (`data-theme="dark"`) and at 390px wide.
 
 The `coachli-ui` skill in `.claude/skills/` has the full method and the decided patterns.
