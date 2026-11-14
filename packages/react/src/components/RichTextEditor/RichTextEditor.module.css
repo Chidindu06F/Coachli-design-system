@@ -100,3 +100,12 @@
 @media (prefers-reduced-motion: reduce) {
   .editor { transition: none; }
 }
+
+/* Link and image popovers (Figma: Editor link popover, Editor image popover). */
+.popoverBody { display: flex; flex-direction: column; gap: var(--halo-spacing-6); }
+.popoverBody > [role='tablist'] { margin-bottom: calc(var(--halo-spacing-2) * -1); }
+
+/* An image shows faded while it uploads. */
+.content img[data-uploading] { opacity: 0.5; animation: uploading 1.2s ease-in-out infinite; }
+@keyframes uploading { 50% { opacity: 0.3; } }
+@media (prefers-reduced-motion: reduce) { .content img[data-uploading] { animation: none; } }

@@ -63,6 +63,7 @@ These come up often. The full list and details are in `DEVELOPERS.md`.
 - **Placeholders** are sample answers that start with "e.g.", not questions or instructions.
 - **Create flows** (invoices, one-off sessions, session bundles): Cancel or Back, Save as draft and Next sit in a sticky bar at the bottom of the main area, left-aligned. The header has only "Watch demo video", which opens the YouTube video in a `Modal` on Coachli. It never opens YouTube.
 - **Celebrations** ("Session published", "New badge earned"): put `<Confetti />` inside the Modal body. Do not write your own animation.
+- **Rich text** (descriptions, notes): `RichTextEditorField` with `onImageUpload` wired to the app's upload (resolve with the https URL) and `onImageUploadError` shown as a toast. Never build a custom editor or paste handler.
 - **Breadcrumbs** go under the page title. No back arrow.
 - **Focus rings** must not be clipped: do not put `overflow: hidden` on a container that holds focusable components unless it scrolls.
 - **Names:** "One-off session" and "Session bundle" (never "1:1 session" for the single kind). Menu items that list kinds of things are plural: One-off sessions, Session bundles, Live events.
