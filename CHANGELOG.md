@@ -6,6 +6,7 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ### Changes
 
+- **Popovers, menus and pickers no longer jump sides while open.** A floating panel keeps the side it opened on (below, or above when there is no room) even when its content changes height, for example switching tabs inside a popover. It only flips if it no longer fits there. The panel is also re-measured reliably when its size changes, so it stays against its trigger.
 - **Rich text editor: links, images and pasting.**
   - **Links:** the link popover has **Text** (optional) and **Link** (required). Highlighted text becomes the link; with nothing highlighted, the link is added with its text (or the address, if Text is empty). `coachli.co` becomes `https://coachli.co`, email addresses become `mailto:` links, and anything else shows "Enter a valid link." instead of being ignored. With the caret inside a link, the button opens **Edit link** with Save and **Remove link**. Highlighting a link and clicking the button removes it straight away and leaves plain text.
   - **Images:** new props `onImageUpload(file) => Promise<url>`, `maxImageSize` (default 10 MB) and `onImageUploadError(file, error)`. With `onImageUpload`, the image popover has **Upload** and **Link** tabs (PNG, JPG, GIF or WebP), and images pasted or dropped into the editor are uploaded too. An image shows faded until its upload finishes and is removed if it fails; `onChange` and `getHTML()` leave out images still uploading. Without `onImageUpload`, images are added by link only (http or https).

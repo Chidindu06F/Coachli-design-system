@@ -21,6 +21,9 @@ export function useFloating(
 ) {
   const floating = useRef<HTMLDivElement | null>(null);
   const [state, setState] = useState<{ style: CSSProperties; side: Side }>({ style: HIDDEN, side });
+  // The side picked when the panel opened. It stays there while open, so the panel doesn't jump when its
+  // content changes height (like switching tabs inside it); it only flips if it no longer fits there.
+  const chosen = useRef<Side | null>(null);
 
   const place = useCallback(() => {
     const a = anchor.current;
@@ -34,7 +37,9 @@ export function useFloating(
       : s === 'bottom' ? r.bottom + h + gap <= window.innerHeight
       : s === 'left' ? r.left - w - gap >= 0
       : r.right + w + gap <= window.innerWidth;
-    const s = fits(side) || !fits(OPPOSITE[side]) ? side : OPPOSITE[side];
+    const keep = chosen.current;
+    const s = keep && (fits(keep) || !fits(OPPOSITE[keep])) ? keep : fits(side) || !fits(OPPOSITE[side]) ? side : OPPOSITE[side];
+    chosen.current = s;
     let top: number;
     let left: number;
     if (s === 'top' || s === 'bottom') {
@@ -56,6 +61,7 @@ export function useFloating(
 
   useLayoutEffect(() => {
     if (!open) {
+      chosen.current = null;
       setState((s) => (s.style === HIDDEN ? s : { side: s.side, style: HIDDEN }));
       return;
     }
@@ -65,8 +71,17 @@ export function useFloating(
     // Follow size changes too, like a Combobox growing a new row of tags.
     const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(() => place());
     if (anchor.current) observer?.observe(anchor.current);
-    if (floating.current) observer?.observe(floating.current);
+    // The panel may mount a frame later (it renders in a portal), so keep trying until it's there.
+    let frame = 0;
+    const watchPanel = () => {
+      if (floating.current) {
+        observer?.observe(floating.current);
+        place();
+      } else frame = requestAnimationFrame(watchPanel);
+    };
+    watchPanel();
     return () => {
+      cancelAnimationFrame(frame);
       observer?.disconnect();
       window.removeEventListener('scroll', place, true);
       window.removeEventListener('resize', place);
