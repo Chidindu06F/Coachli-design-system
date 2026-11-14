@@ -5,6 +5,12 @@ import { RichTextEditor, RichTextEditorField } from './RichTextEditor';
 const sample =
   '<h2>Release notes</h2><p>This update makes sharing <b>faster</b> and <i>simpler</i>.</p><ul><li>Share a link with anyone</li><li>See who opened it</li></ul>';
 
+// Pretend upload for the examples: waits a second, then shows your own file. Names starting with "fail-" fail.
+const demoUpload = (file: File) =>
+  new Promise<string>((resolve, reject) =>
+    setTimeout(() => (file.name.startsWith('fail-') ? reject(new Error('Upload failed')) : resolve(URL.createObjectURL(file))), 1000),
+  );
+
 const meta = {
   title: 'Components/Rich text editor',
   component: RichTextEditor,
@@ -19,7 +25,7 @@ const meta = {
       },
     },
   },
-  args: { defaultValue: sample, 'aria-label': 'Release notes' },
+  args: { defaultValue: sample, 'aria-label': 'Release notes', onImageUpload: demoUpload },
   decorators: [(Story) => <div style={{ maxWidth: 560 }}><Story /></div>],
 } satisfies Meta<typeof RichTextEditor>;
 
@@ -55,11 +61,7 @@ export const LinksAndImages: Story = {
           aria-label="Event description"
           defaultValue='<p>Book a call on <a href="https://coachli.co/johndoe">our booking page</a>. Paste text from any website, or drop an image here.</p>'
           onChange={setHtml}
-          onImageUpload={(file) =>
-            new Promise((resolve, reject) =>
-              setTimeout(() => (file.name.startsWith('fail-') ? reject(new Error('Upload failed')) : resolve(URL.createObjectURL(file))), 1000),
-            )
-          }
+          onImageUpload={demoUpload}
           onImageUploadError={(file, error) => setMessage(`${file.name}: ${error instanceof Error ? error.message : 'upload failed'}`)}
         />
         {message && <p style={{ margin: 0, color: 'var(--halo-state-error-primary)' }}>{message}</p>}
@@ -74,7 +76,7 @@ export const LinksAndImages: Story = {
 
 /** With a label, hint and character count. */
 export const WithField: Story = {
-  render: () => <RichTextEditorField label="Description" hint="Shown on the project page." maxLength={500} defaultValue="" placeholder="Describe the project" />,
+  render: () => <RichTextEditorField label="Description" hint="Shown on the project page." maxLength={500} defaultValue="" placeholder="Describe the project" onImageUpload={demoUpload} />,
 };
 
 /** Only the basic formatting tools. */
@@ -82,10 +84,13 @@ export const WithField: Story = {
 export const Small: Story = {
   render: () => (
     <div style={{ width: 343 }}>
-      <RichTextEditorField label="Notes" size="sm" defaultValue={sample} maxLength={2000} />
+      <RichTextEditorField label="Notes" size="sm" defaultValue={sample} maxLength={2000} onImageUpload={demoUpload} />
     </div>
   ),
 };
+
+/** Without `onImageUpload`, images can only be added by link. */
+export const ImagesByLinkOnly: Story = { args: { onImageUpload: undefined, defaultValue: '' } };
 
 export const Minimal: Story = { args: { defaultValue: '', tools: { textStyle: false, blocks: false, insert: false }, minHeight: 96 } };
 
