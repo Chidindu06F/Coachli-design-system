@@ -5,14 +5,14 @@ import { Alert, Button, InputField } from '@chidindu06f/coachli-react';
 
 # Customising
 
-Theming changes the whole system at once. Sometimes you only need one component to look different on one screen. Every Halo component lets you do that, from the outside in:
+The tokens set how the whole system looks. Sometimes you only need one component to look different on one screen. Every component lets you do that, from the outside in:
 
-1. **Tokens** for the whole app (see Theming).
+1. **Tokens** for the whole app (see Foundations).
 2. **`className` and `style`** for the outer element of one component.
 3. **`classNames` and `styles`** for the parts inside it, like a modal's header or a table's cells.
 4. **`data-halo` and `data-part`** attributes, for styling parts from your own CSS files.
 
-Your styles always win over Halo's: classes are added after Halo's own, and inline styles are merged on top.
+Your styles always win over the component's: classes are added after its own, and inline styles are merged on top.
 
 ## See it
 
@@ -84,7 +84,7 @@ Components that come with a label and hint, like `InputField`, `SelectField` and
 
 ## From your own CSS
 
-Every component's outer element has `data-halo` with its name, and every part has `data-part`. Use them instead of Halo's internal class names, which change between builds.
+Every component's outer element has `data-halo` with its name, and every part has `data-part`. Use them instead of the internal class names, which change between builds.
 
 ```css
 /* Every modal header in the app */

@@ -35,22 +35,6 @@ export function Projects() {
 
 Set `data-theme` on `<html>` to `light`, `dark` or `system`.
 
-## Your brand
-
-Override the brand variables in your own CSS, loaded after Halo's:
-
-```css
-:root {
-  --halo-button-primary: #2f6bff;
-  --halo-surface-brand-contrast: #1f5fe0;
-  --halo-text-brand: #1a4cc2;
-  --halo-font-family-body: 'Inter', system-ui, sans-serif;
-  --halo-font-family-label: 'Inter', system-ui, sans-serif;
-}
-```
-
-The Theming page in the [docs](https://chidindu06f.github.io/Coachli-design-system/) lists every brand variable and shows how to rebrand from Figma.
-
 ## Docs
 
 Every component, with live examples and props: https://chidindu06f.github.io/Coachli-design-system/
