@@ -7,7 +7,7 @@ addons.setConfig({
     brandTitle: 'Coachli Design System',
     brandImage: 'logo.svg',
     brandUrl: 'https://github.com/Chidindu06F/Coachli-design-system',
-    colorPrimary: '#CC1DD0',
-    colorSecondary: '#8C148F',
+    colorPrimary: '#1B7470',
+    colorSecondary: '#1B7470',
   }),
 });

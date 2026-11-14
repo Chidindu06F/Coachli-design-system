@@ -2,11 +2,13 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Introduction" />
 
-# Halo Design System
+# Coachli Design System
 
-Halo is an open-source design system for designers and developers: a Figma library and a React component library built from the same design tokens.
+The design system for the Coachli dashboard: a Figma library and a React component library built from the same design tokens. Figma is the source of truth; the code mirrors it.
 
 ## Install
+
+The packages are on GitHub Packages, which needs a one-time setup (a token and an `.npmrc` file). The steps are in the [README](https://github.com/Chidindu06F/Coachli-design-system#install). Then:
 
 ```bash
 npm install @chidindu06f/coachli-react @chidindu06f/coachli-tokens
@@ -19,16 +21,16 @@ import '@chidindu06f/coachli-tokens/css';      // colours, spacing, type and rad
 import '@chidindu06f/coachli-react/styles.css'; // styles for every component
 ```
 
-Halo uses the **Geist** font. Load it yourself, for example with Fontsource:
+The components use the **Inter** font. Load it yourself, for example with Fontsource:
 
 ```bash
-npm install @fontsource/geist
+npm install @fontsource/inter
 ```
 
 ```tsx
-import '@fontsource/geist/400.css';
-import '@fontsource/geist/600.css';
-import '@fontsource/geist/700.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
 ```
 
 Then use the components:
@@ -41,7 +43,7 @@ export function Save() {
 }
 ```
 
-To use your own colours and fonts, see **Theming** in the sidebar.
+To change how one component looks on one screen, see **Customising** in the sidebar.
 
 ## Light and dark mode
 
@@ -64,7 +66,7 @@ Set `data-theme` on the `<html>` element:
 
 ## Using tokens directly
 
-Every token is a CSS variable prefixed with `--halo-`:
+Every token is a CSS variable prefixed with `--halo-` (the prefix comes from Halo, the open-source system this one is based on):
 
 ```css
 .card {

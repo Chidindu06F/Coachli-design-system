@@ -11,7 +11,7 @@ const cell = { padding: '12px', borderBottom: '1px solid var(--halo-border-prima
 function Typography() {
   const family = typography.find((t) => t.name === 'family/body');
   return (
-    <Page title="Typography" lead={<>Halo uses <strong>{String(family?.values.default)}</strong> for headings, body, labels and captions. Font sizes are in rem so they respect the user's browser font settings.</>}>
+    <Page title="Typography" lead={<>Coachli uses <strong>{String(family?.values.default)}</strong> for headings, body, labels and captions. Font sizes are in rem so they respect the user's browser font settings.</>}>
       <Section title="Type scale">
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -38,7 +38,7 @@ function Typography() {
                   </td>
                   <td style={cell}>
                     <span style={{ fontSize: `var(${t.cssVar})`, lineHeight: `var(${lineHeightVar(key)})`, fontWeight: 600 }}>
-                      Halo design system
+                      Coachli design system
                     </span>
                   </td>
                 </tr>

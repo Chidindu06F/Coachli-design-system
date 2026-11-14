@@ -49,11 +49,11 @@ Override the brand variables in your own CSS, loaded after Halo's:
 }
 ```
 
-The Theming page in the [docs](https://chidindu06f.github.io/Halo-design-system/) lists every brand variable and shows how to rebrand from Figma.
+The Theming page in the [docs](https://chidindu06f.github.io/Coachli-design-system/) lists every brand variable and shows how to rebrand from Figma.
 
 ## Docs
 
-Every component, with live examples and props: https://chidindu06f.github.io/Halo-design-system/
+Every component, with live examples and props: https://chidindu06f.github.io/Coachli-design-system/
 
 ## License
 
