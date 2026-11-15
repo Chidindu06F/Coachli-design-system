@@ -6,6 +6,7 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ### Changes
 
+- **Modals and drawers blur the page behind them.** `Modal` and `Drawer` now default to `overlay="blur"`: the same dim plus an 8px background blur, so the dialog stands out. Pass `overlay="dim"` for the old look. Figma: every Overlay in the Coachli file now uses Style=Blur; the Overlay component itself is unchanged.
 - **Buttons shrink on press and return with no bounce.** Button and SocialButton go to 94% while held; CompactButton and icon-only Buttons, being small, go to 88%. The release eases back in 180ms without the old overshoot, which made icons look like they wobbled. The press now uses the CSS `scale` property instead of `transform`, so a button positioned with a transform stays put: **the Carousel arrows no longer jump down when pressed.** People who ask for reduced motion still see no shrink. Figma: no change (the Pressed state keeps its colour; the motion is code only).
 - **Popovers, menus and pickers no longer jump sides while open.** A floating panel keeps the side it opened on (below, or above when there is no room) even when its content changes height, for example switching tabs inside a popover. It only flips if it no longer fits there. The panel is also re-measured reliably when its size changes, so it stays against its trigger.
 - **Rich text editor: links, images and pasting.**

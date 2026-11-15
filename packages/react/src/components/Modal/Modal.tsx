@@ -32,7 +32,7 @@ export interface ModalProps extends PartsProps<ModalPart> {
   actions?: ReactNode;
   /** Closes when the overlay is clicked. Turn off when closing would lose work. */
   closeOnOverlayClick?: boolean;
-  /** Overlay style. */
+  /** Overlay style. Blur (the default) dims and softly blurs the page behind. Figma: Overlay Style. */
   overlay?: 'dim' | 'blur';
   /** Anything else in the Body, under the description: a form, an image, a list. Figma: Body slot. */
   children?: ReactNode;
@@ -55,7 +55,7 @@ export function Modal({
   showClose = true,
   actions,
   closeOnOverlayClick = true,
-  overlay = 'dim',
+  overlay = 'blur',
   children,
   className,
   classNames,

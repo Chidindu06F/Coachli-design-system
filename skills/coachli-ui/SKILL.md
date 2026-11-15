@@ -62,6 +62,7 @@ These come up often. The full list and details are in `DEVELOPERS.md`.
 - **Error messages** state the problem in a few words and keep a next step ("Enter a valid link.", "Upload failed. Check your connection and retry."). No examples inside the error.
 - **Placeholders** are sample answers that start with "e.g.", not questions or instructions.
 - **Create flows** (invoices, one-off sessions, session bundles): Cancel or Back, Save as draft and Next sit in a sticky bar at the bottom of the main area, left-aligned. The header has only "Watch demo video", which opens the YouTube video in a `Modal` on Coachli. It never opens YouTube.
+- **Overlays blur.** Leave `Modal` and `Drawer` on their default `overlay="blur"` (dim plus a soft 8px blur). Do not switch to `"dim"` or add your own backdrop.
 - **Celebrations** ("Session published", "New badge earned"): put `<Confetti />` inside the Modal body. Do not write your own animation.
 - **Create and edit bottom bars (desktop):** Cancel (every step) and Back (step 2+) on the left, the rest on the right with the main button far right: Save as draft then Next or Publish when creating; Next (not on the last step) then a primary Update on every step when editing, so a change on step 1 can be saved without going to the end. No demo video card on edit pages.
 - **Optional choices behind a switch** (redirect after purchase): the switch turns it on and the dropdown has no "None" option; off means none.

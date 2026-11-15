@@ -37,7 +37,7 @@ Read a screen from its Figma layers: almost everything is a library component in
 | Sidebar *Show report a bug* / *Show log out* | `NavItem`s in `footer`. What's new and Help and resources are not in the sidebar: What's new lives in the Notifications drawer (bell); Help and resources is a row on Home, and its full page (View all) has a back arrow to Home |
 | Text component (Size, Weight, Colour) | `Text` |
 | Card, List, List item, Badge, Tag, Tabs, Table cells | Components with the same names |
-| Modal / Drawer inside an Overlay | `Modal` / `Drawer` (they bring their own overlay) |
+| Modal / Drawer inside an Overlay | `Modal` / `Drawer` (they bring their own overlay, blurred by default; every design uses Overlay Style=Blur) |
 | Toast | `useToast()` inside a `<ToastProvider>` at the app root |
 | Tour step | `Tour` |
 | Plain frames | Layout only: flex/grid using the spacing tokens |

@@ -29,6 +29,7 @@ export interface DrawerProps extends PartsProps<DrawerPart> {
   /** Buttons in the footer. Figma: Actions. */
   actions?: ReactNode;
   closeOnOverlayClick?: boolean;
+  /** Overlay style. Blur (the default) dims and softly blurs the page behind. Figma: Overlay Style. */
   overlay?: 'dim' | 'blur';
   /** The body, which scrolls when it is long. Figma: Content slot. */
   children?: ReactNode;
@@ -49,7 +50,7 @@ export function Drawer({
   showClose = true,
   actions,
   closeOnOverlayClick = true,
-  overlay = 'dim',
+  overlay = 'blur',
   children,
   className,
   classNames,
