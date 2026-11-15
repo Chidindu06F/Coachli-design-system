@@ -8,6 +8,7 @@ This is the Coachli design system: design tokens (`packages/tokens`), React comp
 - **Tokens are generated.** Never edit `packages/tokens/dist`. Change the JSON under `packages/tokens/figma/<Collection>/<Mode>.tokens.json`, then run `pnpm build:tokens`.
 - **Components use tokens only.** In `*.module.css` use `var(--halo-…)`. No hex values, except artwork colours that have no token (say so in a comment).
 - **Follow the existing shape.** Each component is a folder in `packages/react/src/components/<Name>/` with `<Name>.tsx`, `<Name>.module.css`, `<Name>.stories.tsx` and `index.ts`, and is exported from `packages/react/src/index.ts`. Use `parts()` from `internal/parts` so every part gets `data-part`, `classNames` and `styles`. Copy a small component such as `Spinner` when starting a new one.
+- **Token tables in the Figma docs:** when a semantic token changes what it points to, update the Light and Dark labels on its `Doc/Token row`s too. The swatches are linked to the token and update on their own; the labels are text and don't.
 - **Every change is documented.** Add a line to `CHANGELOG.md` under Unreleased. If the change affects how the dashboard is built, update `DEVELOPERS.md`. If it adds a decided pattern, add it to `skills/coachli-ui/SKILL.md` too.
 - **Verify before finishing.** `pnpm typecheck`, then open the story in Storybook (`pnpm dev`, port 6006) and check light mode, dark mode and keyboard use.
 - **Halo is read-only.** Never push to the `halo` remotes.
