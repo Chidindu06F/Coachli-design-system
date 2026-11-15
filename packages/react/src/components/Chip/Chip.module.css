@@ -1,0 +1,63 @@
+/* Values mirror the Chip set in Figma (Chip page). */
+
+.sm { --h: 28px; --pad: var(--halo-spacing-5); }
+.md { --h: 32px; --pad: var(--halo-spacing-6); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--halo-spacing-2);
+  height: var(--h);
+  padding: 0 var(--pad);
+  border: 1px solid var(--halo-border-secondary);
+  border-radius: var(--halo-radius-xl);
+  background: var(--halo-surface-primary);
+  color: var(--halo-text-primary);
+  font-family: var(--halo-font-family-label);
+  font-size: var(--halo-font-size-md);
+  font-weight: var(--halo-font-weight-semibold);
+  line-height: var(--halo-line-height-md);
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 180ms ease;
+}
+
+.chip:hover:not(:disabled) {
+  border-color: var(--halo-border-strong);
+  background: var(--halo-surface-minimal);
+}
+
+.selected {
+  border-color: var(--halo-border-contrast);
+  background: var(--halo-surface-brand);
+  color: var(--halo-text-brand);
+}
+
+.selected:hover:not(:disabled) {
+  border-color: var(--halo-border-contrast);
+  background: var(--halo-surface-brand-secondary);
+}
+
+.chip:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--halo-border-focus);
+}
+
+.chip:disabled {
+  border-color: var(--halo-border-secondary);
+  color: var(--halo-text-disabled);
+  cursor: not-allowed;
+}
+
+.check {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+}
+.check > svg { width: 100%; height: 100%; }
+
+.label { overflow: hidden; text-overflow: ellipsis; }
