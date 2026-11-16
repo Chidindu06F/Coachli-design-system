@@ -322,6 +322,7 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
     <CompactButton
       key={c.label}
       variant="ghost"
+      round
       aria-label={c.label}
       title={c.shortcut ? `${c.label} (${c.shortcut})` : c.label}
       aria-pressed={on}
@@ -461,7 +462,7 @@ function LinkPopover({ disabled, active, getInitial, onApply, onRemove }: {
       align="start"
       title={editing ? 'Edit link' : 'Add link'}
       trigger={
-        <CompactButton variant="ghost" aria-label={active ? 'Edit link' : 'Add link'} aria-pressed={active} selected={active} disabled={disabled} onMouseDown={keepSelection}>
+        <CompactButton variant="ghost" round aria-label={active ? 'Edit link' : 'Add link'} aria-pressed={active} selected={active} disabled={disabled} onMouseDown={keepSelection}>
           <Icon name="Link" />
         </CompactButton>
       }
@@ -565,7 +566,7 @@ function ImagePopover({ disabled, canUpload, maxSize, check, onUpload, onApply }
       align="start"
       title="Add image"
       trigger={
-        <CompactButton variant="ghost" aria-label="Add image" disabled={disabled} onMouseDown={keepSelection}>
+        <CompactButton variant="ghost" round aria-label="Add image" disabled={disabled} onMouseDown={keepSelection}>
           <Icon name="Image" />
         </CompactButton>
       }

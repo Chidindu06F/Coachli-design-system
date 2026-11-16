@@ -6,6 +6,9 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ### Changes
 
+- **Switch moves with springs.** The thumb stretches toward where it is going, lands with a small bounce and rounds back up, and the track fills with the brand colour as it travels. Off with reduced motion. Code only: Figma has no motion.
+- **Number input rolls.** Pressing plus or minus rolls the number up or down. At the limit the button shakes "no" and the number nudges; the button keeps the disabled look and is marked `aria-disabled` so it can still take the press. Off with reduced motion. Code only.
+- **Round buttons inside fields.** The compact buttons inside Input (show password), Number input, Rich text editor, Color picker and the field info button are fully round, to match the round fields. Figma still to do: set Full radius to Yes on the Compact button instances in the Color picker, Field label, Rich text editor and Rich text editor field sets.
 - Figma only: **the Unsplash logo has icon padding.** Its glyph is now 16px inside the 24px box (it was 20px), so in a Compact button or any icon slot it reads the same size as the Phosphor icons and keeps the same space inside the hover background. Solid logos look larger than line icons at the same size, so logos used as icons need this extra room. If the app draws the Unsplash logo itself, export it from Figma so the padding comes with it.
 - **Tour spotlight uses the overlay colour.** The `Tour` spotlight now fills with `--halo-surface-overlay` (40%, 60% in dark mode), like `Overlay`, instead of `--halo-overlay-primary` (20%). Figma: the Tour page token table matches.
 - Figma only: **Tag icons take the tag's text colour.** In every Tag variant the left icon and the close icon now use the same token as the label (for example `tag/pink/text`); they were `icon/primary` black.

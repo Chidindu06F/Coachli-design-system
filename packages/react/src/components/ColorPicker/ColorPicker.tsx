@@ -161,7 +161,7 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
 
       <div {...part('sliders', styles.sliders)}>
         {hasEyeDropper && (
-          <CompactButton variant="ghost" aria-label="Pick a colour from the screen" onClick={pickFromScreen}>
+          <CompactButton variant="ghost" round aria-label="Pick a colour from the screen" onClick={pickFromScreen}>
             <Icon name="Eyedropper" />
           </CompactButton>
         )}
