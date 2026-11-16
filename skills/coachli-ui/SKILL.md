@@ -66,6 +66,7 @@ These come up often. The full list and details are in `DEVELOPERS.md`.
 - **Overlays blur.** Leave `Modal` and `Drawer` on their default `overlay="blur"` (dim plus a soft 8px blur). Do not switch to `"dim"` or add your own backdrop.
 - **Celebrations** ("Session published", "New badge earned"): put `<Confetti />` inside the Modal body. Do not write your own animation.
 - **Create and edit bottom bars (desktop):** Cancel (every step) and Back (step 2+) on the left, the rest on the right with the main button far right: Save as draft then Next or Publish when creating; Next (not on the last step) then a primary Update on every step when editing, so a change on step 1 can be saved without going to the end. No demo video card on edit pages.
+- **Form field spacing:** in create and edit forms (and create drawers), fields inside a section sit **20px** apart (`gap: var(--halo-spacing-8)`), not 16px. Tighter nested groups, such as an add-on option card, keep their own 12px gap.
 - **Optional choices behind a switch** (redirect after purchase): the switch turns it on and the dropdown has no "None" option; off means none.
 - **Names in tables and list rows:** one line with an ellipsis, never wrapping.
 - **Price fields:** currency code only in the prefix, no flag.
