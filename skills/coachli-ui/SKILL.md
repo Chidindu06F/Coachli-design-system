@@ -62,7 +62,6 @@ These come up often. The full list and details are in `DEVELOPERS.md`.
 - **Error messages** state the problem in a few words and keep a next step ("Enter a valid link.", "Upload failed. Check your connection and retry."). No examples inside the error.
 - **Placeholders** are sample answers that start with "e.g.", not questions or instructions.
 - **Create flows** (invoices, one-off sessions, session bundles): Cancel or Back, Save as draft and Next sit in a sticky bar at the bottom of the main area, left-aligned. The header has only "Watch demo video", which opens the YouTube video in a `Modal` on Coachli. It never opens YouTube.
-- **Choices are `Chip`s, not buttons.** For picking interests, categories or filters, use `Chip` (selected = light teal with a check). Never use `Button` for this; it looks like the main action. With a limit ("up to 3"), keep the rest enabled and show a note when someone tries one more.
 - **Logos in icon slots need padding.** A brand logo inside a `CompactButton`, `Button` icon or input affix should be drawn about 2/3 of the slot (for example a 16px glyph in a 24px box, as Figma's Unsplash logo is), never edge to edge. Solid logos look bigger than line icons, so without this the button looks cramped.
 - **Overlays blur.** Leave `Modal` and `Drawer` on their default `overlay="blur"` (dim plus a soft 8px blur). Do not switch to `"dim"` or add your own backdrop.
 - **Celebrations** ("Session published", "New badge earned"): put `<Confetti />` inside the Modal body. Do not write your own animation.

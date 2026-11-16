@@ -28,8 +28,6 @@ export type { AreaChartProps, BarChartProps, ChartDatum, ChartSeries, LineChartP
 export { Checkbox, CheckboxGroup } from './components/Checkbox';
 export type { CheckboxGroupProps, CheckboxProps, CheckboxSize } from './components/Checkbox';
 export { CompactButton } from './components/CompactButton';
-export { Chip } from './components/Chip';
-export type { ChipProps, ChipSize, ChipPart } from './components/Chip';
 export type { CompactButtonProps, CompactButtonSize, CompactButtonVariant } from './components/CompactButton';
 export { LinkButton } from './components/LinkButton';
 export type { LinkButtonProps, LinkButtonSize, LinkButtonVariant } from './components/LinkButton';

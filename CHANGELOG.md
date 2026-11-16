@@ -6,7 +6,6 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ### Changes
 
-- **New: `Chip`.** A choice that switches on and off, like an interest or a filter. Sizes `sm` (28px) and `md` (32px). Off is outlined; on has a light brand fill, a brand border, brand text and a check, so it never looks like the primary `Button`. It's a `button` with `aria-pressed`; use `selected` and `onSelectedChange`. Use several in a wrapping row, and don't disable the others when a limit is reached: show a note instead. Figma: the new Chip page (Size × Selected × State).
 - Figma only: **the Unsplash logo has icon padding.** Its glyph is now 16px inside the 24px box (it was 20px), so in a Compact button or any icon slot it reads the same size as the Phosphor icons and keeps the same space inside the hover background. Solid logos look larger than line icons at the same size, so logos used as icons need this extra room. If the app draws the Unsplash logo itself, export it from Figma so the padding comes with it.
 - **Tour spotlight uses the overlay colour.** The `Tour` spotlight now fills with `--halo-surface-overlay` (40%, 60% in dark mode), like `Overlay`, instead of `--halo-overlay-primary` (20%). Figma: the Tour page token table matches.
 - Figma only: **Tag icons take the tag's text colour.** In every Tag variant the left icon and the close icon now use the same token as the label (for example `tag/pink/text`); they were `icon/primary` black.
