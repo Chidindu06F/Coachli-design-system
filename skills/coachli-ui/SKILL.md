@@ -70,6 +70,8 @@ These come up often. The full list and details are in `DEVELOPERS.md`.
 - **Optional choices behind a switch** (redirect after purchase): the switch turns it on and the dropdown has no "None" option; off means none.
 - **Names in tables and list rows:** one line with an ellipsis, never wrapping.
 - **Price fields:** currency code only in the prefix, no flag.
+- **Amounts never show `.00`:** NGN 10,000, NGN 0, USD 50. Two decimals only when they aren't zero (NGN 10,000.50, NGN 0.92).
+- **Tables on mobile** become one bordered card of `ListItem`s separated by a subtle `Divider`, 4px space each side, pagination below.
 - **Rich text** (descriptions, notes): `RichTextEditorField` with `onImageUpload` wired to the app's upload (resolve with the https URL) and `onImageUploadError` shown as a toast. Never build a custom editor or paste handler.
 - **Breadcrumbs** go under the page title. No back arrow.
 - **Focus rings** must not be clipped: do not put `overflow: hidden` on a container that holds focusable components unless it scrolls.

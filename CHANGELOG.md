@@ -6,6 +6,7 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ### Changes
 
+- Docs: **amounts drop `.00`.** The Result story shows "$1,265"; whole amounts have no decimals across the docs and the Coachli designs.
 - **Switch moves with springs.** The thumb stretches toward where it is going, lands with a small bounce and rounds back up, and the track fills with the brand colour as it travels. Off with reduced motion. Code only: Figma has no motion.
 - **Number input rolls.** Pressing plus or minus rolls the number up or down. At the limit the button shakes "no" and the number nudges; the button keeps the disabled look and is marked `aria-disabled` so it can still take the press. Off with reduced motion. Code only.
 - **Round buttons inside fields.** The compact buttons inside Input (show password), Number input, Rich text editor, Color picker and the field info button are fully round, to match the round fields. In Figma, the Compact buttons in the Color picker, Field label and Editor toolbar sets have Full radius set to Yes, so the Rich text editor and every placed field follow.

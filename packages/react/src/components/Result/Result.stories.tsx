@@ -100,7 +100,7 @@ export const WithDetails: Story = {
       >
         <dl style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '8px 16px', margin: 0, padding: 16, borderRadius: 12, background: 'var(--halo-surface-secondary)', font: '14px/22px var(--halo-font-family-body)' }}>
           <dt style={{ color: 'var(--halo-text-secondary)' }}>Amount</dt>
-          <dd style={{ margin: 0, textAlign: 'end' }}>$1,265.00</dd>
+          <dd style={{ margin: 0, textAlign: 'end' }}>$1,265</dd>
           <dt style={{ color: 'var(--halo-text-secondary)' }}>Date</dt>
           <dd style={{ margin: 0, textAlign: 'end' }}>10 Oct 2026</dd>
           <dt style={{ color: 'var(--halo-text-secondary)' }}>Reference</dt>
