@@ -85,7 +85,7 @@ const TEXT_STYLES = [
 /**
  * A writing area with a formatting toolbar. Content is HTML; sanitise it on the server before showing it to others.
  * Built on the browser's editing support, so it needs no extra packages. For collaborative or schema-based
- * editing, use a dedicated editor library styled with Halo tokens.
+ * editing, use a dedicated editor library styled with the design tokens.
  *
  * Links: highlight text and add a link, or add one with its own text. Addresses without https:// get it added,
  * email addresses become mailto: links, and anything else is refused. With the caret in a link, the link button

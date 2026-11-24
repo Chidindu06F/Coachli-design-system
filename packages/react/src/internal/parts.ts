@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import { cx } from './cx';
 
 /**
- * Lets people style the parts inside a component without reaching for Halo's internal class names.
+ * Lets people style the parts inside a component without reaching for the internal class names.
  * Every part also gets a stable `data-part` attribute, and the outer element gets `data-halo`
  * with the component's name, so parts can be styled from your own CSS too:
  * `[data-halo='modal'] [data-part='header'] { … }`.

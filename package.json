@@ -1,7 +1,7 @@
 {
   "name": "coachli-design-system",
   "private": true,
-  "description": "Coachli design system: Halo components themed with the Coachli brand (aubergine, Inter), for the Coachli dashboard.",
+  "description": "Coachli design system: components and tokens themed with the Coachli brand (aubergine, Inter), for the Coachli dashboard.",
   "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@12.6.0",

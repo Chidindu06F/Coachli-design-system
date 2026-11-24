@@ -5,7 +5,7 @@
 
 # Coachli Design System
 
-The components and design tokens for the Coachli dashboard. It's built on [Halo](https://github.com/Chidindu06F/Halo-design-system), themed with the Coachli brand: an aubergine primary colour, Inter, and light and dark mode.
+The components and design tokens for the Coachli dashboard. It's themed with the Coachli brand: an aubergine primary colour, Inter, and light and dark mode.
 
 - **Figma library:** [COACHLI DESIGN SYSTEM](https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM), the source of truth for every token and component.
 - **Dashboard designs:** [Coachli](https://www.figma.com/design/toCoFh482t5Ho9OU7it9lA/Coachli).

@@ -107,7 +107,7 @@ export const LongPath: Story = {
   ),
 };
 
-/** A settings page, a file browser and a shop, built from Halo components. */
+/** A settings page, a file browser and a shop, built from Coachli components. */
 export const InUse: Story = {
   name: 'In use',
   render: () => (

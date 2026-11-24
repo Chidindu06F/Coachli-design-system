@@ -87,7 +87,7 @@ export const Sizes: Story = {
   ),
 };
 
-/** A dot for statuses, or an icon from the Halo library. */
+/** A dot for statuses, or an icon from the Coachli library. */
 export const DotAndIcon: Story = {
   name: 'Dot and icon',
   render: () => (
@@ -121,7 +121,7 @@ export const Counts: Story = {
   ),
 };
 
-/** A team list, navigation with counts and a plan card, built from Halo components. */
+/** A team list, navigation with counts and a plan card, built from Coachli components. */
 export const InUse: Story = {
   name: 'In use',
   render: () => (

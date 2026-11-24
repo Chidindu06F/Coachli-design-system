@@ -110,7 +110,7 @@ export const Disabled: Story = {
   ),
 };
 
-/** File actions, a split button and a zoom control, built from Halo components. */
+/** File actions, a split button and a zoom control, built from Coachli components. */
 export const InUse: Story = {
   name: 'In use',
   render: () => (

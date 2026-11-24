@@ -1,4 +1,4 @@
-/* Story canvas follows the active Halo theme */
+/* Story canvas follows the active theme */
 html,
 body {
   background: var(--halo-surface-primary);

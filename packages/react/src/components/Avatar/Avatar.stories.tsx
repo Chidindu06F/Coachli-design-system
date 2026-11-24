@@ -187,7 +187,7 @@ const team = [
   { name: 'Sam Lee', role: 'Researcher', src: illustration(2), status: 'offline' as const },
 ];
 
-/** A team list and a shared document header, built from Halo components. */
+/** A team list and a shared document header, built from Coachli components. */
 export const InUse: Story = {
   name: 'In use',
   render: () => (

@@ -13,7 +13,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A scannable QR code for links, sign-in on another device, payments or tickets. Drawn as SVG by an encoder built into Halo, so there is nothing else to install. It stays dark on light in dark mode, because many phones cannot read light-on-dark codes. Give it a `label` saying what scanning does, and show the link or code as text nearby for people who cannot scan.',
+          'A scannable QR code for links, sign-in on another device, payments or tickets. Drawn as SVG by an encoder built into the library, so there is nothing else to install. It stays dark on light in dark mode, because many phones cannot read light-on-dark codes. Give it a `label` saying what scanning does, and show the link or code as text nearby for people who cannot scan.',
       },
     },
   },

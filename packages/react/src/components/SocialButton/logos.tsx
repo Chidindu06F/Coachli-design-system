@@ -1,4 +1,4 @@
-// Provider logos, exported from the Halo Figma file (Logos page).
+// Provider logos, exported from the COACHLI DESIGN SYSTEM Figma file (Logos page).
 // Sources and licences: see THIRD_PARTY_NOTICES.md. Don't redraw or recolour them
 // beyond what each provider allows; `mono` swaps the brand colour for currentColor.
 import type { SVGProps } from 'react';

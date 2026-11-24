@@ -118,7 +118,7 @@ function SelectAll() {
   );
 }
 
-/** Settings, a sign-up form and a list with "Select all", built from Halo components. */
+/** Settings, a sign-up form and a list with "Select all", built from Coachli components. */
 export const InUse: Story = {
   name: 'In use',
   render: () => (
