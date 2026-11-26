@@ -1,0 +1,45 @@
+/* Values mirror the Announcement bar set in Figma (Announcement bar page). */
+
+.bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  column-gap: var(--halo-spacing-7);
+  row-gap: var(--halo-spacing-2);
+  width: 100%;
+  padding: var(--halo-spacing-5) var(--halo-spacing-9);
+  background: var(--halo-surface-primary);
+  color: var(--halo-text-primary);
+  text-align: center;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.message {
+  margin: 0;
+  font-family: var(--halo-font-family-body);
+  font-size: var(--halo-font-size-md);
+  line-height: var(--halo-line-height-md);
+  font-weight: var(--halo-font-weight-regular);
+}
+
+.title {
+  font-weight: var(--halo-font-weight-semibold);
+}
+
+.action {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+/* Phones: the message takes the whole first line, so the link sits centred under it. */
+@media (max-width: 599px) {
+  .bar { padding: var(--halo-spacing-5) var(--halo-spacing-7); }
+  .message { flex-basis: 100%; }
+}

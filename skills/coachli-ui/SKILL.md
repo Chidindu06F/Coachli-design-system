@@ -76,6 +76,7 @@ These come up often. The full list and details are in `DEVELOPERS.md`.
 - **Breadcrumbs** go under the page title. No back arrow.
 - **Focus rings** must not be clipped: do not put `overflow: hidden` on a container that holds focusable components unless it scrolls.
 - **Names:** "One-off session" and "Session bundle" (never "1:1 session" for the single kind). Menu items that list kinds of things are plural: One-off sessions, Session bundles, Live events.
+- **Announcements about all of Coachli** (like an upcoming Coachli event) use `<AnnouncementBar title="…" action={<LinkButton size="sm" …>Register now</LinkButton>}>details</AnnouncementBar>` at the very top of the app. No close button; remove it when the event is over. Use an Alert only for news about one page.
 - **Awards:** earned awards are `<Award name="…" />` (three colours; there are no one or two colour versions). Awards not earned yet are `<Award name="…" inactive />`: flat gray, shades of black in dark mode. Never fade an award with opacity.
 
 ## When the design system does not have it

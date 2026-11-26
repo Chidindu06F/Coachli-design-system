@@ -71,6 +71,8 @@ export type { ComboboxFieldProps, ComboboxProps, MultiComboboxProps, SelectField
 export { Tag, TAG_COLORS } from './components/Tag';
 export type { TagColor, TagProps } from './components/Tag';
 export { Alert } from './components/Alert';
+export { AnnouncementBar } from './components/AnnouncementBar';
+export type { AnnouncementBarProps } from './components/AnnouncementBar';
 export type { AlertProps, AlertType } from './components/Alert';
 export { Drawer } from './components/Drawer';
 export type { DrawerProps } from './components/Drawer';
@@ -134,6 +136,7 @@ export type Theme = 'light' | 'dark' | 'system';
 export type { PartsProps } from './internal/parts';
 export type { AccordionPart } from './components/Accordion';
 export type { AlertPart } from './components/Alert';
+export type { AnnouncementBarPart } from './components/AnnouncementBar';
 export type { AvatarPart } from './components/Avatar';
 export type { BadgePart } from './components/Badge';
 export type { BreadcrumbsPart } from './components/Breadcrumbs';
