@@ -2437,5 +2437,102 @@
         }
       }
     }
+  },
+  "gradient": {
+    "highlight-1": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9647058823529412,
+          0.7098039215686275,
+          0.11764705882352941
+        ],
+        "alpha": 1,
+        "hex": "#F6B51E"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/yellow/300",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "highlight-2": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.2784313725490196,
+          0.7607843137254902,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#47C2FF"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/skyblue/300",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "highlight-3": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5490196078431373,
+          0.788235294117647,
+          0.14901960784313725
+        ],
+        "alpha": 1,
+        "hex": "#8CC926"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/premium/lime",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "highlight-4": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8941176470588236,
+          0.3137254901960784,
+          0.5607843137254902
+        ],
+        "alpha": 1,
+        "hex": "#E4508F"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/pink/300",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "highlight-5": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.5686274509803921,
+          0.2784313725490196
+        ],
+        "alpha": 1,
+        "hex": "#FF9147"
+      },
+      "$extensions": {
+        "com.figma.aliasData": {
+          "targetVariableName": "colours/orange/300",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    }
   }
 }
