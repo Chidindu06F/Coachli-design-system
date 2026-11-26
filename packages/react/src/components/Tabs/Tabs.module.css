@@ -66,6 +66,8 @@
 .pill .tab { border-radius: var(--halo-radius-10); }
 .pill.vertical .tab { width: 100%; }
 .pill .selected { background: var(--halo-surface-minimal); }
+/* The count badge turns white on the grey pill, or it disappears into it (Figma: Pill, Selected). */
+.pill .selected [data-halo='badge'] { --soft-bg: var(--halo-surface-primary); }
 
 .panel { flex: 1; min-width: 0; outline: none; }
 .panel:focus-visible { border-radius: var(--halo-radius-2); box-shadow: 0 0 0 2px var(--halo-surface-primary), 0 0 0 4px var(--halo-border-focus); }
