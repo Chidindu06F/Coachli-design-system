@@ -18,13 +18,13 @@ const meta = {
     docs: {
       description: {
         component:
-          'A full-width dark bar at the very top of the app, for news about all of Coachli, like an upcoming Coachli event. It sits above the sidebar and the page header and stays put while the page scrolls. It has no close button: show it until the thing it announces is over. It is always dark, in light and dark mode. Use an Alert for news about one page.',
+          'A full-width dark bar at the very top of the app, for news about all of Coachli, like an upcoming Coachli event. It sits above the sidebar and the page header and stays put while the page scrolls. The message is only the event name (`title`) and its date, then a \"Register now\" link: keep it to 60 characters. It never runs past two lines; on a phone the link takes its own line under it. It has no close button: show it until the event is over. It is always dark, in light and dark mode. Use an Alert for news about one page.',
       },
     },
   },
   args: {
     title: 'Coachli Creator Summit 2026',
-    children: 'Thu 26 Nov · Starts in 2d 04h 53m',
+    children: 'Thu 26 Nov',
     action: register,
   },
 } satisfies Meta<typeof AnnouncementBar>;
@@ -37,15 +37,7 @@ export const Playground: Story = {};
 /** Without a link, when there is nothing to do yet. */
 export const WithoutLink: Story = { args: { action: undefined } };
 
-/** Long text wraps. On a phone the link always moves to its own line, centred. */
-export const LongMessage: Story = {
-  args: {
-    title: 'Coachli Creator Summit 2026',
-    children: 'Two days of talks and workshops for coaches, online and free · Thu 26 and Fri 27 Nov · Starts in 2d 04h 53m',
-  },
-};
-
-/** At phone width. */
+/** At phone width: the link moves to its own line, centred. */
 export const Phone: Story = {
   parameters: { viewport: { defaultViewport: 'mobile1' } },
   render: (args) => (

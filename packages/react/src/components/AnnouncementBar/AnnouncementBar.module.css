@@ -27,6 +27,12 @@
   font-size: var(--halo-font-size-md);
   line-height: var(--halo-line-height-md);
   font-weight: var(--halo-font-weight-regular);
+  /* Name and date only: never more than two lines. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .title {
