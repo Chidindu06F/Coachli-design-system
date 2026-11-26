@@ -147,7 +147,7 @@ export const WithAward: Story = {
       <Avatar size="xs" name="Ada Okafor" color="purple" award="champion" />
       <Avatar size="sm" src={photo(2)} name="Kemi Ade" award="on-fire" />
       <Avatar size="md" name="Tunde Ola" color="blue" award="lift-off" />
-      <Avatar size="lg" src={photo(5)} name="Zainab Bello" award={<Award name="legend" colors={3} />} />
+      <Avatar size="lg" src={photo(5)} name="Zainab Bello" award={<Award name="legend" />} />
       <Avatar size="xl" src={photo(6)} name="Kemi Ade" status="online" award="most-loved" />
     </div>
   ),
