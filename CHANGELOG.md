@@ -44,7 +44,7 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 ### Changes
 
 - **Lighter greys.** Light mode `surface/secondary` is now `neutrals/200` (#F2F2F2, was the bluish #E1E4EA) and `surface/minimal` is `neutrals/100` (#F5F5F5, was #F2F2F2). Hover, pressed and selected states, neutral badges and the page background are lighter and less dull; `button/secondary-hover` and `-pressed` follow. Dark mode is unchanged. Figma: the Doc/Token row labels are updated.
-- **Count badge on a selected Pill tab is white** (`surface/primary`), so it doesn't disappear into the grey pill. Figma: Tab, Pill, Selected.
+- **Tab count badges are Neutral Solid** (dark with a light number, inverted in dark mode) on every tab, so the count never disappears into the grey selected pill. Figma: every Tab variant's Badge is Colour Neutral, Style Solid. React: `Tab` renders `Badge variant="solid"`.
 - Guide: **table text rule.** First column semibold, every other cell regular `text/primary` (amounts too), no grey cells except a second line under a name. Figma: Home, Store (Digital products, Services, Subscriptions), Payout, Reviews and the customer Purchases tables, and their mobile lists, now follow it.
 - **Modal spacing matches Figma.** 20px padding on every side (was 24px) and 12px between header, body and footer (was 16px). The header, body and footer keep a 4px inset so focus rings inside aren't clipped. Figma: the setup checklist border now uses the `Gradient/Highlight` style.
 - Guide: **the WhatsApp community button is on Home only** (coach and customer Home), not every page. Figma: removed from about 1,280 other screens.
