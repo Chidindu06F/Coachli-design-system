@@ -112,7 +112,7 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(function Tab({ value,
       <span className={styles.content}>
         {icon && <span {...part('icon', styles.icon)} aria-hidden="true">{icon}</span>}
         <span {...part('label', styles.label)}>{children}</span>
-        {badge !== undefined && (typeof badge === 'number' || typeof badge === 'string' ? <Badge size="xs" variant="solid" count={typeof badge === 'number' ? badge : undefined}>{typeof badge === 'string' ? badge : undefined}</Badge> : badge)}
+        {badge !== undefined && (typeof badge === 'number' || typeof badge === 'string' ? <Badge size="xs" count={typeof badge === 'number' ? badge : undefined}>{typeof badge === 'string' ? badge : undefined}</Badge> : badge)}
       </span>
     </button>
   );
