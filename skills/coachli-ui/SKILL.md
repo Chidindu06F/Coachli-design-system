@@ -78,6 +78,7 @@ These come up often. The full list and details are in `DEVELOPERS.md`.
 - **Names:** "One-off session" and "Session bundle" (never "1:1 session" for the single kind). Menu items that list kinds of things are plural: One-off sessions, Session bundles, Live events.
 - **Announcements about all of Coachli** (like an upcoming Coachli event) use `<AnnouncementBar title="…" action={<LinkButton size="sm" …>Register now</LinkButton>}>Thu 26 Nov</AnnouncementBar>` at the very top of the app: event name and date only, 60 characters at most. No close button; remove it when the event is over. Use an Alert only for news about one page.
 - **Table text:** first column semibold; every other cell regular `text/primary`, amounts included. No grey cells, except a second line under a name in the same cell (an email under a customer). Mobile lists follow the same rule.
+- **No modal over a drawer:** an action started in a `Drawer` continues in the same drawer (new title and body, footer **Back** + action). One overlay at a time.
 - **Awards:** earned awards are `<Award name="…" />` (three colours; there are no one or two colour versions). Awards not earned yet are `<Award name="…" inactive />`: flat gray, shades of black in dark mode. Never fade an award with opacity.
 
 ## When the design system does not have it
