@@ -4,6 +4,8 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ## Unreleased
 
+## 0.3.0
+
 ### Changes
 - **Awards: three colours only, and a gray inactive look.** `Award` drops the `colors` prop (and the `AwardColors` type): every earned award now blends its three colours. New `inactive` prop draws an award not earned yet as flat gray with a gray symbol, shades of black in dark mode, from the new `award/inactive-face`, `award/inactive-edge`, `award/inactive-edge-shade` and `award/inactive-symbol` tokens. Use it instead of fading an award with opacity (the locked level in Badges). Figma: the One colour and Two colours sets are gone; the Awards page has Earned (`Awards/Earned/…`) and Inactive (`Awards/Inactive/…`), Avatar's award swap lists the earned awards, and the Coachli designs use the three-colour awards. **Breaking:** remove `colors` from any `<Award>`.
 
