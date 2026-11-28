@@ -4,18 +4,18 @@
 
 Design each page, field and preview in this order:
 
-1. **Empty state:** nothing created yet. Start every flow from its list page.
-2. **Adding:** the create or edit flow, step by step.
-3. **Filled:** the page with real-looking content.
-4. **Error:** every field error, failed upload, failed payment, no results.
-5. **Loading** when it takes more than a moment (skeletons).
+1. **Empty state:** nothing has been created yet. Every flow starts from its list page in this state.
+2. **Create and edit:** the flow for creating or editing something, shown step by step.
+3. **Filled:** the page with real-looking content in it.
+4. **Error:** what happens when something goes wrong: field errors, failed uploads, failed payments, no search results.
+5. **Edge cases:** the unusual but possible cases: very long names, one item or hundreds, slow loading (skeletons), no permission, an expired link.
 
 A new flow gets every state the closest existing flow has. If One-off sessions has an error state for a step, Live events has it too.
 
 ## How a Coachli Figma page is laid out
 
 - **One page per menu item** (Home, Invoices, Live events…).
-- **One row per feature,** each with a section header. Inside a row, screens go left to right: Empty state → adding → filled → error.
+- **One row per feature,** each with a section header. Inside a row, screens go left to right: Empty state → create and edit → filled → error → edge cases.
 - **Sections are grey** (#C2C2C2 fill) with divider headers, and each screen has a black label above it.
 - **Desktop screens are 1440 wide** (1024 minimum). **Mobile screens are 390 wide** and at least 844 tall, with the content filling the height.
 - **Modals, drawers and menus are shown open** inside their screen, at full height, so every option is visible. Every select is shown open once with its full list. Every ⋮ has its menu drawn.

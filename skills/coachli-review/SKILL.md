@@ -33,7 +33,7 @@ Go through every item. Fix what you can; list anything you couldn't.
 
 ## States and devices
 
-- [ ] Empty, filled, error and loading states exist.
+- [ ] Empty, create and edit, filled, error and edge case states exist (long names, many items, slow loading, no permission).
 - [ ] Works in dark mode and at 390px wide, with every desktop action still there.
 - [ ] Every interactive element works with the keyboard, and its focus ring isn't clipped.
 
