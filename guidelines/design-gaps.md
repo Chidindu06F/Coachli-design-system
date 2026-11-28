@@ -15,7 +15,7 @@ Sometimes a developer reaches a screen, state or message the designs don't cover
 1. Review the gap. Either approve what was built or design the right version.
 2. Add the screen or state to the Coachli file, in its feature row.
 3. If it needed a new component or token: add it to the design system first, then the React package, then the changelog.
-4. If it's a new rule, add it to these guidelines and the Figma *How to use* page so the next gap is easier.
+4. If it's a new rule, add it to these guidelines and the Figma *Getting started* page so the next gap is easier.
 
 ## AI tools
 

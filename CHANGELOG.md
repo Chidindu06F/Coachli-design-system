@@ -1,12 +1,13 @@
 # Changelog
 
-Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both packages share one version number. New work collects under **Unreleased**; see Releasing in [CONTRIBUTING.md](CONTRIBUTING.md).
+Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both packages share one version number. New work collects under **Unreleased**; see Releasing in [MAINTAINING.md](MAINTAINING.md).
 
 ## Unreleased
 
 ### Changes
-- Guidelines: **sentence case** is spelled out in Writing copy (Storybook, Figma How to use, `coachli-copy` skill): only the first word and proper nouns take a capital, feature names are not proper nouns, text people type stays as written, no exclamation marks.
-- **Guidelines for designers, developers and AI.** New [`guidelines/`](guidelines/README.md) folder: using the design system (components only, no detaching, when a new component is allowed, who adds what), choosing components, patterns, writing copy, formats (money, numbers, dates, times), images (default cover and profile images), designing screens, design gaps and AI setup. The same text shows in Storybook under **Guidelines**, with a new **Developer setup** page, and on a new Figma page, **How to use**, right after the thumbnail.
+- Figma only: **one Getting started page.** The old Getting started page and the How to use page are merged into one shorter, colour-coded page right after the thumbnail: overview, the rules, choosing components, copy (with sentence case), formats, images, patterns, designing screens, design gaps, setup for designers (library and AI) and developers, and links. The full details stay in Storybook → Guidelines. The open-source wording, Discussions link and Contributing section are gone: this is Coachli's own design system. `CONTRIBUTING.md` is now `MAINTAINING.md`.
+- Guidelines: **sentence case** is spelled out in Writing copy (Storybook, Figma Getting started, `coachli-copy` skill): only the first word and proper nouns take a capital, feature names are not proper nouns, text people type stays as written, no exclamation marks.
+- **Guidelines for designers, developers and AI.** New [`guidelines/`](guidelines/README.md) folder: using the design system (components only, no detaching, when a new component is allowed, who adds what), choosing components, patterns, writing copy, formats (money, numbers, dates, times), images (default cover and profile images), designing screens, design gaps and AI setup. The same text shows in Storybook under **Guidelines**, with a new **Developer setup** page, and on the Figma **Getting started** page (it replaces the old one and adds the rules).
 - **Coachli plugin for Claude Code.** The repository is now a Claude Code plugin marketplace: `/plugin marketplace add Chidindu06F/Coachli-design-system`, then `/plugin install coachli-design-system@coachli-design-system`. It adds four skills (`coachli-ui`, `coachli-copy`, `coachli-gaps`, `coachli-review`) and connects Figma's MCP server. `AGENTS.app.md` points to the guidelines for other AI tools.
 
 ## 0.3.0

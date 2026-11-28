@@ -2,13 +2,13 @@
 
 How to design and build Coachli with this design system. Designers, developers and AI coding tools all follow the same rules.
 
-The same guidance is in three places:
+The guidance is in three places:
 
-- **Figma:** the *How to use* page in COACHLI DESIGN SYSTEM, right after the thumbnail.
+- **Figma:** the *Getting started* page in COACHLI DESIGN SYSTEM, right after the thumbnail. It has the short version.
 - **Storybook:** the *Guidelines* section, https://chidindu06f.github.io/Coachli-design-system/
 - **AI tools:** the Coachli skills in [`skills/`](../skills/README.md) read these files.
 
-These files are the written source. When a rule changes, change it here and on the Figma page in the same update.
+These files are the full written source. When a rule changes, change it here, and on the Figma page if it's one of the rules shown there.
 
 | Guide | What it covers |
 | --- | --- |

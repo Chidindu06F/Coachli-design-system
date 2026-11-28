@@ -1,6 +1,6 @@
-# Working on the Coachli design system
+# Maintaining the Coachli design system
 
-This is the Coachli copy of Halo. Figma and code are kept in step by hand: a change isn't done until both match.
+How Figma and code are kept in step, and how to release. Figma is the source of truth: a change isn't done until code matches it.
 
 ## Ground rules
 

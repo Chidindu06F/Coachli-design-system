@@ -77,7 +77,7 @@ pnpm typecheck     # type-check every package
 pnpm tokens:merge  # apply packages/tokens/coachli/export.json, then rebuild the tokens
 ```
 
-How to keep Figma and code in sync, and how to release, is in [CONTRIBUTING.md](CONTRIBUTING.md).
+How to keep Figma and code in sync, and how to release, is in [MAINTAINING.md](MAINTAINING.md).
 
 ### Relationship to Halo
 

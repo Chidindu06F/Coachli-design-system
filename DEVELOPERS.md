@@ -8,7 +8,7 @@ A guide for developers rebuilding the Coachli dashboard with this design system.
 | --- | --- |
 | Components and tokens | `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens` (install steps in the [README](README.md)) |
 | Live component docs | Storybook: https://chidindu06f.github.io/Coachli-design-system/ (start with Developer setup and Guidelines) |
-| Rules for components, copy, formats, images and design gaps | [`guidelines/`](guidelines/README.md), also in Storybook → Guidelines and the Figma *How to use* page |
+| Rules for components, copy, formats, images and design gaps | [`guidelines/`](guidelines/README.md), also in Storybook → Guidelines and the Figma *Getting started* page |
 | Screens to build | Figma: [Coachli](https://www.figma.com/design/toCoFh482t5Ho9OU7it9lA/Coachli), one page per menu item. Each page has grey sections per context, with black labels above each screen |
 | Component specs | Figma: [COACHLI DESIGN SYSTEM](https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM). Dev Mode shows the matching React code |
 

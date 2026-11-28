@@ -9,7 +9,7 @@ These skills teach AI tools (Claude Code, Cursor, Copilot and others) to design 
 | `coachli-gaps` | What to do when a screen or state isn't designed: copy the closest screen, mark it, tell the designer |
 | `coachli-review` | A checklist before a pull request or a design handover |
 
-The skills read the guides in [`guidelines/`](../guidelines/README.md), the same text as the Figma *How to use* page and Storybook's Guidelines.
+The skills read the guides in [`guidelines/`](../guidelines/README.md), the same text as Storybook's Guidelines (the Figma *Getting started* page has the short version).
 
 ## Claude Code: install the plugin (recommended)
 
@@ -27,4 +27,4 @@ Copy [`AGENTS.app.md`](AGENTS.app.md) to the root of the app repository as `AGEN
 
 ## Changing a skill
 
-Change the guideline in `guidelines/` and the Figma *How to use* page together. Change a `SKILL.md` only for how the AI should work, not for the rules themselves.
+Change the guideline in `guidelines/` and the Figma *Getting started* page together. Change a `SKILL.md` only for how the AI should work, not for the rules themselves.

@@ -43,4 +43,4 @@ Behaviour a screen can't show (timing, what gets saved, what an email says, scro
 1. Change the design system first if a component or token changes, and publish the library.
 2. Update the screens in the Coachli file. Accept library updates there.
 3. Make sure the React package matches, and add a line to `CHANGELOG.md`.
-4. If it's a new decided pattern, add it to these guidelines and the Figma *How to use* page.
+4. If it's a new decided pattern, add it to these guidelines and the Figma *Getting started* page.
