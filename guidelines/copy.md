@@ -10,8 +10,25 @@ Coachli copy is short, plain and easy to scan. Say what the person needs to know
 - **Active and direct.** "We'll email your customers", not "Customers will be notified by email".
 - **No filler.** Drop "please", "simply", "just", "successfully", "in order to".
 - **Calm.** No exclamation marks, no jokes in errors, no ALL CAPS.
-- **Sentence case** everywhere: titles, buttons, tabs, menu items, labels. "Sales and insights", not "Sales And Insights".
 - **No helper lines that repeat the label.** If the label says it, leave the hint out.
+
+## Sentence case
+
+All Coachli text is written in **sentence case**, never title case or all caps.
+
+- **Capitalise only the first word** of a title, label, button, phrase or sentence, **and proper nouns** (Coachli, Google Meet, Zoom, WhatsApp, Paystack, Kemi).
+- It applies to everything we write: page and section titles, buttons, tabs, menu items, field labels, badges, toasts, empty states, emails.
+- Feature names are not proper nouns: "Create a one-off session", "Your live events", "Sales and insights". They take a capital only when they start the line.
+- **Text people type themselves is left as they wrote it.** Offering names, event titles, bios and messages keep the coach's or customer's own capitals.
+- **No exclamation marks.**
+
+| Do | Don't |
+| --- | --- |
+| Sales and insights | Sales And Insights |
+| Create a one-off session | Create a One-Off Session |
+| Connect Google Meet | Connect google meet |
+| Save as draft | SAVE AS DRAFT |
+| Event rescheduled | Event rescheduled! |
 
 ## By element
 
