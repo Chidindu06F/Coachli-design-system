@@ -19,7 +19,7 @@ All Coachli text is written in **sentence case**, never title case or all caps.
 - **Capitalise only the first word** of a title, label, button, phrase or sentence, **and proper nouns** (Coachli, Google Meet, Zoom, WhatsApp, Paystack, Kemi).
 - It applies to everything we write: page and section titles, buttons, tabs, menu items, field labels, badges, toasts, empty states, emails.
 - Feature names are not proper nouns: "Create a one-off session", "Your live events", "Sales and insights". They take a capital only when they start the line.
-- **Text people type themselves is left as they wrote it.** Offering names, event titles, bios and messages keep the coach's or customer's own capitals.
+- **Text users write themselves is left as they wrote it.** Anything a user types into an input field, text area or editor (offering names, event titles, bios, messages) keeps their own capitals.
 - **No exclamation marks.**
 
 | Do | Don't |

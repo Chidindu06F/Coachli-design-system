@@ -21,7 +21,7 @@ If those paths don't exist, read them at https://github.com/Chidindu06F/Coachli-
 - Talk to the person ("Your payout is on its way"), in the active voice.
 - No filler: please, simply, just, successfully, in order to.
 - No exclamation marks, jokes in errors or ALL CAPS.
-- Sentence case everywhere we write (titles, buttons, tabs, menus, labels, badges, toasts): capitalise only the first word and proper nouns (Coachli, Google Meet, WhatsApp). Feature names are not proper nouns: "Create a one-off session". Never title case or all caps. Text the coach or customer typed (offering names, event titles) stays as they wrote it.
+- Sentence case everywhere we write (titles, buttons, tabs, menus, labels, badges, toasts): capitalise only the first word and proper nouns (Coachli, Google Meet, WhatsApp). Feature names are not proper nouns: "Create a one-off session". Never title case or all caps. Text users write themselves (anything typed into an input field, text area or editor: offering names, event titles, bios, messages) stays as they wrote it.
 - No helper line that repeats the label.
 
 ## By element
