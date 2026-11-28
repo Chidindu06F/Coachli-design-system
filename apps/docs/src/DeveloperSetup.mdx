@@ -1,0 +1,74 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Developer setup" />
+
+# Developer setup
+
+Everything a developer installs to build Coachli with this design system, in one place. Do it once per machine and once per app.
+
+## 1. Install the packages
+
+The packages are on GitHub Packages, which needs a token even though they are public.
+
+1. Create a GitHub [personal access token (classic)](https://github.com/settings/tokens) with the `read:packages` scope.
+2. Add an `.npmrc` next to your app's `package.json`:
+
+```
+@chidindu06f:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+3. Set `GITHUB_TOKEN` to that token in your shell and in CI, then install:
+
+```bash
+npm install @chidindu06f/coachli-react @chidindu06f/coachli-tokens @fontsource/inter
+```
+
+4. Load the tokens, the styles and the font once, at the top of the app:
+
+```tsx
+import '@chidindu06f/coachli-tokens/css';
+import '@chidindu06f/coachli-react/styles.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+```
+
+5. Set the theme on `<html>`: `data-theme="light"`, `"dark"` or `"system"`.
+
+To update, `npm install @chidindu06f/coachli-react@latest @chidindu06f/coachli-tokens@latest` and read the [changelog](https://github.com/Chidindu06F/Coachli-design-system/blob/main/CHANGELOG.md) for breaking changes.
+
+## 2. Get Figma access
+
+| File | What's in it |
+| --- | --- |
+| [Coachli](https://www.figma.com/design/toCoFh482t5Ho9OU7it9lA/Coachli) | The screens to build, one page per menu item, with dev notes |
+| [COACHLI DESIGN SYSTEM](https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM) | The components and tokens. Its first page, *How to use*, has the same rules as the Guidelines here |
+
+You need at least a Dev seat. Ask the designer to invite you.
+
+## 3. Set up AI tools
+
+**Claude Code:** install the Coachli plugin. It adds the Coachli skills and connects Figma.
+
+```
+/plugin marketplace add Chidindu06F/Coachli-design-system
+/plugin install coachli-design-system@coachli-design-system
+/reload-plugins
+```
+
+Then run `/mcp`, choose **figma**, then **Authenticate**, and allow access in the browser.
+
+**Cursor, Copilot and others:** copy [`skills/AGENTS.app.md`](https://github.com/Chidindu06F/Coachli-design-system/blob/main/skills/AGENTS.app.md) to the root of the app as `AGENTS.md`, and connect Figma's MCP server (`https://mcp.figma.com/mcp`) in the tool's MCP settings.
+
+Details: **Guidelines → AI setup**.
+
+## 4. Read before building
+
+- **Guidelines** (in the sidebar): which component to use, patterns, copy, formats, images and what to do with design gaps.
+- [DEVELOPERS.md](https://github.com/Chidindu06F/Coachli-design-system/blob/main/DEVELOPERS.md): how Figma screens map to code, the Coachli-only pieces and page-by-page product rules.
+- **Components** (in the sidebar): every component with its props, in light and dark mode.
+
+## When something isn't designed
+
+Build the closest version from the design system, mark it `// DESIGN GAP`, and tell the designer. Don't edit Figma or invent components in the app. See **Guidelines → Design gaps**.

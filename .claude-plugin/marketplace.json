@@ -1,0 +1,12 @@
+{
+  "name": "coachli-design-system",
+  "owner": { "name": "Coachli" },
+  "description": "The Coachli design system for Claude Code",
+  "plugins": [
+    {
+      "name": "coachli-design-system",
+      "source": "./",
+      "description": "Coachli design system skills (components, copy, design gaps, review) and Figma's MCP server"
+    }
+  ]
+}

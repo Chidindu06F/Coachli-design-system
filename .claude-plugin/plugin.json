@@ -1,0 +1,10 @@
+{
+  "name": "coachli-design-system",
+  "description": "Coachli design system skills (components, copy, design gaps, review) and Figma's MCP server",
+  "author": { "name": "Coachli" },
+  "homepage": "https://chidindu06f.github.io/Coachli-design-system/",
+  "repository": "https://github.com/Chidindu06F/Coachli-design-system",
+  "mcpServers": {
+    "figma": { "type": "http", "url": "https://mcp.figma.com/mcp" }
+  }
+}

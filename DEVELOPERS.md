@@ -7,7 +7,8 @@ A guide for developers rebuilding the Coachli dashboard with this design system.
 | | Where |
 | --- | --- |
 | Components and tokens | `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens` (install steps in the [README](README.md)) |
-| Live component docs | Storybook: https://chidindu06f.github.io/Coachli-design-system/ |
+| Live component docs | Storybook: https://chidindu06f.github.io/Coachli-design-system/ (start with Developer setup and Guidelines) |
+| Rules for components, copy, formats, images and design gaps | [`guidelines/`](guidelines/README.md), also in Storybook → Guidelines and the Figma *How to use* page |
 | Screens to build | Figma: [Coachli](https://www.figma.com/design/toCoFh482t5Ho9OU7it9lA/Coachli), one page per menu item. Each page has grey sections per context, with black labels above each screen |
 | Component specs | Figma: [COACHLI DESIGN SYSTEM](https://www.figma.com/design/fNq8x9qbF4yYA6ixgwdGVR/COACHLI-DESIGN-SYSTEM). Dev Mode shows the matching React code |
 
@@ -283,7 +284,7 @@ These live on the **Components** page of the Coachli Figma file, not in the desi
 
 ## AI coding tools
 
-If you build with Claude Code, Cursor, Copilot or similar, copy the files in [`skills/`](skills/README.md) into the dashboard app. They make the tool use these components and tokens, and follow the product rules in this guide, instead of writing its own UI.
+Set up once: Storybook → **Developer setup**. With Claude Code, install the Coachli plugin (`/plugin marketplace add Chidindu06F/Coachli-design-system`, then `/plugin install coachli-design-system@coachli-design-system`); it adds the Coachli skills and connects Figma. For other tools, copy [`skills/AGENTS.app.md`](skills/AGENTS.app.md) into the app as `AGENTS.md`. The rules the AI follows are in [`guidelines/`](guidelines/README.md): components, patterns, copy, formats, images and design gaps.
 
 ## When the design system changes
 

@@ -4,6 +4,10 @@ Changes to `@chidindu06f/coachli-react` and `@chidindu06f/coachli-tokens`. Both 
 
 ## Unreleased
 
+### Changes
+- **Guidelines for designers, developers and AI.** New [`guidelines/`](guidelines/README.md) folder: using the design system (components only, no detaching, when a new component is allowed, who adds what), choosing components, patterns, writing copy, formats (money, numbers, dates, times), images (default cover and profile images), designing screens, design gaps and AI setup. The same text shows in Storybook under **Guidelines**, with a new **Developer setup** page, and on a new Figma page, **How to use**, right after the thumbnail.
+- **Coachli plugin for Claude Code.** The repository is now a Claude Code plugin marketplace: `/plugin marketplace add Chidindu06F/Coachli-design-system`, then `/plugin install coachli-design-system@coachli-design-system`. It adds four skills (`coachli-ui`, `coachli-copy`, `coachli-gaps`, `coachli-review`) and connects Figma's MCP server. `AGENTS.app.md` points to the guidelines for other AI tools.
+
 ## 0.3.0
 
 ### Changes

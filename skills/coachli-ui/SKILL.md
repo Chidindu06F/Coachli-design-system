@@ -1,24 +1,42 @@
 ---
 name: coachli-ui
-description: Build or change any Coachli dashboard UI (pages, forms, modals, tables, menus, empty states, styles) with the Coachli design system. Use whenever the task touches a React component, JSX, CSS, colours, spacing, icons or copy in the Coachli dashboard app, including "add a button", "build this screen from Figma", "fix this layout" or "make this match the design".
+description: Build or change any Coachli UI with the Coachli design system, in code (React pages, forms, modals, tables, menus, empty states, CSS) or in Figma (designing Coachli screens through the Figma MCP). Use whenever the task touches a React component, JSX, CSS, colours, spacing, icons or layout in the Coachli dashboard, or a Coachli Figma screen, including "add a button", "build this screen from Figma", "fix this layout", "make this match the design" or "design the mobile version".
 ---
 
 # Coachli UI
 
-Every screen in the Coachli dashboard is built from the Coachli design system. Your job is to assemble screens from its components and tokens, not to write new UI primitives.
+Every Coachli screen is built from the Coachli design system. Your job is to assemble screens from its components and tokens, never to invent new UI.
 
-## The three rules
+## The guidelines
 
-1. **Use the components.** Import from `@chidindu06f/coachli-react`. Never hand-build a button, input, select, modal, drawer, menu, table, tab bar, badge, toast, tooltip, avatar, progress bar or spinner, and never add another UI library (MUI, Chakra, shadcn, Radix, Headless UI, Ant) for something the package already has.
-2. **Use the tokens.** In your own CSS use `var(--halo-…)` variables only. No hex or rgb values, no pixel font sizes, no made-up spacing. Hard-coded colours break dark mode.
-3. **Follow the product rules.** They are in `DEVELOPERS.md` in the design system repository, under "Product rules". Read the bullet for the area you are working on before you write code.
+The full rules are in the `guidelines/` folder of the design system. Read the file for what you are doing before you start:
+
+| Doing | Read |
+| --- | --- |
+| Any UI work | `${CLAUDE_PLUGIN_ROOT}/guidelines/using-the-design-system.md` |
+| Picking a component | `${CLAUDE_PLUGIN_ROOT}/guidelines/choosing-components.md` |
+| Layout, menus, drawers, tables, create flows | `${CLAUDE_PLUGIN_ROOT}/guidelines/patterns.md` |
+| Images, avatars, covers, icons | `${CLAUDE_PLUGIN_ROOT}/guidelines/images.md` |
+| Designing in Figma (states, page layout) | `${CLAUDE_PLUGIN_ROOT}/guidelines/designing-screens.md` |
+| Any text on screen | the `coachli-copy` skill |
+| A screen or state that isn't designed | the `coachli-gaps` skill |
+
+If that path doesn't exist (the skill was copied by hand), read the same files on GitHub: `https://github.com/Chidindu06F/Coachli-design-system/tree/main/guidelines`. Page-by-page product rules are in `DEVELOPERS.md` in the same repository.
+
+## The rules
+
+1. **Use the components.** In code, import from `@chidindu06f/coachli-react`. In Figma, use instances from COACHLI DESIGN SYSTEM. Never hand-build a button, input, select, modal, drawer, menu, table, tab bar, badge, toast, tooltip, avatar, progress bar or spinner, and never add another UI library (MUI, Chakra, shadcn, Radix, Headless UI, Ant).
+2. **Pick the best component, not one that merely works.** Use the table in `choosing-components.md`. A Select, Radio group, Segmented control and Chips can all pick one option, but each fits a different job.
+3. **Don't detach or restyle.** Use properties and slots (Modal body, Drawer content, Card content, Table cell) in Figma; `classNames`/`styles` props in code. Never override a component's look.
+4. **Tokens only.** In CSS, `var(--halo-…)` only: no hex, rgb or hsl, no pixel font sizes, no made-up spacing. In Figma, variables and text styles only.
+5. **Light, dark and mobile.** Every screen works with `data-theme="dark"` and at 390px wide.
+6. **Never invent a component.** If nothing fits, compose from existing ones and follow `coachli-gaps`. Only the designer adds components, in Figma first.
 
 ## Before you write code
 
-1. Find the component. The full list is in Storybook: https://chidindu06f.github.io/Coachli-design-system/ (or read `node_modules/@chidindu06f/coachli-react/dist/index.d.ts` for every export and its props).
-2. Read its props from the type definitions. Do not guess prop names.
-3. Read the matching section of `DEVELOPERS.md`: https://github.com/Chidindu06F/Coachli-design-system/blob/main/DEVELOPERS.md
-4. If you were given a Figma link, the layer names tell you the component: a layer called `Button`, `Input field`, `Modal`, `Menu`, `List item` and so on is that component from the package, and its Figma properties (Type, Size, State) map to props.
+1. Find the component in Storybook (https://chidindu06f.github.io/Coachli-design-system/) or in `node_modules/@chidindu06f/coachli-react/dist/index.d.ts`.
+2. Read its props from the type definitions. Don't guess prop names.
+3. If you have a Figma link, read it with the Figma MCP. Layer names are component names (`Button`, `Input field`, `Modal`, `List item`), and Figma properties (Type, Size, State) map to props.
 
 ## Setup (once per app)
 
@@ -30,65 +48,40 @@ import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 ```
 
-Themes: `data-theme="light" | "dark" | "system"` on `<html>`. Components switch by themselves.
+Themes: `data-theme="light" | "dark" | "system"` on `<html>`.
 
-## Writing your own CSS
+## Your own CSS
 
-Only for layout (grids, page padding, gaps between components). Use tokens:
+Only for layout (grids, page padding, gaps between components):
 
 ```css
-.page {
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--halo-spacing-6);
+  padding: var(--halo-spacing-8);
   background: var(--halo-surface-primary);
-  color: var(--halo-text-primary);
-  padding: var(--halo-spacing-md);
   border: 1px solid var(--halo-border-secondary);
   border-radius: var(--halo-radius-md);
 }
 ```
 
-- Text styles: use the `Text` component, not your own font sizes.
-- To restyle part of a component, use its `classNames` or `styles` props (each component documents its parts), not its internal class names.
-- Icons: Phosphor icons, regular weight, sized by the component.
+Text uses the `Text` component. Icons are Phosphor, Regular weight.
 
-## Patterns that are already decided
+## The patterns people get wrong most
 
-These come up often. The full list and details are in `DEVELOPERS.md`.
+- ⋮ opens a `Menu` under it, on mobile too. No bottom sheets anywhere.
+- One overlay at a time: never a `Modal` on a `Drawer`; the drawer moves to the next step with Back in the footer.
+- Toasts at the top centre, title only.
+- Tables: first column semibold, every other cell regular `text/primary`; on mobile one bordered card of `ListItem`s with dividers.
+- Tabs holding a list show a count badge.
+- Badges are never the brand colour.
+- Create flows: Cancel/Back left; Save as draft then Next or Publish right. Edit pages: Next and Update.
+- Missing images use `ImagePlaceholder`; missing profile photos use `Avatar` initials.
+- Form fields 20px apart (`--halo-spacing-8`).
 
-- **Menus are dropdowns.** A "more" (⋮) button opens a `Menu` under it, on mobile too. Never a bottom sheet.
-- **Selects with few options** fit their content; fields and info boxes fill their container.
-- **Lists inside tabs** show the item count as a badge on the tab.
-- **Tags are never the brand colour.** "Starts in" is Warning; "Paid by customer", "New" and unread counts are Information.
-- **Primary buttons** are teal with a white label.
-- **Error messages** state the problem in a few words and keep a next step ("Enter a valid link.", "Upload failed. Check your connection and retry."). No examples inside the error.
-- **Placeholders** are sample answers that start with "e.g.", not questions or instructions.
-- **Create flows** (invoices, one-off sessions, session bundles): Cancel or Back, Save as draft and Next sit in a sticky bar at the bottom of the main area, left-aligned. The header has only "Watch demo video", which opens the YouTube video in a `Modal` on Coachli. It never opens YouTube.
-- **Logos in icon slots need padding.** A brand logo inside a `CompactButton`, `Button` icon or input affix should be drawn about 2/3 of the slot (for example a 16px glyph in a 24px box, as Figma's Unsplash logo is), never edge to edge. Solid logos look bigger than line icons, so without this the button looks cramped.
-- **Overlays blur.** Leave `Modal` and `Drawer` on their default `overlay="blur"` (dim plus a soft 8px blur). Do not switch to `"dim"` or add your own backdrop.
-- **Celebrations** ("Session published", "New badge earned"): put `<Confetti />` inside the Modal body. Do not write your own animation.
-- **Create and edit bottom bars (desktop):** Cancel (every step) and Back (step 2+) on the left, the rest on the right with the main button far right: Save as draft then Next or Publish when creating; Next (not on the last step) then a primary Update on every step when editing, so a change on step 1 can be saved without going to the end. No demo video card on edit pages.
-- **Form field spacing:** in create and edit forms (and create drawers), fields inside a section sit **20px** apart (`gap: var(--halo-spacing-8)`), not 16px. Tighter nested groups, such as an add-on option card, keep their own 12px gap.
-- **Optional choices behind a switch** (redirect after purchase): the switch turns it on and the dropdown has no "None" option; off means none.
-- **Names in tables and list rows:** one line with an ellipsis, never wrapping.
-- **Price fields:** currency code only in the prefix, no flag.
-- **Amounts never show `.00`:** NGN 10,000, NGN 0, USD 50. Two decimals only when they aren't zero (NGN 10,000.50, NGN 0.92).
-- **Tables on mobile** become one bordered card of `ListItem`s separated by a subtle `Divider`, 4px space each side, pagination below.
-- **Rich text** (descriptions, notes): `RichTextEditorField` with `onImageUpload` wired to the app's upload (resolve with the https URL) and `onImageUploadError` shown as a toast. Never build a custom editor or paste handler.
-- **Breadcrumbs** go under the page title. No back arrow.
-- **Focus rings** must not be clipped: do not put `overflow: hidden` on a container that holds focusable components unless it scrolls.
-- **Names:** "One-off session" and "Session bundle" (never "1:1 session" for the single kind). Menu items that list kinds of things are plural: One-off sessions, Session bundles, Live events.
-- **Announcements about all of Coachli** (like an upcoming Coachli event) use `<AnnouncementBar title="…" action={<LinkButton size="sm" …>Register now</LinkButton>}>Thu 26 Nov</AnnouncementBar>` at the very top of the app: event name and date only, 60 characters at most. No close button; remove it when the event is over. Use an Alert only for news about one page.
-- **Table text:** first column semibold; every other cell regular `text/primary`, amounts included. No grey cells, except a second line under a name in the same cell (an email under a customer). Mobile lists follow the same rule.
-- **No modal over a drawer:** an action started in a `Drawer` continues in the same drawer (new title and body, footer **Back** + action). One overlay at a time.
-- **Awards:** earned awards are `<Award name="…" />` (three colours; there are no one or two colour versions). Awards not earned yet are `<Award name="…" inactive />`: flat gray, shades of black in dark mode. Never fade an award with opacity.
-
-## When the design system does not have it
-
-1. Check Storybook again, including the "Coachli-only pieces" section of `DEVELOPERS.md` (those are built in the dashboard app from design system components).
-2. Compose it from existing components and tokens.
-3. If it is truly new and reusable, do not invent it in the app: tell the developer you are working with to ask the designer to add it to the design system (Figma first, then the React package), and build the screen with the closest existing component in the meantime.
+The full list is in `patterns.md`.
 
 ## Check your work
 
-- No hex, rgb or hsl colours in the diff. No raw `<button>`, `<input>`, `<select>` or `<dialog>` where a component exists.
-- The screen works in dark mode (`data-theme="dark"`) and at 390px wide.
-- Every interactive element can be reached and used with the keyboard, and its focus ring is fully visible.
+Run the `coachli-review` skill before you finish.
