@@ -11,16 +11,15 @@
 
 ## When a new component is allowed
 
-Almost never. Before you make one:
+You rarely need one. Before you make a new component:
 
-1. Check every component on the library pages, including their properties and slots. Most "new" things are an existing component with a different property, or a slot filled with other components.
-2. Try to build it from existing components inside a slot or an auto layout frame.
-3. Check the Coachli-only pieces (Setup checklist, Featured event, Create menu and others). These are local components in the Coachli file, built from library parts.
+1. **Check the library.** Look through every component, its properties and its slots. What you need often already exists, or is an existing component with a different property.
+2. **Check the Coachli-only components** (Setup checklist, Featured event, Create menu and others) on the Components page of the Coachli file.
+3. **Try combining existing components,** in an auto layout frame or inside a component's slot.
+4. **If nothing fits and it appears on only one screen,** keep it as an auto layout frame built from library components. Don't turn it into a component.
+5. **If it appears on two or more screens,** make it a component.
 
-Only when nothing solves the problem:
-
-- **Used once on one screen:** build it from library components in an auto layout frame. Don't make it a component.
-- **Used twice or more:** it must be a component. In the Coachli file, a local component built from library parts. If other products could use it, add it to the design system (Figma, then React, then the changelog).
+The designer adds every new component to the Figma library first, then to the React code, and notes it in the changelog. Developers don't add components. They ask the designer.
 
 ## Who adds what
 
